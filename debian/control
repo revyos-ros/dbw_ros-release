@@ -1,0 +1,13 @@
+Source: ros-foxy-dbw-ford
+Section: misc
+Priority: optional
+Maintainer: Kevin Hallenbeck <khallenbeck@dataspeedinc.com>
+Build-Depends: debhelper (>= 9.0.0), ros-foxy-ament-cmake, ros-foxy-ros-workspace
+Homepage: http://dataspeedinc.com
+Standards-Version: 3.9.2
+
+Package: ros-foxy-dbw-ford
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-foxy-dbw-ford-can, ros-foxy-dbw-ford-description, ros-foxy-dbw-ford-joystick-demo, ros-foxy-dbw-ford-msgs, ros-foxy-ros-workspace
+Description: Drive-by-wire interface to the Dataspeed Inc.
+ Lincoln MKZ DBW kit
