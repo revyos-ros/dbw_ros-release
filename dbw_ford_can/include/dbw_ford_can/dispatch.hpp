@@ -133,7 +133,7 @@ typedef struct {
   int16_t ANGLE;
   int16_t CMD :15;
   uint8_t TMODE :1; // Torque mode
-  uint16_t SPEED;
+  int16_t VEH_VEL;
   int8_t TORQUE;
   uint8_t ENABLED :1;
   uint8_t OVERRIDE :1;
