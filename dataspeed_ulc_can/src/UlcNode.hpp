@@ -39,6 +39,7 @@
 #include <geometry_msgs/msg/twist_stamped.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/bool.hpp>
+#include <dataspeed_dbw_common/PlatformMap.hpp>
 
 namespace dataspeed_ulc_can {
 
@@ -85,6 +86,8 @@ private:
   rclcpp::Clock cmd_clock_;
   rclcpp::Time cmd_stamp_;
   bool enable_ = false;
+  bool accel_mode_supported_ = true;
+  dataspeed_dbw_common::PlatformMap firmware_;
 };
 
 }  // namespace dataspeed_ulc_can

@@ -14,15 +14,14 @@
  *********************************************************************/
 #pragma once
 #include <chrono>
+#include <rclcpp/rclcpp.hpp>
 
-using std::chrono::high_resolution_clock;
-using std::chrono::time_point;
 using std::chrono::nanoseconds;
 
 template <typename MsgT>
 class MsgRx {
 public:
-  MsgRx(const nanoseconds& thresh) : dur_(thresh) {
+  MsgRx(const nanoseconds& thresh, rclcpp::Node::SharedPtr n) : dur_(thresh), node_(n) {
     clear();
   };
   MsgRx(const nanoseconds& thresh, const MsgT& msg) : dur_(thresh) {
@@ -30,32 +29,30 @@ public:
   };
   void set(const MsgT& msg) {
     msg_ = msg;
-    stamp_ = high_resolution_clock::now();
+    stamp_ = node_->get_clock()->now();
   }
   void clear() {
-    stamp_ = time_point<high_resolution_clock>();
+    stamp_ = rclcpp::Time(0);
   }
-  bool fresh(const nanoseconds &delta) const {
-    return age() < delta;
+  bool fresh(const rclcpp::Duration &delta) const {
+    return age() < delta.nanoseconds();
   }
   bool fresh() const {
     return fresh(dur_);
   }
-  nanoseconds age() const {
-    if (stamp_.time_since_epoch() == nanoseconds::zero()) {
-      return std::chrono::seconds(9999);
-    }
-    return high_resolution_clock::now() - stamp_;
+  int64_t age() const {
+    return node_->get_clock()->now().nanoseconds() - stamp_.nanoseconds();
   }
   const MsgT& get() const {
     return msg_;
   }
-  const time_point<high_resolution_clock>& stamp() const {
+  const rclcpp::Time& stamp() const {
     return stamp_;
   }
 
 private:
   MsgT msg_;
-  time_point<high_resolution_clock> stamp_;
-  nanoseconds dur_;
+  rclcpp::Time stamp_;
+  rclcpp::Duration dur_;
+  rclcpp::Node::SharedPtr node_;
 };
