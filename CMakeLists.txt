@@ -12,7 +12,6 @@ endif()
 
 find_package(ament_cmake_ros REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(rclcpp_components REQUIRED)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   message(STATUS "Enabling coverage testing")
@@ -29,9 +28,14 @@ install(DIRECTORY scripts
   USE_SOURCE_PERMISSIONS
 )
 
+install(DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}
+)
+
 ament_export_include_directories(include)
 
 if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
   ament_add_gtest(${PROJECT_NAME}_test_module_version "tests/test_module_version.cpp")
   target_include_directories(${PROJECT_NAME}_test_module_version PUBLIC "include")
 
