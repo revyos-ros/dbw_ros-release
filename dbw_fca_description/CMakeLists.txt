@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(dbw_fca_description)
 
-find_package(ament_cmake_ros REQUIRED)
+find_package(ament_cmake REQUIRED)
 
 # Uncompress meshes in root of meshes folder
 FILE(GLOB files RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/meshes" "${CMAKE_CURRENT_SOURCE_DIR}/meshes/*.tar.gz")
