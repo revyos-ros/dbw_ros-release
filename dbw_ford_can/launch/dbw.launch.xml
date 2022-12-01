@@ -31,14 +31,14 @@
         <param name="bitrate_3" value="500000" />
       </node>
     </group>
-    <node if="$(var socketcan)" pkg="socketcan_bridge" exec="socketcan_bridge_node" output="screen" >
-      <remap from="received_messages" to="$(var can_ns)/can_rx" />
-      <remap from="sent_messages" to="$(var can_ns)/can_tx" />
-      <param name="can_device" value="$(var socketcan_dev)" />
-      <param name="fatal_error_mask/CAN_ERR_TX_TIMEOUT" value="0" />
-      <param name="fatal_error_mask/CAN_ERR_BUSERROR" value="0" />
-      <param name="fatal_error_mask/CAN_ERR_RESTARTED" value="0" />
-    </node>
+    <include if="$(var socketcan)" file="$(find-pkg-share dataspeed_dbw_common)/launch/socket_can_receiver.launch.py" >
+      <arg name="interface" value="$(var socketcan_dev)" />
+      <arg name="topic" value="$(var can_ns)/can_rx" />
+    </include>
+    <include if="$(var socketcan)" file="$(find-pkg-share dataspeed_dbw_common)/launch/socket_can_sender.launch.py" >
+      <arg name="interface" value="$(var socketcan_dev)" />
+      <arg name="topic" value="$(var can_ns)/can_tx" />
+    </include>
   </group>
 
   <!-- Vehicle Interface -->
