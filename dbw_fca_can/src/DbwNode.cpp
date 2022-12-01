@@ -56,14 +56,14 @@ using namespace dataspeed_dbw_common;
 
 // Latest firmware versions
 PlatformMap FIRMWARE_LATEST({
-  {PlatformVersion(P_FCA_RU,  M_BPEC,  ModuleVersion(1,5,0))},
-  {PlatformVersion(P_FCA_RU,  M_TPEC,  ModuleVersion(1,5,0))},
-  {PlatformVersion(P_FCA_RU,  M_STEER, ModuleVersion(1,5,0))},
-  {PlatformVersion(P_FCA_RU,  M_SHIFT, ModuleVersion(1,5,0))},
-  {PlatformVersion(P_FCA_WK2, M_TPEC,  ModuleVersion(1,3,0))},
-  {PlatformVersion(P_FCA_WK2, M_STEER, ModuleVersion(1,3,0))},
-  {PlatformVersion(P_FCA_WK2, M_SHIFT, ModuleVersion(1,3,0))},
-  {PlatformVersion(P_FCA_WK2, M_ABS,   ModuleVersion(1,3,0))},
+  {PlatformVersion(P_FCA_RU,  M_BPEC,  ModuleVersion(1,6,0))},
+  {PlatformVersion(P_FCA_RU,  M_TPEC,  ModuleVersion(1,6,0))},
+  {PlatformVersion(P_FCA_RU,  M_STEER, ModuleVersion(1,6,0))},
+  {PlatformVersion(P_FCA_RU,  M_SHIFT, ModuleVersion(1,6,0))},
+  {PlatformVersion(P_FCA_WK2, M_TPEC,  ModuleVersion(1,4,0))},
+  {PlatformVersion(P_FCA_WK2, M_STEER, ModuleVersion(1,4,0))},
+  {PlatformVersion(P_FCA_WK2, M_SHIFT, ModuleVersion(1,4,0))},
+  {PlatformVersion(P_FCA_WK2, M_ABS,   ModuleVersion(1,4,0))},
 });
 
 using std::placeholders::_1;
@@ -318,10 +318,10 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg) {
           } else {
             out.steering_wheel_torque = (float)ptr->TORQUE * (float)0.0625;
           }
-          if (ptr->SPEED == 0xFFFF) {
+          if ((uint16_t)ptr->VEH_VEL == 0x8000) {
             out.speed = NAN;
           } else {
-            out.speed = (float)ptr->SPEED * (float)(0.01 / 3.6) * (float)speedSign();
+            out.speed = (float)ptr->VEH_VEL * (float)(0.01 / 3.6);
           }
           out.enabled = ptr->ENABLED ? true : false;
           out.override = ptr->OVERRIDE ? true : false;
@@ -1096,20 +1096,26 @@ void DbwNode::recvMiscCmd(const dbw_fca_msgs::msg::MiscCmd::ConstSharedPtr msg) 
   pub_can_->publish(out);
 }
 
-bool DbwNode::publishDbwEnabled() {
-  bool change = false;
+bool DbwNode::publishDbwEnabled(bool force)
+{
   bool en = enabled();
-  if (prev_enable_ != en) {
+  bool change = prev_enable_ != en;
+  if (change || force) {
     std_msgs::msg::Bool msg;
     msg.data = en;
     pub_sys_enable_->publish(msg);
-    change = true;
   }
   prev_enable_ = en;
   return change;
 }
 
 void DbwNode::timerCallback() {
+  // Publish status periodically, in addition to latched and on change
+  if (publishDbwEnabled(true)) {
+    RCLCPP_WARN(get_logger(), "DBW system enable status changed unexpectedly");
+  }
+
+  // Clear override statuses if necessary
   if (clear()) {
     can_msgs::msg::Frame out;
     out.is_extended = false;
