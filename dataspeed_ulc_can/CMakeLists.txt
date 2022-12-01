@@ -10,7 +10,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-find_package(ament_cmake_ros REQUIRED)
+find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(dataspeed_dbw_common REQUIRED)
@@ -70,25 +70,28 @@ find_package(ament_cmake_python REQUIRED)
 ament_python_install_package(${PROJECT_NAME})
 
 if(BUILD_TESTING)
-  # find_package(roslib REQUIRED)
-  # find_package(rostest REQUIRED)
-  
-  # Test node
-  # add_rostest_gtest(${PROJECT_NAME}_test_node test_ulc_node.test test_ulc_node.cpp)
-  # add_dependencies(${PROJECT_NAME}_test_node ${catkin_EXPORTED_TARGETS})
-  # target_link_libraries(${PROJECT_NAME}_test_node ${catkin_LIBRARIES})
-  
-  # # Test nodelet
-  # add_rostest_gtest(${PROJECT_NAME}_test_nodelet test_ulc_nodelet.test test_ulc_node.cpp)
-  # add_dependencies(${PROJECT_NAME}_test_nodelet ${catkin_EXPORTED_TARGETS})
-  # target_link_libraries(${PROJECT_NAME}_test_nodelet ${catkin_LIBRARIES})
-  
-  # # Test config frequency parameter (for ROS distributions newer than Indigo)
-  # if($ENV{ROS_DISTRO} STRGREATER indigo)
-  #   add_rostest(param_cfg_freq.test ARGS config_freq:=2  param_value:=5)
-  #   add_rostest(param_cfg_freq.test ARGS config_freq:=20 param_value:=20)
-  #   add_rostest(param_cfg_freq.test ARGS config_freq:=99 param_value:=50)
-  # endif()
+  find_package(ament_cmake_gtest REQUIRED)
+  find_package(ros_testing REQUIRED)
+
+  ament_add_gtest_executable(ulc_test_node
+    tests/test_ulc.cpp
+  )
+  ament_target_dependencies(ulc_test_node
+    "rclcpp"
+    "std_msgs"
+    "can_msgs"
+    "geometry_msgs"
+    "dataspeed_ulc_msgs"
+  )
+  target_include_directories(ulc_test_node PUBLIC
+    "include"
+    "src"
+  )
+  target_link_libraries(ulc_test_node
+    ${PROJECT_NAME}
+  )
+  add_ros_test(tests/ulc_test_launch.py TIMEOUT 120 ARGS "test_binary_dir:=${CMAKE_CURRENT_BINARY_DIR}")
+
 endif()
 
 ament_package()
