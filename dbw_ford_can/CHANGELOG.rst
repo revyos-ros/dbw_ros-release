@@ -2,6 +2,25 @@
 Changelog for package dbw_ford_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.0 (2022-11-30)
+------------------
+* Bump firmware versions
+* Add missing ament_cmake_gtest dependency
+* Sync ament_cmake and ament_cmake_ros in each CMakeLists.txt/package.xml
+* Change unsigned vehicle speed to signed vehicle velocity
+* Contributors: Kevin Hallenbeck, Micho Radovnikovich
+
+2.0.3 (2022-10-14)
+------------------
+* Fix socketcan options
+* Contributors: Kevin Hallenbeck
+
+2.0.2 (2022-05-13)
+------------------
+* Periodically publish DBW enabled status in addition to latched and on change
+* Bump firmware versions
+* Contributors: Kevin Hallenbeck
+
 2.0.1 (2022-02-23)
 ------------------
 * Add Ford GE1 platform (Ford Mustang Mach-E)
