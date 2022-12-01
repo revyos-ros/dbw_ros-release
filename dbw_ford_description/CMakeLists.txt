@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(dbw_ford_description)
 
-find_package(ament_cmake_ros REQUIRED)
+find_package(ament_cmake REQUIRED)
 
 # Uncompress meshes for individual vehicle models
 MACRO(SUBDIRLIST result curdir)
