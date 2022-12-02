@@ -1,0 +1,39 @@
+ros-humble-dataspeed-dbw-common (2.1.0-1bullseye) bullseye; urgency=high
+
+  * Remove unused dependency
+  * Add missing ament_cmake_gtest dependency
+  * Sync ament_cmake and ament_cmake_ros in each CMakeLists.txt/package.xml
+  * Contributors: Kevin Hallenbeck, Micho Radovnikovich
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Wed, 30 Nov 2022 05:00:00 -0000
+
+ros-humble-dataspeed-dbw-common (2.0.3-1bullseye) bullseye; urgency=high
+
+  * Copy and modify socketcan launch files
+  * Add topic remapping to socketcan launch files
+  * Contributors: Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Fri, 14 Oct 2022 04:00:00 -0000
+
+ros-humble-dataspeed-dbw-common (2.0.2-1bullseye) bullseye; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Fri, 13 May 2022 04:00:00 -0000
+
+ros-humble-dataspeed-dbw-common (2.0.1-1bullseye) bullseye; urgency=high
+
+  * Add Ford GE1 platform (Ford Mustang Mach-E)
+  * Change parameters to work in Foxy and Galactic
+  * Contributors: Kevin Hallenbeck, Micho Radovnikovich
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Wed, 23 Feb 2022 05:00:00 -0000
+
+ros-humble-dataspeed-dbw-common (2.0.0-1bullseye) bullseye; urgency=high
+
+  * Initial ROS2 release
+  * Contributors: Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Wed, 03 Nov 2021 04:00:00 -0000
+
+
