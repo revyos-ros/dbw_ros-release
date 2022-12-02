@@ -1,0 +1,12 @@
+Source: ros-humble-dataspeed-ulc
+Section: misc
+Priority: optional
+Maintainer: Micho Radovnikovich <mradovnikovich@dataspeedinc.com>
+Build-Depends: debhelper (>= 9.0.0), ros-humble-ament-cmake, ros-humble-ros-workspace
+Homepage: http://dataspeedinc.com
+Standards-Version: 3.9.2
+
+Package: ros-humble-dataspeed-ulc
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-humble-dataspeed-ulc-can, ros-humble-dataspeed-ulc-msgs, ros-humble-ros-workspace
+Description: CAN interface to the Universal Lat/Lon Controller (ULC) firmware
