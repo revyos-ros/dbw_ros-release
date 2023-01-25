@@ -2,6 +2,11 @@
 Changelog for package dbw_polaris_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.1 (2023-01-24)
+------------------
+* Update install scripts for ROS2
+* Contributors: Kevin Hallenbeck
+
 2.1.0 (2022-11-30)
 ------------------
 * Bump firmware versions
