@@ -6,7 +6,7 @@ pipelines:
           image: dataspeedinc/ros:foxy
           size: 2x # 8GB RAM
           script:
-            - source `find /opt/ros -name setup.bash | sort | tail -1` && echo $ROS_DISTRO # Source ROS environment
+            - source `find /opt/ros -maxdepth 2 -name setup.bash | sort | head -1` && echo $ROS_DISTRO # Source ROS environment
             - mkdir src && mv `find -maxdepth 1 -not -name . -not -name src` src/ # Move everything into the src directory
             - apt update && rosdep install --from-paths src --ignore-src -y # Install dependencies missing from the docker image
             - colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
@@ -18,7 +18,7 @@ pipelines:
           image: dataspeedinc/ros:galactic
           size: 2x # 8GB RAM
           script:
-            - source `find /opt/ros -name setup.bash | sort | tail -1` && echo $ROS_DISTRO # Source ROS environment
+            - source `find /opt/ros -maxdepth 2 -name setup.bash | sort | head -1` && echo $ROS_DISTRO # Source ROS environment
             - mkdir src && mv `find -maxdepth 1 -not -name . -not -name src` src/ # Move everything into the src directory
             - apt update && rosdep install --from-paths src --ignore-src -y # Install dependencies missing from the docker image
             - colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
@@ -30,7 +30,7 @@ pipelines:
           image: dataspeedinc/ros:humble
           size: 2x # 8GB RAM
           script:
-            - source `find /opt/ros -name setup.bash | sort | tail -1` && echo $ROS_DISTRO # Source ROS environment
+            - source `find /opt/ros -maxdepth 2 -name setup.bash | sort | head -1` && echo $ROS_DISTRO # Source ROS environment
             - mkdir src && mv `find -maxdepth 1 -not -name . -not -name src` src/ # Move everything into the src directory
             - apt update && rosdep install --from-paths src --ignore-src -y # Install dependencies missing from the docker image
             - colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
