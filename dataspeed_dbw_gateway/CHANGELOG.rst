@@ -2,6 +2,11 @@
 Changelog for package dataspeed_dbw_gateway
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.1 (2023-01-24)
+------------------
+* Fix build in Humble
+* Contributors: Kevin Hallenbeck
+
 2.1.0 (2022-11-30)
 ------------------
 * Add missing ament_cmake_gtest dependency
