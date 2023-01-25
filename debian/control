@@ -1,0 +1,13 @@
+Source: ros-foxy-dbw-ford-can
+Section: misc
+Priority: optional
+Maintainer: Kevin Hallenbeck <khallenbeck@dataspeedinc.com>
+Build-Depends: debhelper (>= 9.0.0), ros-foxy-ament-cmake, ros-foxy-ament-cmake-gtest <!nocheck>, ros-foxy-can-msgs, ros-foxy-dataspeed-can-msg-filters, ros-foxy-dataspeed-dbw-common, ros-foxy-dbw-ford-msgs, ros-foxy-geometry-msgs, ros-foxy-rclcpp, ros-foxy-sensor-msgs, ros-foxy-std-msgs, ros-foxy-ros-workspace
+Homepage: http://dataspeedinc.com
+Standards-Version: 3.9.2
+
+Package: ros-foxy-dbw-ford-can
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-foxy-can-msgs, ros-foxy-dataspeed-can-usb, ros-foxy-dataspeed-dbw-common, ros-foxy-dataspeed-dbw-gateway, ros-foxy-dataspeed-ulc-can, ros-foxy-dbw-ford-description, ros-foxy-dbw-ford-msgs, ros-foxy-geometry-msgs, ros-foxy-rclcpp, ros-foxy-sensor-msgs, ros-foxy-std-msgs, ros-foxy-ros-workspace
+Description: Drive-by-wire interface to the Dataspeed Inc.
+ Ford DBW kit
