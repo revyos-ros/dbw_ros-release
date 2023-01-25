@@ -1,0 +1,13 @@
+Source: ros-foxy-dbw-polaris
+Section: misc
+Priority: optional
+Maintainer: Kevin Hallenbeck <khallenbeck@dataspeedinc.com>
+Build-Depends: debhelper (>= 9.0.0), ros-foxy-ament-cmake, ros-foxy-ros-workspace
+Homepage: http://dataspeedinc.com
+Standards-Version: 3.9.2
+
+Package: ros-foxy-dbw-polaris
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-foxy-dbw-polaris-can, ros-foxy-dbw-polaris-description, ros-foxy-dbw-polaris-joystick-demo, ros-foxy-dbw-polaris-msgs, ros-foxy-ros-workspace
+Description: Drive-by-wire interface to the Dataspeed Inc.
+ Polaris GEM/Ranger/RZR DBW kit
