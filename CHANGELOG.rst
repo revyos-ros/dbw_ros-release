@@ -2,6 +2,11 @@
 Changelog for package dataspeed_dbw_common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.1 (2023-01-24)
+------------------
+* Add P702 platform (2021+ F-150)
+* Contributors: Kevin Hallenbeck
+
 2.1.0 (2022-11-30)
 ------------------
 * Remove unused dependency
