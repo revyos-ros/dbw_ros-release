@@ -2,6 +2,14 @@
 Changelog for package dbw_ford_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.1 (2023-01-24)
+------------------
+* Bump firmware versions
+* Update install scripts for ROS2
+* Add P702 platform (2021+ F-150)
+* Add warning for steering configuration fault
+* Contributors: Kevin Hallenbeck
+
 2.1.0 (2022-11-30)
 ------------------
 * Bump firmware versions

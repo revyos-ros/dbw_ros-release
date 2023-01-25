@@ -2,6 +2,9 @@
 Changelog for package dbw_fca_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.1 (2023-01-24)
+------------------
+
 2.1.0 (2022-11-30)
 ------------------
 * Sync ament_cmake and ament_cmake_ros in each CMakeLists.txt/package.xml
