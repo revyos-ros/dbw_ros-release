@@ -23,6 +23,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Ignition.msg"
   "msg/MiscCmd.msg"
   "msg/Misc1Report.msg"
+  "msg/OnePedal.msg"
   "msg/ParkingBrake.msg"
   "msg/ParkingBrakeCmd.msg"
   "msg/QualityFactor.msg"
