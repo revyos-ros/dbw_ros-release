@@ -160,7 +160,8 @@ typedef struct {
   uint8_t CMD :3;
   uint8_t FLTBUS :1;
   uint8_t REJECT :3;
-  uint8_t :5;
+  uint8_t :4;
+  uint8_t READY :1;
 } MsgGearReport;
 static_assert(2 == sizeof(MsgGearReport));
 
