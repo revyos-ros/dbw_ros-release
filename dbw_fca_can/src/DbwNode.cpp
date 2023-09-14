@@ -56,14 +56,14 @@ using namespace dataspeed_dbw_common;
 
 // Latest firmware versions
 PlatformMap FIRMWARE_LATEST({
-  {PlatformVersion(P_FCA_RU,  M_BPEC,  ModuleVersion(1,6,0))},
-  {PlatformVersion(P_FCA_RU,  M_TPEC,  ModuleVersion(1,6,0))},
-  {PlatformVersion(P_FCA_RU,  M_STEER, ModuleVersion(1,6,0))},
-  {PlatformVersion(P_FCA_RU,  M_SHIFT, ModuleVersion(1,6,0))},
-  {PlatformVersion(P_FCA_WK2, M_TPEC,  ModuleVersion(1,4,0))},
-  {PlatformVersion(P_FCA_WK2, M_STEER, ModuleVersion(1,4,0))},
-  {PlatformVersion(P_FCA_WK2, M_SHIFT, ModuleVersion(1,4,0))},
-  {PlatformVersion(P_FCA_WK2, M_ABS,   ModuleVersion(1,4,0))},
+  {PlatformVersion(P_FCA_RU,  M_BPEC,  ModuleVersion(1,6,2))},
+  {PlatformVersion(P_FCA_RU,  M_TPEC,  ModuleVersion(1,6,2))},
+  {PlatformVersion(P_FCA_RU,  M_STEER, ModuleVersion(1,6,2))},
+  {PlatformVersion(P_FCA_RU,  M_SHIFT, ModuleVersion(1,6,2))},
+  {PlatformVersion(P_FCA_WK2, M_TPEC,  ModuleVersion(1,4,2))},
+  {PlatformVersion(P_FCA_WK2, M_STEER, ModuleVersion(1,4,2))},
+  {PlatformVersion(P_FCA_WK2, M_SHIFT, ModuleVersion(1,4,2))},
+  {PlatformVersion(P_FCA_WK2, M_ABS,   ModuleVersion(1,4,2))},
 });
 
 using std::placeholders::_1;
@@ -362,6 +362,7 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg) {
           out.header.stamp = msg->header.stamp;
           out.state.gear = ptr->STATE;
           out.cmd.gear = ptr->CMD;
+          out.ready = ptr->READY ? true : false;
           out.override = ptr->OVERRIDE ? true : false;
           out.fault_bus = ptr->FLTBUS ? true : false;
           if (msg->dlc >= sizeof(MsgGearReport)) {
