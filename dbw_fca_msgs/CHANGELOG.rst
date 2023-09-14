@@ -2,6 +2,14 @@
 Changelog for package dbw_fca_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.3 (2023-09-11)
+------------------
+* Add ready flag to GearReport message
+* Contributors: Kevin Hallenbeck
+
+2.1.2 (2023-05-10)
+------------------
+
 2.1.1 (2023-01-24)
 ------------------
 
