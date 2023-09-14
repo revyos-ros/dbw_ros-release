@@ -2,6 +2,18 @@
 Changelog for package dbw_ford_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.3 (2023-09-11)
+------------------
+* Bump firmware versions
+* Add one-pedal-drive mode status
+* Add ready flag to GearReport message
+* Contributors: Kevin Hallenbeck
+
+2.1.2 (2023-05-10)
+------------------
+* Bump firmware versions
+* Contributors: Kevin Hallenbeck
+
 2.1.1 (2023-01-24)
 ------------------
 * Bump firmware versions
