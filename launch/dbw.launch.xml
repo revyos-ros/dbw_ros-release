@@ -21,6 +21,12 @@
         <!-- SID 0x060 to 0x07F -->
         <param name="channel_3_mask_0"  value="0x800007E0" />
         <param name="channel_3_match_0" value="0x00000060" />
+        <!-- SID 0x100 to 0x103 -->
+        <param name="channel_3_mask_1"  value="0x800007FC" />
+        <param name="channel_3_match_1" value="0x00000100" />
+        <!-- SID 0x6C0 to 0x6C7 -->
+        <param name="channel_3_mask_2"  value="0x800007F8" />
+        <param name="channel_3_match_2" value="0x000006C0" />
       </node>
     </group>
     <group unless="$(var filter_can)">
@@ -63,8 +69,6 @@
       <param name="ackermann_track" value="$(var ackermann_track)" />
       <param name="steering_ratio" value="$(var steering_ratio)" />
       <param name="joint_states" value="$(var load_urdf)" />
-    </node>
-    <node pkg="dataspeed_dbw_gateway" exec="fca_gateway" output="screen">
     </node>
     <node if="$(var ulc)" pkg="dataspeed_ulc_can" exec="ulc_node" output="screen">
       <remap from="can_rx" to="$(var can_ns)/can_rx"/>
