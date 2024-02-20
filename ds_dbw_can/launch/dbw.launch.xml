@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="live" default="true" />
+  <arg name="vehicle_ns" default="vehicle" />
+  <arg name="can_ns" default="/can_bus_dbw" />
+
+  <!-- CAN Bus Hardware -->
+  <arg name="filter_can" default="true" />
+  <arg name="dataspeed_can" default="true" />
+  <arg name="socketcan" default="false" />
+  <arg name="socketcan_dev" default="can0" />
+  <group if="$(var live)">
+    <group if="$(var filter_can)">
+      <node if="$(var dataspeed_can)" pkg="dataspeed_can_usb" exec="can_node" output="screen">
+        <remap from="can_bus_3/can_rx" to="$(var can_ns)/can_rx"/>
+        <remap from="can_bus_3/can_tx" to="$(var can_ns)/can_tx"/>
+        <remap from="can_bus_3/can_err" to="$(var can_ns)/can_err"/>
+        <param name="bitrate_3" value="500000" />
+        <!-- param name="channel_3_mask_0"  value="0x800007E0" / -->
+        <!-- param name="channel_3_match_0" value="0x00000060" / -->
+        <!-- param name="channel_3_mask_1"  value="0x800007F0" / -->
+        <!-- param name="channel_3_match_1" value="0x00000100" / --> <!-- Reports -->
+        <!-- param name="channel_3_mask_2"  value="0x800007F0" / -->
+        <!-- param name="channel_3_match_2" value="0x00000200" / --> <!-- Commands -->
+      </node>
+    </group>
+    <group unless="$(var filter_can)">
+      <node if="$(var dataspeed_can)" pkg="dataspeed_can_usb" exec="can_node" output="screen">
+        <remap from="can_bus_3/can_rx" to="$(var can_ns)/can_rx"/>
+        <remap from="can_bus_3/can_tx" to="$(var can_ns)/can_tx"/>
+        <remap from="can_bus_3/can_err" to="$(var can_ns)/can_err"/>
+        <param name="bitrate_3" value="500000" />
+      </node>
+    </group>
+    <include if="$(var socketcan)" file="$(find-pkg-share ds_dbw_can)/launch/socket_can_receiver.launch.py" >
+      <arg name="interface" value="$(var socketcan_dev)" />
+      <arg name="topic" value="$(var can_ns)/can_rx" />
+    </include>
+    <include if="$(var socketcan)" file="$(find-pkg-share ds_dbw_can)/launch/socket_can_sender.launch.py" >
+      <arg name="interface" value="$(var socketcan_dev)" />
+      <arg name="topic" value="$(var can_ns)/can_tx" />
+    </include>
+  </group>
+
+  <!-- Vehicle Interface -->
+  <arg name="frame_id" default="base_footprint"/>
+  <arg name="warn_cmds" default="true"/>
+  <arg name="buttons" default="true"/>
+  <group>
+    <push-ros-namespace namespace="$(var vehicle_ns)" />
+    <node pkg="ds_dbw_can" exec="dbw_node" output="screen">
+      <remap from="can_rx" to="$(var can_ns)/can_rx"/>
+      <remap from="can_tx" to="$(var can_ns)/can_tx"/>
+      <param name="frame_id" value="$(var frame_id)" />
+      <param name="warn_cmds" value="$(var warn_cmds)" />
+      <param name="buttons" value="$(var buttons)" />
+    </node>
+  </group>
+
+</launch>
