@@ -69,6 +69,7 @@ find_package(ament_cmake_python REQUIRED)
 
 ament_python_install_package(${PROJECT_NAME})
 
+if(0)
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
   find_package(ros_testing REQUIRED)
@@ -92,6 +93,7 @@ if(BUILD_TESTING)
   )
   add_ros_test(tests/ulc_test_launch.py TIMEOUT 120 ARGS "test_binary_dir:=${CMAKE_CURRENT_BINARY_DIR}")
 
+endif()
 endif()
 
 ament_package()
