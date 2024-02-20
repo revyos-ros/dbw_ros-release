@@ -1,45 +1,68 @@
-# dbw_ros
+# ds_dbw_joystick_demo
 ROS2 interface to Dataspeed drive-by-wire platforms
 
-# Launch
+Launch the drive-by-wire and the demo
+```
+ros2 launch ds_dbw_joystick_demo joystick_demo.launch.xml sys:=true
+```
 
-* Joystick demo
-    * DBW2:         `ros2 launch ds_dbw_joystick_demo joystick_demo.launch.xml sys:=true`
-    * DBW1 FCA:     `ros2 launch dbw_fca_joystick_demo joystick_demo.launch.xml sys:=true`
-    * DBW1 Ford:    `ros2 launch dbw_ford_joystick_demo joystick_demo.launch.xml sys:=true`
-    * DBW1 Polaris: `ros2 launch dbw_polaris_joystick_demo joystick_demo.launch.xml sys:=true`
-* Drive-by-wire only
-    * DBW2:         `ros2 launch ds_dbw_can dbw.launch.xml`
-    * DBW1 FCA:     `ros2 launch dbw_fca_can dbw.launch.xml`
-    * DBW1 Ford:    `ros2 launch dbw_ford_can dbw.launch.xml`
-    * DBW1 Polaris: `ros2 launch dbw_polaris_can dbw.launch.xml`
-* RViz visualization
-    * DBW1 FCA:     `ros2 launch dbw_fca_description rviz.launch.xml`
-    * DBW1 Ford:    `ros2 launch dbw_ford_description rviz.launch.xml`
-    * DBW1 Polaris: `ros2 launch dbw_polaris_description rviz.launch.xml`
+Launch the drive-by-wire and the demo and only send brake commands
+```
+ros2 launch ds_dbw_joystick_demo joystick_demo.launch.xml sys:=true steer:=false brake:=true thrtl:=false shift:=false misc:=false
+```
 
-# Binaries
+Launch the drive-by-wire and the demo and specify all steer options
+```
+ros2 launch ds_dbw_joystick_demo joystick_demo.launch.xml sys:=true steer_cmd_type:=angle steer_max:=500.0 steer_rate:=0.0 steer_accel:=0.0
+```
 
-* ROS buildfarm with infrequent updates:
-    * http://repo.ros2.org/status_page/ros_humble_default.html?q=dbw_ros
-* Dataspeed buildfarm with frequent updates:
-    * https://bitbucket.org/DataspeedInc/ros_binaries/
+Launch the drive-by-wire and the demo and specify all brake options
+```
+ros2 launch ds_dbw_joystick_demo joystick_demo.launch.xml sys:=true brake_cmd_type:=pressure brake_min:=0.0 brake_max:=80.0 brake_inc:=0.0 brake_dec:=0.0
+ros2 launch ds_dbw_joystick_demo joystick_demo.launch.xml sys:=true brake_cmd_type:=accel brake_min:=0.1 brake_max:=-8.0 brake_inc:=0.0 brake_dec:=0.0
+```
 
-# One Line Install (binary)
+Launch the drive-by-wire and the demo and specify all throttle options
+```
+ros2 launch ds_dbw_joystick_demo joystick_demo.launch.xml sys:=true thrtl_cmd_type:=percent thrtl_min:=0.0 thrtl_max:=100.0 thrtl_inc:=0.0 thrtl_dec:=0.0
+```
 
-* Use this option to install ROS2 package binaries on a workstation that already has ROS2 installed.
-* Paste the following into a terminal to install the binary packages. This script will configure apt-get to connect to the Dataspeed server and install the binary packages.
-* DBW2:    ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/ds_dbw/scripts/sdk_install.bash)```
-* FCA:     ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_fca/scripts/sdk_install.bash)```
-* Ford:    ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_ford/scripts/sdk_install.bash)```
-* Polaris: ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_polaris/scripts/sdk_install.bash)```
+# Parameters
 
-# One Line ROS2 and Packages Install (binary)
+* `steer` Send steer commands. Default `true`
+* `steer_cmd_type` Steer command type. Default `percent`. Options: `torque` `angle` `curvature` `yaw_rate` `percent`
+* `steer_max` Steer command scale factor applied to joystick axis. Default `100.0`% (changes with the value of `steer_cmd_type`)
+* `steer_rate` Steer command rate limit in deg/s. Default `0.0` (firmware selects default value)
+* `steer_accel` Steer command acceleration limit in deg/s^2. Default `0.0` (firmware selects default value)
+* `brake` Send brake commands. Default `true`
+* `brake_cmd_type` Brake command type. Default `percent`. Options: `pressure` `torque` `accel` `accel_acc` `accel_aeb` `pedal_raw` `percent`
+* `brake_max` Brake command scale factor applied to joystick axis (with `brake_min`). Default `80.0`% (changes with the value of `brake_cmd_type`)
+* `brake_min` Brake command scale factor applied to joystick axis (with `brake_max`). Default `0.0`% (changes with the value of `brake_cmd_type`)
+* `brake_inc` Brake command rate limit for increase. Default `0.0` (firmware selects default value) (units change with the value of `brake_cmd_type`)
+* `brake_dec` Brake command rate limit for decrease. Default `0.0` (firmware selects default value) (units change with the value of `brake_cmd_type`)
+* `thrtl` Send throttle commands. Default `true`
+* `thrtl_cmd_type` Throttle command type. Default `percent`. Options: `pedal_raw` `percent`
+* `thrtl_max` Throttle command scale factor applied to joystick axis (with `thrtl_min`). Default `100.0`% (changes with the value of `thrtl_cmd_type`)
+* `thrtl_min` Throttle command scale factor applied to joystick axis (with `thrtl_max`). Default `0.0`% (changes with the value of `thrtl_cmd_type`)
+* `thrtl_inc` Throttle command rate limit for increase. Default `0.0`%/s (firmware selects default value)
+* `thrtl_dec` Throttle command rate limit for decrease. Default `0.0`%/s (firmware selects default value)
+* `shift` Send gear shift commands. Default `true`
+* `misc` Send misc commands (turn-signal and others). Default `true`
 
-* Use this option to install ROS2 and this SDK on a clean Ubuntu install.
-* This should ONLY be run on a fresh install of Ubuntu Desktop [22.04](http://releases.ubuntu.com/22.04/)/[20.04](http://releases.ubuntu.com/20.04/).
-* Paste the following into a terminal to install ROS2 and this SDK. This script will change some operating system parameters, install ROS2 [Humble](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html)/[Foxy](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html), install the SDK, and configure the joystick demo with rviz to run at startup.
-* DBW2:    ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/ds_dbw/scripts/ros_install.bash)```
-* FCA:     ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_fca/scripts/ros_install.bash)```
-* Ford:    ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_ford/scripts/ros_install.bash)```
-* Polaris: ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_polaris/scripts/ros_install.bash)```
+# Controls
+
+Logitech F310 Gamepad controls:
+
+* Disable
+    * Left Bumper
+* Enable
+    * Right Bumper
+* Brakes
+    * Left Trigger
+* Throttle
+    * Right Trigger
+* Steering
+    * Left/right of either joystick axis
+    * Hold back or start to get full steering range, otherwise half
+* Turn Signals
+    * Left/Right D-Pad toggle on/off
