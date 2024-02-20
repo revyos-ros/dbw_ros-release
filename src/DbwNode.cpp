@@ -187,44 +187,17 @@ DbwNode::DbwNode(const rclcpp::NodeOptions &options)
   }
 
   // Setup Subscribers
-  {
-    auto bind = std::bind(&DbwNode::recvEnable, this, _1);
-    sub_enable_ = create_subscription<std_msgs::msg::Empty>("enable", 10, bind);
-  }
-  {
-    auto bind = std::bind(&DbwNode::recvDisable, this, _1);
-    sub_disable_ = create_subscription<std_msgs::msg::Empty>("disable", 10, bind);
-  }
-  {
-    auto bind = std::bind(&DbwNode::recvCAN, this, _1);
-    sub_can_ = create_subscription<can_msgs::msg::Frame>("can_rx", 100, bind);
-  }
-  {
-    auto bind = std::bind(&DbwNode::recvBrakeCmd, this, _1);
-    sub_brake_ = create_subscription<dbw_ford_msgs::msg::BrakeCmd>("brake_cmd", 1, bind);
-  }
-  {
-    auto bind = std::bind(&DbwNode::recvThrottleCmd, this, _1);
-    sub_throttle_ = create_subscription<dbw_ford_msgs::msg::ThrottleCmd>("throttle_cmd", 1, bind);
-  }
-  {
-    auto bind = std::bind(&DbwNode::recvSteeringCmd, this, _1);
-    sub_steering_ = create_subscription<dbw_ford_msgs::msg::SteeringCmd>("steering_cmd", 1, bind);
-  }
-  {
-    auto bind = std::bind(&DbwNode::recvGearCmd, this, _1);
-    sub_gear_ = create_subscription<dbw_ford_msgs::msg::GearCmd>("gear_cmd", 1, bind);
-  }
-  {
-    auto bind = std::bind(&DbwNode::recvMiscCmd, this, _1);
-    sub_misc_ = create_subscription<dbw_ford_msgs::msg::MiscCmd>("misc_cmd", 1, bind);
-  }
+  sub_enable_ = create_subscription<std_msgs::msg::Empty>("enable", 10, std::bind(&DbwNode::recvEnable, this, _1));
+  sub_disable_ = create_subscription<std_msgs::msg::Empty>("disable", 10, std::bind(&DbwNode::recvDisable, this, _1));
+  sub_can_ = create_subscription<can_msgs::msg::Frame>("can_rx", 100, std::bind(&DbwNode::recvCAN, this, _1));
+  sub_brake_ = create_subscription<dbw_ford_msgs::msg::BrakeCmd>("brake_cmd", 1, std::bind(&DbwNode::recvBrakeCmd, this, _1));
+  sub_throttle_ = create_subscription<dbw_ford_msgs::msg::ThrottleCmd>("throttle_cmd", 1, std::bind(&DbwNode::recvThrottleCmd, this, _1));
+  sub_steering_ = create_subscription<dbw_ford_msgs::msg::SteeringCmd>("steering_cmd", 1, std::bind(&DbwNode::recvSteeringCmd, this, _1));
+  sub_gear_ = create_subscription<dbw_ford_msgs::msg::GearCmd>("gear_cmd", 1, std::bind(&DbwNode::recvGearCmd, this, _1));
+  sub_misc_ = create_subscription<dbw_ford_msgs::msg::MiscCmd>("misc_cmd", 1, std::bind(&DbwNode::recvMiscCmd, this, _1));
 
   // Setup Timer
-  {
-    auto bind = std::bind(&DbwNode::timerCallback, this);
-    timer_ = create_wall_timer(std::chrono::milliseconds(50), bind);
-  }
+  timer_ = create_wall_timer(std::chrono::milliseconds(50), std::bind(&DbwNode::timerCallback, this));
 }
 
 void DbwNode::recvEnable(const std_msgs::msg::Empty::ConstSharedPtr) {
@@ -922,6 +895,16 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg) {
             get_logger(), warn_cmds_,
             "DBW system: Another node on the CAN bus is commanding the vehicle!!! Subsystem: Turn Signals. Id: 0x%03X",
             ID_MISC_CMD);
+        break;
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+      case 0x100 ... 0x103: // DBW2 steer/brake/throttle/gear report
+      case 0x6C0 ... 0x6C5: // DBW2 ECU info for each module
+#pragma GCC diagnostic pop
+          DS_WARN_ONCE_ID(get_logger(), msg->id,
+              "Received unsupported CAN ID %03X from next-generation drive-by-wire system (DBW2)"
+              "\nUse the ds_dbw_can package instead", msg->id);
         break;
     }
   }
