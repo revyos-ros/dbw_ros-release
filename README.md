@@ -1,3 +1,49 @@
+## dbw_ros (humble) - 2.1.8-1
+
+The packages in the `dbw_ros` repository were released into the `humble` distro by running `/usr/bin/bloom-release dbw_ros --rosdistro humble` on `Tue, 20 Feb 2024 21:32:29 -0000`
+
+These packages were released:
+- `dataspeed_dbw_common`
+- `dataspeed_ulc`
+- `dataspeed_ulc_can`
+- `dataspeed_ulc_msgs`
+- `dbw_fca`
+- `dbw_fca_can`
+- `dbw_fca_description`
+- `dbw_fca_joystick_demo`
+- `dbw_fca_msgs`
+- `dbw_ford`
+- `dbw_ford_can`
+- `dbw_ford_description`
+- `dbw_ford_joystick_demo`
+- `dbw_ford_msgs`
+- `dbw_polaris`
+- `dbw_polaris_can`
+- `dbw_polaris_description`
+- `dbw_polaris_joystick_demo`
+- `dbw_polaris_msgs`
+- `ds_dbw`
+- `ds_dbw_can`
+- `ds_dbw_joystick_demo`
+- `ds_dbw_msgs`
+
+Version of package(s) in repository `dbw_ros`:
+
+- upstream repository: https://bitbucket.org/dataspeedinc/dbw_ros.git
+- release repository: https://github.com/DataspeedInc-release/dbw_ros-release.git
+- rosdistro version: `2.1.3-1`
+- old version: `2.1.3-1`
+- new version: `2.1.8-1`
+
+Versions of tools used:
+
+- bloom version: `0.11.2`
+- catkin_pkg version: `1.0.0`
+- rosdep version: `0.22.2`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## dbw_ros (humble) - 2.1.3-1
 
 The packages in the `dbw_ros` repository were released into the `humble` distro by running `/usr/bin/bloom-release dbw_ros --rosdistro humble` on `Thu, 14 Sep 2023 20:13:49 -0000`
