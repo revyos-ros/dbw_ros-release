@@ -2,6 +2,11 @@
 Changelog for package dbw_ford_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.9 (2024-02-23)
+------------------
+* Add missing rclcpp_components dependency to package.xml
+* Contributors: Kevin Hallenbeck
+
 2.1.8 (2024-02-20)
 ------------------
 
