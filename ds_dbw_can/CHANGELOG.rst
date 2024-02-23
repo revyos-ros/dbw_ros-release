@@ -2,6 +2,11 @@
 Changelog for package ds_dbw_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.9 (2024-02-23)
+------------------
+* Add missing rclcpp_components dependency to package.xml
+* Contributors: Kevin Hallenbeck
+
 2.1.8 (2024-02-20)
 ------------------
 * Bump firmware versions to match 2024/02/21 release package
