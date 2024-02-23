@@ -29,13 +29,13 @@ add_library(${PROJECT_NAME} SHARED
 )
 
 ament_target_dependencies(${PROJECT_NAME}
-  "rclcpp_components"
-  "rclcpp"
-  "std_msgs"
-  "can_msgs"
-  "sensor_msgs"
-  "ds_dbw_msgs"
-  "dataspeed_can_msg_filters"
+  rclcpp
+  rclcpp_components
+  std_msgs
+  can_msgs
+  sensor_msgs
+  ds_dbw_msgs
+  dataspeed_can_msg_filters
 )
 
 target_include_directories(
