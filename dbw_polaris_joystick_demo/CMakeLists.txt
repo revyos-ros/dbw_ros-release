@@ -28,12 +28,12 @@ add_library(${PROJECT_NAME} SHARED
 )
 
 ament_target_dependencies(${PROJECT_NAME}
-  "rclcpp_components"
-  "rclcpp"
-  "dataspeed_dbw_common"
-  "std_msgs"
-  "sensor_msgs"
-  "dbw_polaris_msgs"
+  rclcpp
+  rclcpp_components
+  dataspeed_dbw_common
+  std_msgs
+  sensor_msgs
+  dbw_polaris_msgs
 )
 
 install(TARGETS ${PROJECT_NAME}
