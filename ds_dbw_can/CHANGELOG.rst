@@ -2,6 +2,9 @@
 Changelog for package ds_dbw_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.10 (2024-02-27)
+-------------------
+
 2.1.9 (2024-02-23)
 ------------------
 * Add missing rclcpp_components dependency to package.xml
