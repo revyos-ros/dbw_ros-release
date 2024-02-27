@@ -1,0 +1,66 @@
+ros-humble-ds-dbw-can (2.1.10-1bullseye) bullseye; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Tue, 27 Feb 2024 05:00:00 -0000
+
+ros-humble-ds-dbw-can (2.1.9-1bullseye) bullseye; urgency=high
+
+  * Add missing rclcpp_components dependency to package.xml
+  * Contributors: Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Fri, 23 Feb 2024 05:00:00 -0000
+
+ros-humble-ds-dbw-can (2.1.8-1bullseye) bullseye; urgency=high
+
+  * Bump firmware versions to match 2024/02/21 release package
+  * PlatformMap as sparse std::map instead of dense std::array
+  * Platform/Module from EcuInfo
+  * Rename LimitHash to ParamHash
+  * Fix ULC config message transmit rate
+  * Add warnings for ULC preemption and lack of CRC/RC validation
+  * ULC demo scripts converted to DBW 2
+  * Contributors: Kevin Hallenbeck, Micho Radovnikovich
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Tue, 20 Feb 2024 05:00:00 -0000
+
+ros-humble-ds-dbw-can (2.1.7-1bullseye) bullseye; urgency=high
+
+  * Bump firmware versions to match 2024/02/12 release package
+  * Add support for system sync option
+  * Fix unused brake accel command scaling
+  * Steering wheel angle as degrees instead of radians
+  * Add brake vacuum pressure
+  * Contributors: Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Mon, 12 Feb 2024 05:00:00 -0000
+
+ros-humble-ds-dbw-can (2.1.6-1bullseye) bullseye; urgency=high
+
+  * Command limits vs vehicle speed
+  * Report calculated steer value/rate limits
+  * Report brake/throttle value limits
+  * Add warning on invalid steer/brake/throttle limit parameters
+  * Print limit hashes
+  * Refactor
+  * Add reserved CAN message
+  * Contributors: Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Tue, 16 Jan 2024 05:00:00 -0000
+
+ros-humble-ds-dbw-can (2.1.5-1bullseye) bullseye; urgency=high
+
+  * Bump firmware versions to match 2024/01/02 release package
+  * Warn when the incorrect DBW1/DBW2 package is used at runtime and suggest the correct package
+  * Contributors: Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Wed, 03 Jan 2024 05:00:00 -0000
+
+ros-humble-ds-dbw-can (2.1.4-1bullseye) bullseye; urgency=high
+
+  * Single package for all platforms with new DBW2 CAN API
+  * Contributors: Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Wed, 13 Dec 2023 05:00:00 -0000
+
+
