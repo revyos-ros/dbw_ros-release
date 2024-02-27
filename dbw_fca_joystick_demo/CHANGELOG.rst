@@ -2,6 +2,11 @@
 Changelog for package dbw_fca_joystick_demo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.10 (2024-02-27)
+-------------------
+* Add missing rclcpp_components dependency to package.xml
+* Contributors: Kevin Hallenbeck
+
 2.1.9 (2024-02-23)
 ------------------
 
