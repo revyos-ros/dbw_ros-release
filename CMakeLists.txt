@@ -27,11 +27,11 @@ add_library(${PROJECT_NAME} SHARED
 )
 
 ament_target_dependencies(${PROJECT_NAME}
-  "rclcpp_components"
-  "rclcpp"
-  "std_msgs"
-  "sensor_msgs"
-  "ds_dbw_msgs"
+  rclcpp
+  rclcpp_components
+  std_msgs
+  sensor_msgs
+  ds_dbw_msgs
 )
 
 install(TARGETS ${PROJECT_NAME}
