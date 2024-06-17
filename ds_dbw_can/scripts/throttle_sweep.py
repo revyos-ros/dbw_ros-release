@@ -31,8 +31,8 @@
 import rclpy
 from rclpy.node import Node
 import csv
-from dbw_ford_msgs.msg import ThrottleCmd, ThrottleReport, ThrottleInfoReport
-from dbw_ford_msgs.msg import GearReport, SteeringReport
+from ds_dbw_msgs.msg import ThrottleCmd, ThrottleReport, ThrottleInfo
+from ds_dbw_msgs.msg import GearReport, VehicleVelocity
 from math import fabs
 
 class ThrottleSweep(Node):
@@ -43,21 +43,21 @@ class ThrottleSweep(Node):
     self.throttle_cmd = 0.0
     self.msg_throttle_report = ThrottleReport()
     self.msg_throttle_report_ready = False
-    self.msg_throttle_info_report = ThrottleInfoReport()
-    self.msg_throttle_info_report_ready = False
+    self.msg_throttle_info = ThrottleInfo()
+    self.msg_throttle_info_ready = False
 
     # Other drive-by-wire variables
     self.msg_gear_report = GearReport()
     self.msg_gear_report_ready = False
-    self.msg_steering_report = SteeringReport()
-    self.msg_steering_report_ready = False
+    self.msg_vehicle_velocity = VehicleVelocity()
+    self.msg_vehicle_velocity_ready = False
 
     # Parameters
     self.i = -1
-    self.start = 0.15
-    self.end = 0.80
-    self.resolution = 0.001
-    self.duration = 1.5
+    self.start = 15.0
+    self.end = 80.0
+    self.resolution = 0.2
+    self.duration = 1.0
     self.get_logger().info('Recording throttle pedal data every ' + str(self.duration) + ' seconds from ' + str(self.start) + ' to ' + str(self.end) + ' with ' + str(self.resolution) + ' increments.')
     self.get_logger().info('This will take '  + str((self.end - self.start) / self.resolution * self.duration / 60.0) + ' minutes.')
 
@@ -67,74 +67,77 @@ class ThrottleSweep(Node):
     self.csv_writer.writerow(['Throttle (%)', 'Measured (%)'])
     
     # Publishers and subscribers
-    self.pub = self.create_publisher(ThrottleCmd, '/vehicle/throttle_cmd', 1)
-    self.create_subscription(ThrottleReport, '/vehicle/throttle_report', self.recv_throttle, 10)
-    self.create_subscription(ThrottleInfoReport, '/vehicle/throttle_info_report', self.recv_throttle_info, 10)
-    self.create_subscription(GearReport, '/vehicle/gear_report', self.recv_gear, 10)
-    self.create_subscription(SteeringReport, '/vehicle/steering_report', self.recv_steering, 10)
+    self.pub = self.create_publisher(ThrottleCmd, '/vehicle/throttle/cmd', 1)
+    self.create_subscription(ThrottleReport, '/vehicle/throttle/report', self.recv_throttle, 10)
+    self.create_subscription(ThrottleInfo, '/vehicle/throttle/info', self.recv_throttle_info, 10)
+    self.create_subscription(GearReport, '/vehicle/gear/report', self.recv_gear, 10)
+    self.create_subscription(VehicleVelocity, '/vehicle/vehicle_velocity', self.recv_veh_vel, 10)
+    rclpy.spin_once(self)
+
+    # Create timer
     self.create_timer(0.02, self.timer_cmd)
     self.create_timer(self.duration, self.timer_process)
 
   def timer_process(self):
     if self.i < 0:
       # Check for safe conditions
-      if not self.msg_steering_report_ready:
-        self.get_logger().error('Speed check failed. No messages on topic \'/vehicle/steering_report\'')
-        rclpy.try_shutdown()
+      if not self.msg_vehicle_velocity_ready:
+        self.get_logger().error('Speed check failed. No messages on topic \'/vehicle/vehicle_velocity\'')
+        rclpy.shutdown()
         return
-      if self.msg_steering_report.speed > 1.0:
+      if abs(self.msg_vehicle_velocity.vehicle_velocity_brake) > 1.0:
         self.get_logger().error('Speed check failed. Vehicle speed is greater than 1 m/s.')
-        rclpy.try_shutdown()
+        rclpy.shutdown()
         return
       if not self.msg_gear_report_ready:
-        self.get_logger().error('Gear check failed. No messages on topic \'/vehicle/gear_report\'')
-        rclpy.try_shutdown()
+        self.get_logger().error('Gear check failed. No messages on topic \'/vehicle/gear/report\'')
+        rclpy.shutdown()
         return
-      if not self.msg_gear_report.state.gear == self.msg_gear_report.state.PARK:
+      if self.msg_gear_report.gear.value != self.msg_gear_report.gear.PARK:
         self.get_logger().error('Gear check failed. Vehicle not in park.')
-        rclpy.try_shutdown()
+        rclpy.shutdown()
         return
     elif self.i < int((self.end - self.start) / self.resolution + 1):
       # Check for new messages
       if not self.msg_throttle_report_ready:
-        self.get_logger().error('No new messages on topic \'/vehicle/throttle_report\'')
-        rclpy.try_shutdown()
+        self.get_logger().error('No new messages on topic \'/vehicle/throttle/report\'')
+        rclpy.shutdown()
         return
-      if not self.msg_throttle_info_report_ready:
-        self.get_logger().error('No new messages on topic \'/vehicle/throttle_info_report\'')
-        rclpy.try_shutdown()
+      if not self.msg_throttle_info_ready:
+        self.get_logger().error('No new messages on topic \'/vehicle/throttle/info\'')
+        rclpy.shutdown()
         return
       if not self.msg_throttle_report.enabled:
         self.get_logger().error('Throttle module not enabled!')
-        rclpy.try_shutdown()
+        rclpy.shutdown()
         return
 
       # Make sure values are close to expected
-      diff = self.throttle_cmd - self.msg_throttle_report.pedal_output
-      if (fabs(diff) > 0.01):
+      diff = self.throttle_cmd - self.msg_throttle_report.percent_output
+      if (fabs(diff) > 1.0):
         self.get_logger().warn('Not saving data point. Large disparity between pedal request and actual: ' + str(diff))
       else:
         # Write data to file
-        self.get_logger().info('Data point: ' + "{:.03f}".format(self.msg_throttle_report.pedal_output) + ', ' +
-                         "{:.03f}".format(self.msg_throttle_info_report.throttle_pc))
-        self.csv_writer.writerow(["{:.03f}".format(self.msg_throttle_report.pedal_output),
-                      "{:.03f}".format(self.msg_throttle_info_report.throttle_pc)])
+        self.get_logger().info('Data point: ' + "{:.03f}".format(self.msg_throttle_report.percent_output) + ', ' +
+                         "{:.01f}".format(self.msg_throttle_info.accel_pedal_pc))
+        self.csv_writer.writerow(["{:.03f}".format(self.msg_throttle_report.percent_output),
+                      "{:.01f}".format(self.msg_throttle_info.accel_pedal_pc)])
     else:
-      rclpy.try_shutdown()
+      rclpy.shutdown()
       return
     
     # Prepare for next iteration
     self.i += 1
     self.msg_throttle_report_ready = False
-    self.msg_throttle_info_report_ready = False
+    self.msg_throttle_info_ready = False
     self.throttle_cmd = self.start + self.i * self.resolution
 
   def timer_cmd(self):
     if self.throttle_cmd > 0:
       msg = ThrottleCmd()
       msg.enable = True
-      msg.pedal_cmd_type = ThrottleCmd.CMD_PEDAL
-      msg.pedal_cmd = self.throttle_cmd
+      msg.cmd_type = ThrottleCmd.CMD_PEDAL_RAW
+      msg.cmd = self.throttle_cmd
       self.pub.publish(msg)
 
   def recv_throttle(self, msg):
@@ -142,16 +145,16 @@ class ThrottleSweep(Node):
     self.msg_throttle_report_ready = True
 
   def recv_throttle_info(self, msg):
-    self.msg_throttle_info_report = msg
-    self.msg_throttle_info_report_ready = True
+    self.msg_throttle_info = msg
+    self.msg_throttle_info_ready = True
 
   def recv_gear(self, msg):
     self.msg_gear_report = msg
     self.msg_gear_report_ready = True
 
-  def recv_steering(self, msg):
-    self.msg_steering_report = msg
-    self.msg_steering_report_ready = True
+  def recv_veh_vel(self, msg):
+    self.msg_vehicle_velocity = msg
+    self.msg_vehicle_velocity_ready = True
 
   def shutdown_handler(self):
     self.get_logger().info('Saving csv file')
@@ -162,7 +165,7 @@ def main(args=None):
   node = ThrottleSweep()
   rclpy.spin(node)
   node.destroy_node()
-  rclpy.try_shutdown()
+  rclpy.shutdown()
 
 if __name__ == '__main__':
   main()

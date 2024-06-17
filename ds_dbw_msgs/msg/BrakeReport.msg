@@ -37,7 +37,7 @@ bool bad_rc # Repeated rolling counter on most recent command
 bool degraded
 
 # Calculated limit vs vehicle speed
-float32 limit_value # bar or m/s^2
+float32 limit_value # percent, bar, or m/s^2
 
 # Brake available duration and actions
 float32 brake_available_duration
@@ -45,8 +45,9 @@ bool brake_available_full
 bool req_shift_park
 bool req_park_brake
 
-#
+# Other braking sources
 bool external_button
+bool comms_loss_armed
 
 # Command source
 CmdSrc cmd_src
