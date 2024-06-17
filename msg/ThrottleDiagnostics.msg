@@ -15,6 +15,7 @@ bool degraded_param_mismatch
 bool degraded_vehicle
 bool degraded_vehicle_speed
 bool degraded_aped_feedback
+bool degraded_actuator_pedal_sensor
 bool degraded_sensor
 bool degraded_calibration
 
@@ -34,6 +35,8 @@ bool fault_sensor
 bool fault_aped_sensor_1
 bool fault_aped_sensor_2
 bool fault_aped_sensor_mismatch
+bool fault_actuator_pedal_sensor
+bool fault_control_performance
 bool fault_param_mismatch
 bool fault_param_limits
 bool fault_calibration
