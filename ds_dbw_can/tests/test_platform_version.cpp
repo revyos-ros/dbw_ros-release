@@ -91,8 +91,9 @@ TEST(PlatformVersion, platformToString) {
   EXPECT_STREQ("FCA_RU",         platformToString(Platform::FCA_RU));
   EXPECT_STREQ("FCA_WK2",        platformToString(Platform::FCA_WK2));
   EXPECT_STREQ("POLARIS_GEM",    platformToString(Platform::POLARIS_GEM));
+  EXPECT_STREQ("POLARIS_RZRXP",  platformToString(Platform::POLARIS_RZRXP));
   EXPECT_STREQ("POLARIS_RANGER", platformToString(Platform::POLARIS_RANGER));
-  EXPECT_STREQ("POLARIS_RZR",    platformToString(Platform::POLARIS_RZR));
+  EXPECT_STREQ("POLARIS_RZRR",   platformToString(Platform::POLARIS_RZRR));
   for (size_t i = 0x90; i <= UINT8_MAX; i++) {
     EXPECT_STREQ("UNKNOWN", platformToString((Platform)i)) << "i = " << i;
   }
@@ -106,6 +107,7 @@ TEST(PlatformVersion, moduleToString) {
   EXPECT_STREQ("Throttle", moduleToString(Module::Throttle));
   EXPECT_STREQ("Shift   ", moduleToString(Module::Shift));
   EXPECT_STREQ("BOO     ", moduleToString(Module::BOO));
+  EXPECT_STREQ("Monitor ", moduleToString(Module::Monitor));
   EXPECT_STREQ("UNKNOWN", moduleToString((Module)0));
   for (size_t i = 0; i < (size_t)Module::Gateway; i++) {
     EXPECT_STREQ("UNKNOWN", moduleToString((Module)i)) << "i = " << i;
