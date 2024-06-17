@@ -21,6 +21,7 @@ bool btn_enable
 bool btn_disable
 
 # Status
+bool lockout
 bool override # Any steer/brake/throttle/gear override
 bool ready    # All steer/brake/throttle ready, and gear not faulted
 bool enabled  # All steer/brake/throttle enabled, and gear not faulted (or any steer/brake/throttle enabled for Mode>=AllOrNone)
