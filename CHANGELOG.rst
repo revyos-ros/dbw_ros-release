@@ -2,6 +2,26 @@
 Changelog for package ds_dbw_joystick_demo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.16 (2024-06-17)
+-------------------
+
+2.1.15 (2024-06-07)
+-------------------
+
+2.1.14 (2024-05-29)
+-------------------
+
+2.1.13 (2024-05-13)
+-------------------
+
+2.1.12 (2024-04-01)
+-------------------
+
+2.1.11 (2024-03-05)
+-------------------
+* Use system enable/disable buttons when mode-sync is inactive
+* Contributors: Kevin Hallenbeck
+
 2.1.10 (2024-02-27)
 -------------------
 * Add missing rclcpp_components dependency to package.xml
