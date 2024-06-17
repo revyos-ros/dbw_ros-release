@@ -50,6 +50,9 @@
 #include <ds_dbw_msgs/msg/gear_cmd.hpp>
 #include <ds_dbw_msgs/msg/gear_diagnostics.hpp>
 #include <ds_dbw_msgs/msg/gear_report.hpp>
+#include <ds_dbw_msgs/msg/monitor_cmd.hpp>
+#include <ds_dbw_msgs/msg/monitor_report.hpp>
+#include <ds_dbw_msgs/msg/monitor_throttle.hpp>
 #include <ds_dbw_msgs/msg/system_report.hpp>
 #include <ds_dbw_msgs/msg/vehicle_velocity.hpp>
 #include <ds_dbw_msgs/msg/throttle_info.hpp>
@@ -94,41 +97,50 @@ private:
   void recvGearCmd(const ds_dbw_msgs::msg::GearCmd::ConstSharedPtr msg);
   void recvMiscCmd(const ds_dbw_msgs::msg::MiscCmd::ConstSharedPtr msg);
   void recvUlcCmd(const ds_dbw_msgs::msg::UlcCmd::ConstSharedPtr msg);
+  void recvMonitorCmd(const ds_dbw_msgs::msg::MonitorCmd::ConstSharedPtr msg);
   void recvSteeringCalibrate(const std_msgs::msg::Empty::ConstSharedPtr msg);
 
   // CAN messages
-  MsgSteerCmdUsr     msg_steer_cmd_;
-  MsgSteerReport1    msg_steer_rpt_1_;
-  MsgSteerReport2    msg_steer_rpt_2_;
-  MsgSteerReport3    msg_steer_rpt_3_;
-  MsgBrakeCmdUsr     msg_brake_cmd_;
-  MsgBrakeReport1    msg_brake_rpt_1_;
-  MsgBrakeReport2    msg_brake_rpt_2_;
-  MsgBrakeReport3    msg_brake_rpt_3_;
-  MsgThrtlCmdUsr     msg_thrtl_cmd_;
-  MsgThrtlReport1    msg_thrtl_rpt_1_;
-  MsgThrtlReport2    msg_thrtl_rpt_2_;
-  MsgThrtlReport3    msg_thrtl_rpt_3_;
-  MsgGearCmdUsr      msg_gear_cmd_;
-  MsgGearReport1     msg_gear_rpt_1_;
-  MsgGearReport2     msg_gear_rpt_2_;
-  MsgGearReport3     msg_gear_rpt_3_;
-  MsgSystemReport    msg_system_rpt_;
-  MsgSystemCmd       msg_system_cmd_;
-  MsgVehicleVelocity msg_veh_vel_;
-  MsgThrtlInfo       msg_thrtl_info_;
-  MsgBrakeInfo       msg_brake_info_;
-  MsgUlcCmd          msg_ulc_cmd_;
-  MsgUlcCfg          msg_ulc_cfg_;
-  MsgUlcReport       msg_ulc_rpt_;
-  MsgAccel           msg_accel_;
-  MsgGyro            msg_gyro_;
-  MsgWheelSpeed      msg_wheel_speed_;
-  MsgWheelPosition   msg_wheel_position_;
-  MsgMiscCmd         msg_misc_cmd_;
-  MsgMiscReport1     msg_misc_rpt_1_;
-  MsgMiscReport2     msg_misc_rpt_2_;
-  MsgTirePressure    msg_tire_pressure_;
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+  MsgSteerCmdUsr     msg_steer_cmd_ = {0};
+  MsgSteerReport1    msg_steer_rpt_1_ = {0};
+  MsgSteerReport2    msg_steer_rpt_2_ = {0};
+  MsgSteerReport3    msg_steer_rpt_3_ = {0};
+  MsgBrakeCmdUsr     msg_brake_cmd_ = {0};
+  MsgBrakeReport1    msg_brake_rpt_1_ = {0};
+  MsgBrakeReport2    msg_brake_rpt_2_ = {0};
+  MsgBrakeReport3    msg_brake_rpt_3_ = {0};
+  MsgThrtlCmdUsr     msg_thrtl_cmd_ = {0};
+  MsgThrtlReport1    msg_thrtl_rpt_1_ = {0};
+  MsgThrtlReport2    msg_thrtl_rpt_2_ = {0};
+  MsgThrtlReport3    msg_thrtl_rpt_3_ = {0};
+  MsgGearCmdUsr      msg_gear_cmd_ = {Gear::None};
+  MsgGearReport1     msg_gear_rpt_1_ = {Gear::None};
+  MsgGearReport2     msg_gear_rpt_2_ = {0};
+  MsgGearReport3     msg_gear_rpt_3_ = {0};
+  MsgMonitorCmd      msg_monitor_cmd_ = {MsgMonitorCmd::CmdType::None};
+  MsgMonitorReport1  msg_monitor_rpt_1_ = {0};
+  MsgMonitorReport2  msg_monitor_rpt_2_ = {MsgMonitorReport2::Fault::None};
+  MsgMonitorReport3  msg_monitor_rpt_3_ = {MsgMonitorReport3::Fault::None};
+  MsgMonitorThrtl    msg_monitor_thrtl_ = {0};
+  MsgSystemReport    msg_system_rpt_ = {0};
+  MsgSystemCmd       msg_system_cmd_ = {MsgSystemCmd::Cmd::None};
+  MsgVehicleVelocity msg_veh_vel_ = {0};
+  MsgThrtlInfo       msg_thrtl_info_ = {0};
+  MsgBrakeInfo       msg_brake_info_ = {0};
+  MsgUlcCmd          msg_ulc_cmd_ = {0};
+  MsgUlcCfg          msg_ulc_cfg_ = {0};
+  MsgUlcReport       msg_ulc_rpt_ = {0};
+  MsgAccel           msg_accel_ = {0};
+  MsgGyro            msg_gyro_ = {0};
+  MsgWheelSpeed      msg_wheel_speed_ = {0};
+  MsgWheelPosition   msg_wheel_position_ = {0};
+  MsgMiscCmd         msg_misc_cmd_ = {TurnSignal::None};
+  MsgMiscReport1     msg_misc_rpt_1_ = {TurnSignal::None};
+  MsgMiscReport2     msg_misc_rpt_2_ = {0};
+  MsgTirePressure    msg_tire_pressure_ = {0};
+  #pragma GCC diagnostic pop
 
   // Clock for received message timestamps
   rclcpp::Clock ros_clock_ = rclcpp::Clock(RCL_ROS_TIME);
@@ -145,6 +157,7 @@ private:
   bool msg_steer_cmd_clear_ = false; // Set clear flag in steer cmd one time
   bool msg_brake_cmd_clear_ = false; // Set clear flag in brake cmd one time
   bool msg_thrtl_cmd_clear_ = false; // Set clear flag in thrtl cmd one time
+  bool msg_ulc_cmd_clear_ = false;   // Set clear flag in ulc cmd one time
   bool msg_system_cmd_enable_ = false; // Send system cmd with enable one time
 
   // Without firmware mode sync (manage mode here)
@@ -220,11 +233,16 @@ private:
   WarnTimeout<MsgBrakeCmd, MsgBrakeReport1> warn_timeout_brake_ = WarnTimeout<MsgBrakeCmd, MsgBrakeReport1>(*this, "Brake");
   WarnTimeout<MsgThrtlCmd, MsgThrtlReport1> warn_timeout_thrtl_ = WarnTimeout<MsgThrtlCmd, MsgThrtlReport1>(*this, "Throttle");
 
-  // Other warnings
+  // Other oneshot warnings and prints
   bool validate_cmd_crc_rc_warned_ = false;
   bool ulc_preempt_warned_ = false;
+  bool system_sync_mode_printed_ = false;
+  bool remote_control_printed_ = false;
 
-#if 0
+  #if 1
+  ///@TODO: Remove after implementing proper timeouts
+  bool msg_misc_rpt_2_valid_ = false;
+  #else
   template <typename T>
   class Recv {
   public:
@@ -269,6 +287,10 @@ private:
   RollingCounterValidation<MsgThrtlReport2>    msg_thrtl_rpt_2_rc_;
   RollingCounterValidation<MsgGearReport1>     msg_gear_rpt_1_rc_;
   RollingCounterValidation<MsgGearReport2>     msg_gear_rpt_2_rc_;
+  RollingCounterValidation<MsgMonitorReport1>  msg_monitor_rpt_1_rc_;
+  RollingCounterValidation<MsgMonitorReport2>  msg_monitor_rpt_2_rc_;
+  RollingCounterValidation<MsgMonitorReport3>  msg_monitor_rpt_3_rc_;
+  RollingCounterValidation<MsgMonitorThrtl>    msg_monitor_thrtl_rc_;
   RollingCounterValidation<MsgSystemReport>    msg_system_rpt_rc_;
   RollingCounterValidation<MsgVehicleVelocity> msg_veh_vel_rc_;
   RollingCounterValidation<MsgThrtlInfo>       msg_thrtl_info_rc_;
@@ -337,7 +359,10 @@ private:
   // Frame ID
   std::string frame_id_ = "base_footprint";
 
-  // Command warnings
+  // Use system enable/disable buttons
+  bool buttons_ = true;
+
+  // Warning print options
   bool warn_crc_ = true;
   bool warn_cmds_ = true;
   bool warn_unknown_ = true;
@@ -352,6 +377,7 @@ private:
   rclcpp::Subscription<ds_dbw_msgs::msg::GearCmd>::SharedPtr sub_gear_;
   rclcpp::Subscription<ds_dbw_msgs::msg::MiscCmd>::SharedPtr sub_misc_;
   rclcpp::Subscription<ds_dbw_msgs::msg::UlcCmd>::SharedPtr sub_ulc_;
+  rclcpp::Subscription<ds_dbw_msgs::msg::MonitorCmd>::SharedPtr sub_monitor_cmd_;
   rclcpp::Subscription<std_msgs::msg::Empty>::SharedPtr sub_calibrate_steering_;
 
   // Published topics
@@ -364,6 +390,8 @@ private:
   rclcpp::Publisher<ds_dbw_msgs::msg::ThrottleDiagnostics>::SharedPtr pub_thrtl_diag_;
   rclcpp::Publisher<ds_dbw_msgs::msg::GearReport>::SharedPtr pub_gear_rpt_;
   rclcpp::Publisher<ds_dbw_msgs::msg::GearDiagnostics>::SharedPtr pub_gear_diag_;
+  rclcpp::Publisher<ds_dbw_msgs::msg::MonitorReport>::SharedPtr pub_monitor_rpt_;
+  rclcpp::Publisher<ds_dbw_msgs::msg::MonitorThrottle>::SharedPtr pub_monitor_thrtl_;
   rclcpp::Publisher<ds_dbw_msgs::msg::SystemReport>::SharedPtr pub_system_rpt_;
   rclcpp::Publisher<ds_dbw_msgs::msg::VehicleVelocity>::SharedPtr pub_veh_vel_;
   rclcpp::Publisher<ds_dbw_msgs::msg::ThrottleInfo>::SharedPtr pub_thrtl_info_;
