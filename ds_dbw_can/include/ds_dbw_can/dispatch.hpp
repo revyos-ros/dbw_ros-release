@@ -66,12 +66,23 @@ enum class SystemSyncMode : uint8_t {
     AllOrNone = 2,
     AllOrNoneWithBtn = 3,
 };
+static constexpr const char * systemSyncModeToString(SystemSyncMode x) {
+    switch (x) {
+        case SystemSyncMode::None:             return "None";
+        case SystemSyncMode::Disengages:       return "Disengages";
+        case SystemSyncMode::AllOrNone:        return "AllOrNone";
+        case SystemSyncMode::AllOrNoneWithBtn: return "AllOrNoneWithBtn";
+        default:                               return "Unknown";
+    }
+}
+
 enum class CmdSrc : uint8_t {
     User = 0,
     ULC = 1,
     Remote = 2,
     Button = 3,
-    _Future = 7,
+    CommsLoss = 4,
+    Lockout = 5,
 };
 enum class Gear : uint8_t {
     None = 0,
@@ -81,6 +92,7 @@ enum class Gear : uint8_t {
     Drive = 4,
     Low = 5,
     Manual = 6,
+    Calibrate = 15,
 };
 enum class TurnSignal : uint8_t {
     None = 0,
@@ -421,7 +433,7 @@ struct MsgSteerReport2 {
             limit_rate = 0xFF; // Unlimited
         }
     }
-    float getLimitRateDegS() {
+    float getLimitRateDegS() const {
         if (limit_rate != 0xFF) {
             return limit_rate * 4;
         }
@@ -434,7 +446,7 @@ struct MsgSteerReport2 {
             limit_value = 0x3FF; // Unlimited
         }
     }
-    float getLimitValueDeg() {
+    float getLimitValueDeg() const {
         if (limit_value != 0x3FF) {
             return limit_value;
         }
@@ -483,10 +495,16 @@ struct MsgSteerReport3 {
     uint8_t fault_comms_actuator :1;
     uint8_t :3;
     uint8_t fault_vehicle_speed :1;
-    uint8_t :7;
+    uint8_t :3;
+    uint8_t fault_angle_sensor :1;
+    uint8_t fault_torque_sensor_1 :1;
+    uint8_t fault_torque_sensor_2 :1;
+    uint8_t fault_torque_sensor_mismatch :1;
     uint8_t fault_actuator_torque_sensor :1;
     uint8_t fault_actuator_config :1;
-    uint8_t :3;
+    uint8_t fault_actuator_assist :1;
+    uint8_t :1;
+    uint8_t fault_control_performance :1;
     uint8_t fault_param_mismatch :1;
     uint8_t fault_param_limits :1;
     uint8_t fault_calibration :1;
@@ -613,6 +631,9 @@ struct MsgBrakeCmd {
     float cmdPressureBar() const {
         return cmd * 0.01f;
     }
+    uint16_t cmdTorqueNmU16() const {
+        return cmd;
+    }
     float cmdTorqueNm() const {
         return cmd;
     }
@@ -621,6 +642,13 @@ struct MsgBrakeCmd {
     }
     float cmdAccelMpS() const {
         return (int16_t)cmd * 0.001f;
+    }
+    uint16_t cmdPercentU16() const {
+        constexpr uint16_t MAX = 100 / 0.01;
+        if (cmd < MAX) {
+            return (cmd * UINT16_MAX) / MAX;
+        }
+        return UINT16_MAX;
     }
     float cmdPercent() const {
         return cmd * 0.01f;
@@ -695,6 +723,42 @@ struct MsgBrakeCmd {
             return std::max<float>(rate_dec * 10, 50); // Minimum of 50 %/s
         } else {
             return INFINITY; // Unlimited
+        }
+    }
+    uint16_t cmdRateIncNmSU16() const { // Nm/ms (0.001Nm/s)
+        if (rate_inc == 0) {
+            return 0; // Default
+        } else if (rate_inc < UINT8_MAX) {
+            return std::max<uint16_t>(rate_inc, 2); // Minimum of 2 kNm/s
+        } else {
+            return UINT16_MAX; // Unlimited
+        }
+    }
+    uint16_t cmdRateDecNmSU16() const { // Nm/ms (0.001Nm/s)
+        if (rate_dec == 0) {
+            return 0; // Default
+        } else if (rate_dec < UINT8_MAX) {
+            return std::max<uint16_t>(rate_dec, 2); // Minimum of 2 kNm/s
+        } else {
+            return UINT16_MAX; // Unlimited
+        }
+    }
+    uint16_t cmdRateIncPercentSU16() const { // %/ms (0.001%/s)
+        if (rate_inc == 0) {
+            return 0; // Default
+        } else if (rate_inc < UINT8_MAX) {
+            return std::max<uint16_t>(rate_inc * (uint16_t)(10e-2 * 1e-3 * UINT16_MAX), (uint16_t)(50e-2 * 1e-3 * UINT16_MAX)); // Minimum of 50 %/s
+        } else {
+            return UINT16_MAX; // Unlimited
+        }
+    }
+    uint16_t cmdRateDecPercentSU16() const { // %/ms (0.001%/s)
+        if (rate_dec == 0) {
+            return 0; // Default
+        } else if (rate_dec < UINT8_MAX) {
+            return std::max<uint16_t>(rate_dec * (uint16_t)(10e-2 * 1e-3 * UINT16_MAX), (uint16_t)(50e-2 * 1e-3 * UINT16_MAX)); // Minimum of 50 %/s
+        } else {
+            return UINT16_MAX; // Unlimited
         }
     }
     bool validRc(uint8_t rc) const {
@@ -861,6 +925,23 @@ struct MsgBrakeReport1 {
         setPercent(in_pc, cmd_pc, out_pc);
         cmd_type = CmdType::PedalRaw;
     }
+    void setPercentU16(uint16_t in_pc, uint16_t cmd_pc, uint16_t out_pc) {
+        cmd_type = CmdType::Percent;
+        constexpr uint16_t MAX = 100 / 0.025;
+        input  = (in_pc  * MAX) / UINT16_MAX;
+        cmd    = (cmd_pc * MAX) / UINT16_MAX;
+        output = (out_pc * MAX) / UINT16_MAX;
+    }
+    void setPedalRawU16(uint16_t in_pc, uint16_t cmd_pc, uint16_t out_pc) {
+        setPercentU16(in_pc, cmd_pc, out_pc);
+        cmd_type = CmdType::PedalRaw;
+    }
+    void setTorqueNmU16(uint16_t in_nm, uint16_t cmd_nm, uint16_t out_nm) {
+        cmd_type = CmdType::Torque;
+        input  = std::clamp<uint16_t>(in_nm  / 4, 0, (UINT16_MAX >> 4) - 1);
+        cmd    = std::clamp<uint16_t>(cmd_nm / 4, 0, (UINT16_MAX >> 4) - 1);
+        output = std::clamp<uint16_t>(out_nm / 4, 0, (UINT16_MAX >> 4) - 1);
+    }
     int32_t cmdRawSigned() const {
         switch (cmd_type) { // No default case, explicitly specify all cases
             case MsgBrakeCmd::CmdType::Accel:
@@ -991,8 +1072,9 @@ struct MsgBrakeReport2 {
     uint8_t :1;
     uint8_t :1;
     uint8_t :8;
-    uint16_t limit_value :10; // 0.2 bar or 0.02 m/s^2, 1023=unlimited
-    uint8_t :3;
+    uint16_t limit_value :10; // 0.1 %, 0.2 bar, 0.02 m/s^2, 1023=unlimited
+    uint8_t :2;
+    uint8_t comms_loss_armed :1;
     uint8_t req_park_brake :1;
     uint8_t req_shift_park :1;
     uint8_t brake_available_full :1;
@@ -1007,6 +1089,27 @@ struct MsgBrakeReport2 {
         memset(this, 0x00, sizeof(*this));
         rc = save;
     }
+    void setLimitValuePercentU16(uint16_t percent, bool valid) {
+        if (valid) {
+            constexpr uint16_t MAX = 100 / 0.1;
+            limit_value = (percent  * MAX) / UINT16_MAX;
+        } else {
+            limit_value = 0x3FF; // Unlimited
+        }
+    }
+    void setLimitValuePercent(float percent) {
+        if (std::isfinite(percent)) {
+            limit_value = std::clamp<float>(std::round(std::abs(percent) / 0.1f), 0, 0x3FE);
+        } else {
+            limit_value = 0x3FF; // Unlimited
+        }
+    }
+    float getLimitValuePercent() const {
+        if (limit_value != 0x3FF) {
+            return limit_value * 0.1f;
+        }
+        return INFINITY; // Unlimited
+    }
     void setLimitValuePressureBar(float bar) {
         if (std::isfinite(bar)) {
             limit_value = std::clamp<float>(std::round(std::abs(bar) / 0.2f), 0, 0x3FE);
@@ -1014,7 +1117,7 @@ struct MsgBrakeReport2 {
             limit_value = 0x3FF; // Unlimited
         }
     }
-    float getLimitValuePressureBar() {
+    float getLimitValuePressureBar() const {
         if (limit_value != 0x3FF) {
             return limit_value * 0.2f;
         }
@@ -1027,11 +1130,14 @@ struct MsgBrakeReport2 {
             limit_value = 0x3FF; // Unlimited
         }
     }
-    float getLimitValueDecelMps2() {
+    float getLimitValueDecelMps2() const {
         if (limit_value != 0x3FF) {
             return limit_value * 0.02f;
         }
         return INFINITY; // Unlimited
+    }
+    void setBrkAvailDurUnlimited() {
+        brake_available_mux = BrkAvlMode::Unlimited;
     }
     void setBrkAvailDurSec(uint16_t seconds, uint16_t seconds_full, uint16_t offset = 0) {
         brake_available_mux = BrkAvlMode::SecondsX2;
@@ -1127,10 +1233,13 @@ struct MsgBrakeReport3 {
     uint8_t fault_vehicle_speed :1;
     uint8_t fault_actuator_acc_deny :1;
     uint8_t fault_actuator_pedal_sensor :1;
-    uint8_t :3;
+    uint8_t fault_bped_sensor_1 :1;
+    uint8_t fault_bped_sensor_2 :1;
+    uint8_t fault_bped_sensor_mismatch :1;
     uint8_t fault_actuator_1 :1;
     uint8_t fault_actuator_2 :1;
-    uint8_t :5;
+    uint8_t :4;
+    uint8_t fault_control_performance :1;
     uint8_t fault_param_mismatch :1;
     uint8_t fault_param_limits :1;
     uint8_t fault_calibration :1;
@@ -1418,7 +1527,7 @@ struct MsgThrtlReport2 {
             limit_value = 0x3FF; // Unlimited
         }
     }
-    float getLimitValuePc() {
+    float getLimitValuePc() const {
         if (limit_value != 0x3FF) {
             return limit_value * 0.1f;
         }
@@ -1451,7 +1560,8 @@ struct MsgThrtlReport3 {
     uint8_t degraded_param_mismatch :1;
     uint8_t degraded_vehicle_speed :1;
     uint8_t degraded_aped_feedback :1;
-    uint8_t :6;
+    uint8_t degraded_actuator_pedal_sensor :1;
+    uint8_t :5;
     uint8_t :7;
     uint8_t degraded_calibration :1;
     uint8_t fault_comms_dbw :1;
@@ -1464,9 +1574,11 @@ struct MsgThrtlReport3 {
     uint8_t fault_aped_sensor_1 :1;
     uint8_t fault_aped_sensor_2 :1;
     uint8_t fault_aped_sensor_mismatch :1;
-    uint8_t :4;
+    uint8_t fault_actuator_pedal_sensor :1;
+    uint8_t :3;
     uint8_t :8;
-    uint8_t :5;
+    uint8_t :4;
+    uint8_t fault_control_performance :1;
     uint8_t fault_param_mismatch :1;
     uint8_t fault_param_limits :1;
     uint8_t fault_calibration :1;
@@ -1494,8 +1606,8 @@ static_assert(4 == sizeof(MsgThrtlParamHash));
 
 struct MsgGearCmd {
     static constexpr size_t TIMEOUT_MS = 0; // Event based
-    Gear cmd :3;
-    uint8_t :5;
+    Gear cmd :4;
+    uint8_t :4;
     uint8_t :8;
     uint8_t :8;
     uint8_t crc;
@@ -1553,15 +1665,12 @@ struct MsgGearReport1 {
         ShiftInProgress = 3, // Shift in progress
         Override = 4,        // Override on brake, throttle, or steering
         BrakeHold = 5,       // Brake hold time depleted, stay in park
-        Reserved = 6,
+        VehicleSpeed = 6,    // Excessive vehicle speed
         Vehicle = 7,         // Rejected by vehicle (try pressing the brakes)
     };
-    Gear gear :3;
-    uint8_t :1; // Future expansion of gear
-    Gear cmd :3;
-    uint8_t :1; // Future expansion of gear
-    Gear driver :3;
-    uint8_t :1; // Future expansion of gear
+    Gear gear :4;
+    Gear cmd :4;
+    Gear driver :4;
     Reject reject :3;
     uint8_t :1; // Future expansion of reject
 
@@ -1689,7 +1798,9 @@ struct MsgGearReport3 {
     uint8_t :1;
     uint8_t fault_vehicle_speed :1;
     uint8_t :7;
-    uint8_t :5;
+    uint8_t :1;
+    uint8_t fault_actuator_config :1;
+    uint8_t :3;
     uint8_t fault_param_mismatch :1;
     uint8_t :1;
     uint8_t fault_calibration :1;
@@ -1707,6 +1818,228 @@ struct MsgGearReport3 {
     }
 };
 static_assert(8 == sizeof(MsgGearReport3));
+
+struct MsgMonitorCmd {
+    static constexpr uint32_t ID = 0x215;
+    static constexpr size_t TIMEOUT_MS = 250;
+    enum class CmdType : uint8_t {
+        None = 0,
+        ActivateTestFault = 1,
+        ClearTestFault = 2,
+    };
+    CmdType cmd_type :2;
+    uint8_t :6;
+    uint8_t crc;
+    void reset() {
+        memset(this, 0x00, sizeof(*this));
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+};
+static_assert(2 == sizeof(MsgMonitorCmd));
+struct MsgMonitorReport1 {
+    static constexpr uint32_t ID = 0x105;
+    static constexpr size_t PERIOD_MIN = 20;
+    static constexpr size_t PERIOD_MS  = 100;
+    static constexpr size_t PERIOD_MAX = 100;
+    static constexpr size_t TIMEOUT_MS = 250;
+    enum class Fault : uint8_t {
+        Unknown = 0,
+        None = 1,
+        Fault = 2,
+    };
+    static constexpr Fault mergeFaults(Fault a, Fault b) {
+        if (a == Fault::Fault || b == Fault::Fault) {
+            return Fault::Fault;
+        }
+        if (a == Fault::Unknown || b == Fault::Unknown) {
+            return Fault::Unknown;
+        }
+        return Fault::None;
+    }
+    bool fault :1;
+    bool shutoff :1;
+    bool shutoff_on_motion :1;
+    bool stationary :1;
+    uint8_t :2;
+    Fault fault_test :2;   // Test fault to verify shutoff action
+    Fault fault_system :2; // Any fault related to system enable/disable
+    Fault fault_steer :2;  // Any fault related to steer control
+    Fault fault_brake :2;  // Any fault related to brake control
+    Fault fault_thrtl :2;  // Any fault related to throttle control
+    Fault fault_gear :2;   // Any fault related to gear control
+    Fault fault_ulc :2;    // Any fault related to the ULC
+    uint8_t :2;
+    Fault fault_vehicle_velocity :2; // Vehicle velocity measurement mismatch with OEM
+    uint8_t steer_cmd_match_oem :1;
+    uint8_t steer_cmd_match_dbw :1;
+    uint8_t brake_cmd_match_oem :1;
+    uint8_t brake_cmd_match_dbw :1;
+    uint8_t thrtl_cmd_match_oem :1;
+    uint8_t thrtl_cmd_match_dbw :1;
+    uint8_t gear_cmd_match_oem :1;
+    uint8_t gear_cmd_match_dbw :1;
+    uint8_t :4;
+    uint8_t rc :4;
+    uint8_t crc;
+    void reset() {
+        uint8_t save = rc;
+        memset(this, 0x00, sizeof(*this));
+        rc = save;
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validRc(uint8_t rc) const {
+        return rc != this->rc;
+    }
+};
+static_assert(6 == sizeof(MsgMonitorReport1));
+struct MsgMonitorReport2 {
+    static constexpr uint32_t ID = 0x305;
+    static constexpr size_t PERIOD_MS = 1000;
+    static constexpr size_t TIMEOUT_MS = 3500;
+    using Fault = MsgMonitorReport1::Fault;
+    Fault fault_steer_feedback :2; // Steering wheel angle measurement mismatch with OEM
+    Fault fault_steer_input :2;    // Steering column torque measurement mismatch with OEM
+    Fault fault_steer_param :2;    // Steering parameter mismatch with DBW
+    Fault fault_steer_limit :2;    // Steering limit calculation mismatch with DBW
+    Fault fault_steer_override :2; // Steering override calculation mismatch with DBW
+    Fault fault_steer_cmd :2;      // Steering actuator command mismatch with OEM and DBW
+    Fault fault_steer_cmd_rate :2; // Steering actuator command rate faster than DBW and limit
+    Fault fault_steer_cmd_en :2;   // Steering actuator command without matching DBW command enable
+    Fault fault_steer_cmd_sys :2;  // Steering actuator command with DBW system disabled
+    Fault fault_steer_cmd_ovr :2;  // Steering actuator command with override
+    uint8_t :4;
+    Fault fault_brake_feedback :2; // Brake actuator output torque/pressure measurement mismatch with OEM
+    Fault fault_brake_input :2;    // Brake pedal input torque/pressure measurement mismatch with OEM
+    Fault fault_brake_param :2;    // Brake parameter mismatch with DBW
+    Fault fault_brake_limit :2;    // Brake limit calculation mismatch with DBW
+    Fault fault_brake_override :2; // Brake override calculation mismatch with DBW
+    Fault fault_brake_cmd :2;      // Brake actuator command mismatch with OEM and DBW
+    Fault fault_brake_cmd_ulc :2;  // Brake command generated by ULC without matching ULC command
+    Fault fault_brake_cmd_en :2;   // Brake actuator command without matching DBW command enable
+    Fault fault_brake_cmd_sys :2;  // Brake actuator command with DBW system disabled
+    Fault fault_brake_cmd_ovr :2;  // Brake actuator command with override
+    uint8_t :4;
+    uint8_t :4;
+    uint8_t rc :4;
+    uint8_t crc;
+    void reset() {
+        uint8_t save = rc;
+        memset(this, 0x00, sizeof(*this));
+        rc = save;
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validRc(uint8_t rc) const {
+        return rc != this->rc;
+    }
+};
+static_assert(8 == sizeof(MsgMonitorReport2));
+struct MsgMonitorReport3 {
+    static constexpr uint32_t ID = 0x315;
+    static constexpr size_t PERIOD_MS = 1000;
+    static constexpr size_t TIMEOUT_MS = 3500;
+    using Fault = MsgMonitorReport1::Fault;
+    Fault fault_thrtl_feedback :2; // Accelerator pedal output measurement mismatch with OEM
+    Fault fault_thrtl_input :2;    // Accelerator pedal input measurement mismatch with OEM
+    Fault fault_thrtl_param :2;    // Throttle parameter mismatch with DBW
+    Fault fault_thrtl_limit :2;    // Throttle limit calculation mismatch with DBW
+    Fault fault_thrtl_override :2; // Throttle override calculation mismatch with DBW
+    Fault fault_thrtl_cmd :2;      // Throttle actuator command mismatch with OEM and DBW
+    Fault fault_thrtl_cmd_ulc :2;  // Throttle command generated by ULC without matching ULC command
+    Fault fault_thrtl_cmd_en :2;   // Throttle actuator command without matching DBW command enable
+    Fault fault_thrtl_cmd_sys :2;  // Throttle actuator command with DBW system disabled
+    Fault fault_thrtl_cmd_ovr :2;  // Throttle actuator command with override
+    uint8_t :4;
+    Fault fault_gear_feedback :2;  // Transmission gear measurement mismatch with OEM
+    Fault fault_gear_input :2;     // Gear input selection measurement mismatch with OEM
+    Fault fault_gear_param :2;     // Gear parameter mismatch with DBW
+    Fault fault_gear_override :2;  // Gear override calculation mismatch with DBW
+    Fault fault_gear_cmd :2;       // Gear actuator command mismatch with OEM and DBW
+    Fault fault_gear_cmd_ulc :2;   // Gear command generated by ULC without matching ULC command
+    uint8_t :4;
+    uint8_t :8;
+    uint8_t :2;
+    Fault fault_system_param :2;   // System parameter mismatch with DBW
+    uint8_t rc :4;
+    uint8_t crc;
+    void reset() {
+        uint8_t save = rc;
+        memset(this, 0x00, sizeof(*this));
+        rc = save;
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validRc(uint8_t rc) const {
+        return rc != this->rc;
+    }
+};
+static_assert(8 == sizeof(MsgMonitorReport3));
+struct MsgMonitorThrtl {
+    static constexpr uint32_t ID = 0x2A7;
+    static constexpr size_t PERIOD_MS = 20;
+    static constexpr size_t TIMEOUT_MS = 100;
+    uint16_t pedal_pc :12; // 0.025 %
+    Quality pedal_qf :2;
+    uint8_t :2;
+    uint8_t :4;
+    uint8_t rc :4;
+    uint8_t crc;
+    void reset() {
+        uint8_t save = rc;
+        memset(this, 0x00, sizeof(*this));
+        rc = save;
+    }
+    void setPercent(float percent, Quality quality) {
+        pedal_pc = std::clamp<float>(percent / 0.025f, 0, UINT16_MAX >> 4);
+        pedal_qf = quality;
+    }
+    void setPercentU16(uint16_t percent, Quality quality) {
+        constexpr uint16_t MAX = 100 / 0.025;
+        pedal_pc = (percent  * MAX) / UINT16_MAX;
+        pedal_qf = quality;
+    }
+    float getPercent() const {
+        return pedal_pc * 0.025f;
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validRc(uint8_t rc) const {
+        return rc != this->rc;
+    }
+};
+static_assert(4 == sizeof(MsgMonitorThrtl));
 
 struct MsgSystemCmd {
     static constexpr uint32_t ID = 0x216;
@@ -1751,139 +2084,149 @@ struct MsgSystemReport {
         Fault  = 7,
     };
     enum class ReasonNotReady : uint8_t {
-        None                 = 0x00,
-        MissingReportSteer   = 0x10,
-        MissingReportBrake   = 0x11,
-        MissingReportThrtl   = 0x12,
-        MissingReportGear    = 0x13,
-        FaultSteer           = 0x18,
-        FaultBrake           = 0x19,
-        FaultThrtl           = 0x1A,
-        FaultGear            = 0x1B,
-        OverrideActiveSteer  = 0x20,
-        OverrideActiveBrake  = 0x21,
-        OverrideActiveThrtl  = 0x22,
-        OverrideActiveGear   = 0x23,
-        OverrideLatchedSteer = 0x24,
-        OverrideLatchedBrake = 0x25,
-        OverrideLatchedThrtl = 0x26,
-        OverrideOtherSteer   = 0x28,
-        OverrideOtherBrake   = 0x29,
-        OverrideOtherThrtl   = 0x2A,
-        OverrideOtherGear    = 0x2B,
-        NotReadySteer        = 0x30,
-        NotReadyBrake        = 0x31,
-        NotReadyThrtl        = 0x32,
-        MissingCmdSteer      = 0x38,
-        MissingCmdBrake      = 0x39,
-        MissingCmdThrtl      = 0x3A,
-        SpeedTooFast         = 0xA0,
-        GearIsReverse        = 0xA1,
-        NotEnableCmdSteer    = 0xC0,
-        NotEnableCmdBrake    = 0xC1,
-        NotEnableCmdThrtl    = 0xC2,
-        SystemReengageDelay  = 0xF8,
-        SystemDisabled       = 0xFE,
-        Unknown              = 0xFF,
+        None                   = 0x00,
+        MissingReportSteer     = 0x10,
+        MissingReportBrake     = 0x11,
+        MissingReportThrtl     = 0x12,
+        MissingReportGear      = 0x13,
+        FaultSteer             = 0x18,
+        FaultBrake             = 0x19,
+        FaultThrtl             = 0x1A,
+        FaultGear              = 0x1B,
+        OverrideActiveSteer    = 0x20,
+        OverrideActiveBrake    = 0x21,
+        OverrideActiveThrtl    = 0x22,
+        OverrideActiveGear     = 0x23,
+        OverrideLatchedSteer   = 0x24,
+        OverrideLatchedBrake   = 0x25,
+        OverrideLatchedThrtl   = 0x26,
+        OverrideOtherSteer     = 0x28,
+        OverrideOtherBrake     = 0x29,
+        OverrideOtherThrtl     = 0x2A,
+        OverrideOtherGear      = 0x2B,
+        NotReadySteer          = 0x30,
+        NotReadyBrake          = 0x31,
+        NotReadyThrtl          = 0x32,
+        MissingCmdSteer        = 0x38,
+        MissingCmdBrake        = 0x39,
+        MissingCmdThrtl        = 0x3A,
+        LockoutVehicleVelocity = 0xA0,
+        LockoutVehicleAccel    = 0xA1,
+        LockoutGearReverse     = 0xA2,
+        NotEnableCmdSteer      = 0xC0,
+        NotEnableCmdBrake      = 0xC1,
+        NotEnableCmdThrtl      = 0xC2,
+        SystemReengageDelay    = 0xF8,
+        SystemLockout          = 0xFA,
+        SystemDisabled         = 0xFE,
+        Unknown                = 0xFF,
     };
     enum class ReasonDisengage : uint8_t {
-        None                = 0x00,
-        SteerCmdDisengage   = 0x21,
-        SteerCmdInvalidCrc  = 0x22,
-        SteerCmdInvalidRc   = 0x23,
-        SteerCmdTimeout     = 0x24,
-        SteerRptFault       = 0x25,
-        SteerRptOverride    = 0x26,
-        SteerRptDisengage   = 0x27,
-        BrakeCmdDisengage   = 0x41,
-        BrakeCmdInvalidCrc  = 0x42,
-        BrakeCmdInvalidRc   = 0x43,
-        BrakeCmdTimeout     = 0x44,
-        BrakeRptFault       = 0x45,
-        BrakeRptOverride    = 0x46,
-        BrakeRptDisengage   = 0x47,
-        ThrtlCmdDisengage   = 0x61,
-        ThrtlCmdInvalidCrc  = 0x62,
-        ThrtlCmdInvalidRc   = 0x63,
-        ThrtlCmdTimeout     = 0x64,
-        ThrtlRptFault       = 0x65,
-        ThrtlRptOverride    = 0x66,
-        ThrtlRptDisengage   = 0x67,
-        GearRptFault        = 0x85,
-        GearRptOverride     = 0x86,
-        ExternalBrake       = 0xA0,
-        SystemDisableCmd    = 0xC0,
-        SystemDisableBtn    = 0xC1,
-        Unknown             = 0xFF,
+        None                   = 0x00,
+        LockoutVehicleVelocity = 0x10,
+        LockoutVehicleAccel    = 0x11,
+        LockoutGearReverse     = 0x12,
+        SteerCmdDisengage      = 0x21,
+        SteerCmdInvalidCrc     = 0x22,
+        SteerCmdInvalidRc      = 0x23,
+        SteerCmdTimeout        = 0x24,
+        SteerRptFault          = 0x25,
+        SteerRptOverride       = 0x26,
+        SteerRptDisengage      = 0x27,
+        BrakeCmdDisengage      = 0x41,
+        BrakeCmdInvalidCrc     = 0x42,
+        BrakeCmdInvalidRc      = 0x43,
+        BrakeCmdTimeout        = 0x44,
+        BrakeRptFault          = 0x45,
+        BrakeRptOverride       = 0x46,
+        BrakeRptDisengage      = 0x47,
+        ThrtlCmdDisengage      = 0x61,
+        ThrtlCmdInvalidCrc     = 0x62,
+        ThrtlCmdInvalidRc      = 0x63,
+        ThrtlCmdTimeout        = 0x64,
+        ThrtlRptFault          = 0x65,
+        ThrtlRptOverride       = 0x66,
+        ThrtlRptDisengage      = 0x67,
+        GearRptFault           = 0x85,
+        GearRptOverride        = 0x86,
+        ExternalBrake          = 0xA0,
+        SystemDisableCmd       = 0xC0,
+        SystemDisableBtn       = 0xC1,
+        Unknown                = 0xFF,
     };
     static constexpr const char * reasonToString(ReasonNotReady x) {
         switch (x) {
-            case ReasonNotReady::None:                 return "";
-            case ReasonNotReady::MissingReportSteer:   return "MissingReportSteer";
-            case ReasonNotReady::MissingReportBrake:   return "MissingReportBrake";
-            case ReasonNotReady::MissingReportThrtl:   return "MissingReportThrtl";
-            case ReasonNotReady::MissingReportGear:    return "MissingReportGear";
-            case ReasonNotReady::FaultSteer:           return "FaultSteer";
-            case ReasonNotReady::FaultBrake:           return "FaultBrake";
-            case ReasonNotReady::FaultThrtl:           return "FaultThrtl";
-            case ReasonNotReady::FaultGear:            return "FaultGear";
-            case ReasonNotReady::OverrideActiveSteer:  return "OverrideActiveSteer";
-            case ReasonNotReady::OverrideActiveBrake:  return "OverrideActiveBrake";
-            case ReasonNotReady::OverrideActiveThrtl:  return "OverrideActiveThrtl";
-            case ReasonNotReady::OverrideActiveGear:   return "OverrideActiveGear";
-            case ReasonNotReady::OverrideLatchedSteer: return "OverrideLatchedSteer";
-            case ReasonNotReady::OverrideLatchedBrake: return "OverrideLatchedBrake";
-            case ReasonNotReady::OverrideLatchedThrtl: return "OverrideLatchedThrtl";
-            case ReasonNotReady::OverrideOtherSteer:   return "OverrideOtherSteer";
-            case ReasonNotReady::OverrideOtherBrake:   return "OverrideOtherBrake";
-            case ReasonNotReady::OverrideOtherThrtl:   return "OverrideOtherThrtl";
-            case ReasonNotReady::OverrideOtherGear:    return "OverrideOtherGear";
-            case ReasonNotReady::NotReadySteer:        return "NotReadySteer";
-            case ReasonNotReady::NotReadyBrake:        return "NotReadyBrake";
-            case ReasonNotReady::NotReadyThrtl:        return "NotReadyThrtl";
-            case ReasonNotReady::MissingCmdSteer:      return "MissingCmdSteer";
-            case ReasonNotReady::MissingCmdBrake:      return "MissingCmdBrake";
-            case ReasonNotReady::MissingCmdThrtl:      return "MissingCmdThrtl";
-            case ReasonNotReady::SpeedTooFast:         return "SpeedTooFast";
-            case ReasonNotReady::GearIsReverse:        return "GearIsReverse";
-            case ReasonNotReady::NotEnableCmdSteer:    return "NotEnableCmdSteer";
-            case ReasonNotReady::NotEnableCmdBrake:    return "NotEnableCmdBrake";
-            case ReasonNotReady::NotEnableCmdThrtl:    return "NotEnableCmdThrtl";
-            case ReasonNotReady::SystemReengageDelay:  return "SystemReengageDelay";
-            case ReasonNotReady::SystemDisabled:       return "SystemDisabled";
-            case ReasonNotReady::Unknown:   default:   return "Unknown";
+            case ReasonNotReady::None:                   return "";
+            case ReasonNotReady::MissingReportSteer:     return "MissingReportSteer";
+            case ReasonNotReady::MissingReportBrake:     return "MissingReportBrake";
+            case ReasonNotReady::MissingReportThrtl:     return "MissingReportThrtl";
+            case ReasonNotReady::MissingReportGear:      return "MissingReportGear";
+            case ReasonNotReady::FaultSteer:             return "FaultSteer";
+            case ReasonNotReady::FaultBrake:             return "FaultBrake";
+            case ReasonNotReady::FaultThrtl:             return "FaultThrtl";
+            case ReasonNotReady::FaultGear:              return "FaultGear";
+            case ReasonNotReady::OverrideActiveSteer:    return "OverrideActiveSteer";
+            case ReasonNotReady::OverrideActiveBrake:    return "OverrideActiveBrake";
+            case ReasonNotReady::OverrideActiveThrtl:    return "OverrideActiveThrtl";
+            case ReasonNotReady::OverrideActiveGear:     return "OverrideActiveGear";
+            case ReasonNotReady::OverrideLatchedSteer:   return "OverrideLatchedSteer";
+            case ReasonNotReady::OverrideLatchedBrake:   return "OverrideLatchedBrake";
+            case ReasonNotReady::OverrideLatchedThrtl:   return "OverrideLatchedThrtl";
+            case ReasonNotReady::OverrideOtherSteer:     return "OverrideOtherSteer";
+            case ReasonNotReady::OverrideOtherBrake:     return "OverrideOtherBrake";
+            case ReasonNotReady::OverrideOtherThrtl:     return "OverrideOtherThrtl";
+            case ReasonNotReady::OverrideOtherGear:      return "OverrideOtherGear";
+            case ReasonNotReady::NotReadySteer:          return "NotReadySteer";
+            case ReasonNotReady::NotReadyBrake:          return "NotReadyBrake";
+            case ReasonNotReady::NotReadyThrtl:          return "NotReadyThrtl";
+            case ReasonNotReady::MissingCmdSteer:        return "MissingCmdSteer";
+            case ReasonNotReady::MissingCmdBrake:        return "MissingCmdBrake";
+            case ReasonNotReady::MissingCmdThrtl:        return "MissingCmdThrtl";
+            case ReasonNotReady::LockoutVehicleVelocity: return "LockoutVehicleVelocity";
+            case ReasonNotReady::LockoutVehicleAccel:    return "LockoutVehicleAccel";
+            case ReasonNotReady::LockoutGearReverse:     return "LockoutGearReverse";
+            case ReasonNotReady::NotEnableCmdSteer:      return "NotEnableCmdSteer";
+            case ReasonNotReady::NotEnableCmdBrake:      return "NotEnableCmdBrake";
+            case ReasonNotReady::NotEnableCmdThrtl:      return "NotEnableCmdThrtl";
+            case ReasonNotReady::SystemReengageDelay:    return "SystemReengageDelay";
+            case ReasonNotReady::SystemLockout:          return "SystemLockout";
+            case ReasonNotReady::SystemDisabled:         return "SystemDisabled";
+            case ReasonNotReady::Unknown:    default:    return "Unknown";
         }
     }
     static constexpr const char * reasonToString(ReasonDisengage x) {
         switch (x) {
-            case ReasonDisengage::None:               return "";
-            case ReasonDisengage::SteerCmdDisengage:  return "SteerCmdDisengage";
-            case ReasonDisengage::SteerCmdInvalidCrc: return "SteerCmdInvalidCrc";
-            case ReasonDisengage::SteerCmdInvalidRc:  return "SteerCmdInvalidRc";
-            case ReasonDisengage::SteerCmdTimeout:    return "SteerCmdTimeout";
-            case ReasonDisengage::SteerRptFault:      return "SteerRptFault";
-            case ReasonDisengage::SteerRptOverride:   return "SteerRptOverride";
-            case ReasonDisengage::SteerRptDisengage:  return "SteerRptDisengage";
-            case ReasonDisengage::BrakeCmdDisengage:  return "BrakeCmdDisengage";
-            case ReasonDisengage::BrakeCmdInvalidCrc: return "BrakeCmdInvalidCrc";
-            case ReasonDisengage::BrakeCmdInvalidRc:  return "BrakeCmdInvalidRc";
-            case ReasonDisengage::BrakeCmdTimeout:    return "BrakeCmdTimeout";
-            case ReasonDisengage::BrakeRptFault:      return "BrakeRptFault";
-            case ReasonDisengage::BrakeRptOverride:   return "BrakeRptOverride";
-            case ReasonDisengage::BrakeRptDisengage:  return "BrakeRptDisengage";
-            case ReasonDisengage::ThrtlCmdDisengage:  return "ThrtlCmdDisengage";
-            case ReasonDisengage::ThrtlCmdInvalidCrc: return "ThrtlCmdInvalidCrc";
-            case ReasonDisengage::ThrtlCmdInvalidRc:  return "ThrtlCmdInvalidRc";
-            case ReasonDisengage::ThrtlCmdTimeout:    return "ThrtlCmdTimeout";
-            case ReasonDisengage::ThrtlRptFault:      return "ThrtlRptFault";
-            case ReasonDisengage::ThrtlRptOverride:   return "ThrtlRptOverride";
-            case ReasonDisengage::ThrtlRptDisengage:  return "ThrtlRptDisengage";
-            case ReasonDisengage::GearRptFault:       return "GearRptFault";
-            case ReasonDisengage::GearRptOverride:    return "GearRptOverride";
-            case ReasonDisengage::ExternalBrake:      return "ExternalBrake";
-            case ReasonDisengage::SystemDisableCmd:   return "SystemDisableCmd";
-            case ReasonDisengage::SystemDisableBtn:   return "SystemDisableBtn";
-            case ReasonDisengage::Unknown:  default:  return "Unknown";
+            case ReasonDisengage::None:                   return "";
+            case ReasonDisengage::LockoutVehicleVelocity: return "LockoutVehicleVelocity";
+            case ReasonDisengage::LockoutVehicleAccel:    return "LockoutVehicleAccel";
+            case ReasonDisengage::LockoutGearReverse:     return "LockoutGearReverse";
+            case ReasonDisengage::SteerCmdDisengage:      return "SteerCmdDisengage";
+            case ReasonDisengage::SteerCmdInvalidCrc:     return "SteerCmdInvalidCrc";
+            case ReasonDisengage::SteerCmdInvalidRc:      return "SteerCmdInvalidRc";
+            case ReasonDisengage::SteerCmdTimeout:        return "SteerCmdTimeout";
+            case ReasonDisengage::SteerRptFault:          return "SteerRptFault";
+            case ReasonDisengage::SteerRptOverride:       return "SteerRptOverride";
+            case ReasonDisengage::SteerRptDisengage:      return "SteerRptDisengage";
+            case ReasonDisengage::BrakeCmdDisengage:      return "BrakeCmdDisengage";
+            case ReasonDisengage::BrakeCmdInvalidCrc:     return "BrakeCmdInvalidCrc";
+            case ReasonDisengage::BrakeCmdInvalidRc:      return "BrakeCmdInvalidRc";
+            case ReasonDisengage::BrakeCmdTimeout:        return "BrakeCmdTimeout";
+            case ReasonDisengage::BrakeRptFault:          return "BrakeRptFault";
+            case ReasonDisengage::BrakeRptOverride:       return "BrakeRptOverride";
+            case ReasonDisengage::BrakeRptDisengage:      return "BrakeRptDisengage";
+            case ReasonDisengage::ThrtlCmdDisengage:      return "ThrtlCmdDisengage";
+            case ReasonDisengage::ThrtlCmdInvalidCrc:     return "ThrtlCmdInvalidCrc";
+            case ReasonDisengage::ThrtlCmdInvalidRc:      return "ThrtlCmdInvalidRc";
+            case ReasonDisengage::ThrtlCmdTimeout:        return "ThrtlCmdTimeout";
+            case ReasonDisengage::ThrtlRptFault:          return "ThrtlRptFault";
+            case ReasonDisengage::ThrtlRptOverride:       return "ThrtlRptOverride";
+            case ReasonDisengage::ThrtlRptDisengage:      return "ThrtlRptDisengage";
+            case ReasonDisengage::GearRptFault:           return "GearRptFault";
+            case ReasonDisengage::GearRptOverride:        return "GearRptOverride";
+            case ReasonDisengage::ExternalBrake:          return "ExternalBrake";
+            case ReasonDisengage::SystemDisableCmd:       return "SystemDisableCmd";
+            case ReasonDisengage::SystemDisableBtn:       return "SystemDisableBtn";
+            case ReasonDisengage::Unknown:    default:    return "Unknown";
         }
     }
     uint8_t inhibit :1; // Inhibit control for steer/brake/throttle/gear
@@ -1897,7 +2240,8 @@ struct MsgSystemReport {
     uint16_t time_phase :10; // Milliseconds 0-999, 0x3FF for unknown
     State state :3;
     uint8_t :3;
-    uint8_t :7;
+    uint8_t :6;
+    uint8_t lockout :1;
     uint8_t override :1; // Any steer/brake/throttle/gear override
     uint8_t ready :1; // All steer/brake/throttle ready, and gear not faulted
     uint8_t enabled :1; // All steer/brake/throttle enabled, and gear not faulted (or any steer/brake/throttle enabled for Mode>=AllOrNone)
@@ -2134,6 +2478,17 @@ struct MsgThrtlInfo {
     bool accelPedalPercentValid() const {
         return accel_pedal_pc != UINT16_MAX >> 4;
     }
+    bool accelPedalZero() const {
+        switch (accel_pedal_qf) {
+            case Quality::Ok:
+            case Quality::Partial:
+                return accel_pedal_pc == 0;
+            case Quality::NoData:
+            case Quality::Fault:
+            default:
+                return false;
+        }
+    }
     float accelPedalPercent() const {
         if (accelPedalPercentValid()) {
             return accel_pedal_pc * 0.025f;
@@ -2159,6 +2514,9 @@ struct MsgThrtlInfo {
     }
     bool engineRpmValid() const {
         return engine_rpm != UINT16_MAX;
+    }
+    bool engineRpmZero() const {
+        return engine_rpm == 0;
     }
     float engineRpm() const {
         if (engineRpmValid()) {
@@ -2513,6 +2871,9 @@ struct MsgUlcReport {
     }
     bool accelMeasValid() const {
         return accel_meas != (int8_t)0x80;
+    }
+    int8_t accelMeasMpsx20() const {
+        return accel_meas;
     }
     float accelMeasMps() const {
         if (accelMeasValid()) {
@@ -2890,6 +3251,16 @@ struct MsgReserved2 {
     uint8_t reserved[8];
 };
 static_assert(8 == sizeof(MsgReserved2));
+struct MsgReservedDebug {
+    static constexpr uint32_t ID = 0x36F;
+    static constexpr size_t TIMEOUT_MS = 1000;
+    int16_t nom;
+    int16_t min;
+    int16_t max;
+    uint16_t ms :15;
+    uint16_t fault :1;
+};
+static_assert(8 == sizeof(MsgReservedDebug));
 
 struct MsgTirePressure {
     static constexpr uint32_t ID = 0x380;
@@ -3156,6 +3527,7 @@ struct MsgEcuInfo {
         VIN0         = 0x50,
         VIN1         = 0x51,
         VIN2         = 0x52,
+        Logging      = 0x60,
     };
     Mux mux :8;
     union {
@@ -3255,6 +3627,18 @@ struct MsgEcuInfo {
             uint8_t :8;
             uint8_t :8;
         } vin2;
+        struct {
+            uint8_t fault :1;
+            uint8_t filesystem :1;
+            uint8_t :6;
+            uint8_t :8;
+            uint8_t :8;
+            uint32_t :8;
+            uint32_t filename :24; // "000000.dbw", 0xFFFFFF for None
+            bool validFilename() const {
+                return filename != 0xFFFFFFu;
+            }
+        } logging;
     };
     void reset() {
         memset(this, 0x00, sizeof(*this));
@@ -3267,17 +3651,20 @@ struct MsgEcuInfoBrake    : public MsgEcuInfo { static constexpr uint32_t ID = 0
 struct MsgEcuInfoThrottle : public MsgEcuInfo { static constexpr uint32_t ID = 0x6C3; };
 struct MsgEcuInfoShift    : public MsgEcuInfo { static constexpr uint32_t ID = 0x6C4; };
 struct MsgEcuInfoBOO      : public MsgEcuInfo { static constexpr uint32_t ID = 0x6C5; };
+struct MsgEcuInfoMonitor  : public MsgEcuInfo { static constexpr uint32_t ID = 0x6C6; };
+
 
 #pragma pack(pop) // Undo packing
 
 
 // Verify that IDs are unique and in the desired order of priorities (unit test)
-static constexpr std::array<uint32_t, 50> IDS {
+static constexpr std::array<uint32_t, 57> IDS {
     // Primary reports
     MsgSteerReport1::ID,
     MsgBrakeReport1::ID,
     MsgThrtlReport1::ID,
     MsgGearReport1::ID,
+    MsgMonitorReport1::ID,
     MsgSystemReport::ID,
     // Primary sensors
     MsgVehicleVelocity::ID,
@@ -3293,6 +3680,7 @@ static constexpr std::array<uint32_t, 50> IDS {
     MsgBrakeCmdUsr::ID,
     MsgThrtlCmdUsr::ID,
     MsgGearCmdUsr::ID,
+    MsgMonitorCmd::ID,
     MsgSystemCmd::ID,
     // Commands (ULC)
     MsgBrakeCmdUlc::ID,
@@ -3307,6 +3695,7 @@ static constexpr std::array<uint32_t, 50> IDS {
     MsgGyro::ID,
     MsgWheelSpeed::ID,
     MsgWheelPosition::ID,
+    MsgMonitorThrtl::ID,
     // Misc
     MsgMiscCmd::ID,
     MsgMiscReport1::ID,
@@ -3316,16 +3705,19 @@ static constexpr std::array<uint32_t, 50> IDS {
     MsgBrakeReport2::ID,
     MsgThrtlReport2::ID,
     MsgGearReport2::ID,
+    MsgMonitorReport2::ID,
     MsgSteerReport3::ID,
     MsgBrakeReport3::ID,
     MsgThrtlReport3::ID,
     MsgGearReport3::ID,
+    MsgMonitorReport3::ID,
     MsgSteerParamHash::ID,
     MsgBrakeParamHash::ID,
     MsgThrtlParamHash::ID,
     // Reserved
     MsgReserved1::ID,
     MsgReserved2::ID,
+    MsgReservedDebug::ID,
     // Other sensors
     MsgTirePressure::ID,
     // ECU info
@@ -3335,6 +3727,7 @@ static constexpr std::array<uint32_t, 50> IDS {
     MsgEcuInfoThrottle::ID,
     MsgEcuInfoShift::ID,
     MsgEcuInfoBOO::ID,
+    MsgEcuInfoMonitor::ID,
 };
 template <typename T, size_t N>
 static constexpr bool _is_sorted_unique(const std::array<T, N> &arr) {
