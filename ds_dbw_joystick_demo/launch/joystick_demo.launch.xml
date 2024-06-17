@@ -6,11 +6,13 @@
   <arg name="dataspeed_can" default="true" />
   <arg name="socketcan" default="false" />
   <arg name="socketcan_dev" default="can0" />
+  <arg name="buttons" default="true"/>
   <group if="$(var sys)">
     <include file="$(find-pkg-share ds_dbw_can)/launch/dbw.launch.xml" >
       <arg name="dataspeed_can" value="$(var dataspeed_can)" />
       <arg name="socketcan" value="$(var socketcan)" />
       <arg name="socketcan_dev" value="$(var socketcan_dev)" />
+      <arg name="buttons" value="$(var buttons)" />
     </include>
   </group>
 
