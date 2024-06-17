@@ -44,5 +44,6 @@ bool fault_internal
 bool fault_vehicle
 bool fault_vehicle_speed
 bool fault_actuator
+bool fault_actuator_config
 bool fault_param_mismatch
 bool fault_calibration
