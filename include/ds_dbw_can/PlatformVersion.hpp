@@ -55,8 +55,9 @@ enum class Platform : uint8_t {
   FCA_RU         = 0x10, // Chrysler Pacifica
   FCA_WK2        = 0x11, // Jeep Grand Cherokee
   POLARIS_GEM    = 0x80, // Polaris GEM
-  POLARIS_RZR    = 0x81, // Polaris RZR
+  POLARIS_RZRXP  = 0x81, // Polaris RZR-XP
   POLARIS_RANGER = 0x82, // Polaris Ranger
+  POLARIS_RZRR   = 0x83, // Polaris RZR-R
   MAX
 };
 
@@ -68,6 +69,7 @@ enum class Module : uint16_t {
   Throttle = MsgEcuInfoThrottle::ID,
   Shift = MsgEcuInfoShift::ID,
   BOO = MsgEcuInfoBOO::ID,
+  Monitor = MsgEcuInfoMonitor::ID,
   MAX
 };
 
@@ -84,8 +86,9 @@ constexpr static const char* platformToString(Platform x) {
     case Platform::FCA_RU:         return "FCA_RU";
     case Platform::FCA_WK2:        return "FCA_WK2";
     case Platform::POLARIS_GEM:    return "POLARIS_GEM";
-    case Platform::POLARIS_RZR:    return "POLARIS_RZR";
+    case Platform::POLARIS_RZRXP:  return "POLARIS_RZRXP";
     case Platform::POLARIS_RANGER: return "POLARIS_RANGER";
+    case Platform::POLARIS_RZRR:   return "POLARIS_RZRR";
     default:                       return "UNKNOWN";
   }
 }
@@ -98,6 +101,7 @@ constexpr static const char* moduleToString(Module x) {
     case Module::Throttle: return "Throttle";
     case Module::Shift:    return "Shift   ";
     case Module::BOO:      return "BOO     ";
+    case Module::Monitor:  return "Monitor ";
     default:               return "UNKNOWN";
   }
 }
