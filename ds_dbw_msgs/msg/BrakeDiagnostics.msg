@@ -45,8 +45,12 @@ bool fault_comms_actuator_2
 bool fault_vehicle_speed
 bool fault_actuator_acc_deny
 bool fault_actuator_pedal_sensor
+bool fault_bped_sensor_1
+bool fault_bped_sensor_2
+bool fault_bped_sensor_mismatch
 bool fault_actuator_1
 bool fault_actuator_2
+bool fault_control_performance
 bool fault_param_mismatch
 bool fault_param_limits
 bool fault_calibration
