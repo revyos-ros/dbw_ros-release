@@ -2,6 +2,38 @@
 Changelog for package ds_dbw_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.16 (2024-06-17)
+-------------------
+
+2.1.15 (2024-06-07)
+-------------------
+* Brake on comms loss and system lockout
+* Contributors: Kevin Hallenbeck
+
+2.1.14 (2024-05-29)
+-------------------
+* Add gear command option for calibration
+* Add gear fault_actuator_config diagnostic
+* Contributors: Kevin Hallenbeck
+
+2.1.13 (2024-05-13)
+-------------------
+* Add gear reject enumeration for excessive vehicle speed
+* Add actuator pedal position quality diagnostics
+* Add logging status to EcuInfo message
+* Contributors: Kevin Hallenbeck
+
+2.1.12 (2024-04-01)
+-------------------
+* Add support for DBW Monitor module
+* Contributors: Kevin Hallenbeck
+
+2.1.11 (2024-03-05)
+-------------------
+* Add control performance fault
+* Add support for system lockout
+* Contributors: Kevin Hallenbeck
+
 2.1.10 (2024-02-27)
 -------------------
 
