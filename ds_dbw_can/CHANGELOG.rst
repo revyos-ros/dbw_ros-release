@@ -2,6 +2,63 @@
 Changelog for package ds_dbw_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.16 (2024-06-17)
+-------------------
+* Bump firmware versions to match 2024/06/17 release package
+* Contributors: Kevin Hallenbeck
+
+2.1.15 (2024-06-07)
+-------------------
+* Bump firmware versions to match 2024/06/07 release package
+* Separate Polaris RZR into RXR-R and RXR-XP
+* Brake on comms loss and system lockout
+* Contributors: Kevin Hallenbeck
+
+2.1.14 (2024-05-29)
+-------------------
+* Bump firmware versions to match 2024/05/30 release package
+* Print remote control status
+* Print system sync mode
+* Add gear command option for calibration
+* Add gear fault_actuator_config diagnostic
+* Contributors: Kevin Hallenbeck
+
+2.1.13 (2024-05-13)
+-------------------
+* Bump firmware versions to match 2024/05/13 release package
+* Add gear reject enumeration for excessive vehicle speed
+* Add Fort Robotics CAN IDs that may be present on the DBW CAN bus
+* Handle MsgMiscReport1 without MsgMiscReport2
+* Add support for Polaris RZR platform
+* Add support for MKZ/Fusion (CD4) platform
+* Add actuator pedal position quality diagnostics
+* Distinguish between brake hold actions and external brake actions
+* Publish EcuInfo message without config fields populated
+* Add logging status to EcuInfo message
+* Add missing header stamp on diagnostic messages
+* Finish porting throttle sweep script to DBW2
+* Mask ULC enable command with system enable when mode sync is diabled
+* Contributors: Kevin Hallenbeck
+
+2.1.12 (2024-04-01)
+-------------------
+* Bump firmware versions to match 2024/04/02 release package
+* Add Lincoln Aviator (U6) platform
+* Add support for DBW Monitor module
+* Set clear flag in ULC command when firmware is configured for mode-sync
+* Contributors: Kevin Hallenbeck
+
+2.1.11 (2024-03-05)
+-------------------
+* Bump firmware versions to match 2024/03/05 release package
+* Add control performance fault
+* Add reserved debug message
+* Add support for system lockout
+* Use system enable/disable buttons when mode-sync is inactive
+* Initialize CAN message class variables to zero
+* Print unknown module ID as hex
+* Contributors: Kevin Hallenbeck
+
 2.1.10 (2024-02-27)
 -------------------
 
