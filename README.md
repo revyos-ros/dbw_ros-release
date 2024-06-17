@@ -1,35 +1,45 @@
-# dataspeed_ulc_can
- 
-## ulc_node
-This node allows ROS users to command the Universal Lat/Lon Controller (ULC) using ROS messages instead of having to manually construct and populate CAN messages. The node subscribes to three different command topics that alter the behavior of the node. It is recommended to make sure that only one command topic is being used at a given time.
+# dbw_ros
+ROS2 interface to Dataspeed drive-by-wire platforms
 
-### Subscribed Topics
-#### ulc_cmd ([dataspeed_ulc_msgs/UlcCmd](../dataspeed_ulc_msgs/msg/UlcCmd.msg))
+# Launch
 
-Input command for the ULC. In addition to the speed and steering command inputs, this topic also configures the behavior of the ULC. It allows the user to turn the speed and steering components of the ULC on and off, switch shifting and steering modes, and configure longitudinal and lateral acceleration limits.
+* Joystick demo
+    * DBW2:         `ros2 launch ds_dbw_joystick_demo joystick_demo.launch.xml sys:=true`
+    * DBW1 FCA:     `ros2 launch dbw_fca_joystick_demo joystick_demo.launch.xml sys:=true`
+    * DBW1 Ford:    `ros2 launch dbw_ford_joystick_demo joystick_demo.launch.xml sys:=true`
+    * DBW1 Polaris: `ros2 launch dbw_polaris_joystick_demo joystick_demo.launch.xml sys:=true`
+* Drive-by-wire only
+    * DBW2:         `ros2 launch ds_dbw_can dbw.launch.xml`
+    * DBW1 FCA:     `ros2 launch dbw_fca_can dbw.launch.xml`
+    * DBW1 Ford:    `ros2 launch dbw_ford_can dbw.launch.xml`
+    * DBW1 Polaris: `ros2 launch dbw_polaris_can dbw.launch.xml`
+* RViz visualization
+    * DBW1 FCA:     `ros2 launch dbw_fca_description rviz.launch.xml`
+    * DBW1 Ford:    `ros2 launch dbw_ford_description rviz.launch.xml`
+    * DBW1 Polaris: `ros2 launch dbw_polaris_description rviz.launch.xml`
 
-#### cmd_vel ([geometry_msgs/Twist](http://docs.ros.org/api/geometry_msgs/html/msg/Twist.html))
+# Binaries
 
-Simplified interface to the ULC. When messages on this topic are used to command the ULC:
+* ROS buildfarm with infrequent updates:
+    * http://repo.ros2.org/status_page/ros_humble_default.html?q=dbw_ros
+* Dataspeed buildfarm with frequent updates:
+    * https://bitbucket.org/DataspeedInc/ros_binaries/
 
-  - The speed component of the ULC is activated and tracks the `linear.x` field of the `geometry_msgs/Twist` message, assuming the units are m/s
-  - The steering component of the ULC is activated in yaw rate mode and tracks the `angular.z` field of the `geometry_msgs/Twist` message, assuming the units are rad/s
-  - All longitudinal and lateral acceleration limits use the default settings outlined in the ULC User's Guide
+# One Line Install (binary)
 
-#### cmd_vel_stamped ([geometry_msgs/TwistStamped](http://docs.ros.org/api/geometry_msgs/html/msg/TwistStamped.html))
+* Use this option to install ROS2 package binaries on a workstation that already has ROS2 installed.
+* Paste the following into a terminal to install the binary packages. This script will configure apt-get to connect to the Dataspeed server and install the binary packages.
+* DBW2:    ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/ds_dbw/scripts/sdk_install.bash)```
+* FCA:     ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_fca/scripts/sdk_install.bash)```
+* Ford:    ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_ford/scripts/sdk_install.bash)```
+* Polaris: ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_polaris/scripts/sdk_install.bash)```
 
-The header of the incoming `geometry_msgs/TwistStamped` messages are ignored, and instead treated identically to the `cmd_vel` topic.
+# One Line ROS2 and Packages Install (binary)
 
-#### can_rx ([can_msgs/Frame](http://docs.ros.org/melodic/api/can_msgs/html/msg/Frame.html))
-
-This topic listens to the CAN traffic on the Dataspeed ADAS Kit CAN bus and uses the data to publish the messages on the `ulc_report` topic.
-
-### Published Topics
-
-#### can_tx ([can_msgs/Frame](http://docs.ros.org/melodic/api/can_msgs/html/msg/Frame.html))
-
-This topic transmits ULC command and configuration CAN messages to the Dataspeed ADAS Kit CAN bus to control the ULC running in the ADAS Kit firmware. These CAN messages are constructed based on how the user is publishing command messages on the input topics.
-
-#### ulc_report([dataspeed_ulc_msgs/UlcReport](../dataspeed_ulc_msgs/msg/UlcReport.msg))
-
-Feedback data from the ULC running in the ADAS Kit firmware.
+* Use this option to install ROS2 and this SDK on a clean Ubuntu install.
+* This should ONLY be run on a fresh install of Ubuntu Desktop [22.04](http://releases.ubuntu.com/22.04/)/[20.04](http://releases.ubuntu.com/20.04/).
+* Paste the following into a terminal to install ROS2 and this SDK. This script will change some operating system parameters, install ROS2 [Humble](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html)/[Foxy](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html), install the SDK, and configure the joystick demo with rviz to run at startup.
+* DBW2:    ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/ds_dbw/scripts/ros_install.bash)```
+* FCA:     ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_fca/scripts/ros_install.bash)```
+* Ford:    ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_ford/scripts/ros_install.bash)```
+* Polaris: ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_polaris/scripts/ros_install.bash)```
