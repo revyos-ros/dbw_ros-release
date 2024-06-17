@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>dbw_polaris_description</name>
-  <version>2.1.10</version>
+  <version>2.1.16</version>
   <description>
     URDF and meshes describing Polaris vehicles.
   </description>
