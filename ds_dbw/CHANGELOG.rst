@@ -2,6 +2,13 @@
 Changelog for package ds_dbw
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.2.0 (2024-07-17)
+------------------
+* Remove some settings changes in ROS install script
+* Better desktop startup launcher with ROS environment already sourced in bashrc
+* Add support for Ubuntu Noble with ROS Jazzy in ROS install script
+* Contributors: Gabe, Kevin Hallenbeck
+
 2.1.16 (2024-06-17)
 -------------------
 

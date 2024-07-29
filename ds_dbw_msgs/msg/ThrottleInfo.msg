@@ -8,5 +8,8 @@ OnePedal one_pedal     # One-pedal-drive mode
 # Engine
 float32 engine_rpm    # Engine Speed (rpm)
 
+# Drive Mode
+DriveMode drive_mode
+
 # Gear Num
-# GearNum gear_num      # Gear Number
+GearNum gear_num      # Gear Number

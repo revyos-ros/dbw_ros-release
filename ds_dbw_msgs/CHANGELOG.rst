@@ -2,6 +2,36 @@
 Changelog for package ds_dbw_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.2.0 (2024-07-17)
+------------------
+* Add steering offset message
+* Add several new messages and signals
+  New messages:
+  - Battery
+  - Low voltage battery state-of-charge/voltage/current/temperature
+  - Vehicle ignition
+  - BatteryTraction
+  - High voltage battery state-of-charge/voltage/temperature
+  - DriverAssist
+  - ADAS deceleration value
+  - FCW/AEB/ACC/BLIS/CTA statuses
+  - FuelLevel
+  - Fuel level
+  - Odometer
+  - GPS
+  New signals in existing messages:
+  - MiscReport
+  - Wiper
+  - Headlights (high and low beams)
+  - Ambient light
+  - Outside air temperature
+  - ThrottleInfo
+  - Drive mode
+  - Transmission gear number
+* Separate turn signal messages with diagnostics
+  Keep functionality in misc cmd/report for a while to ease the transition
+* Contributors: Kevin Hallenbeck
+
 2.1.16 (2024-06-17)
 -------------------
 

@@ -1,22 +1,12 @@
 # dbw_ros
-ROS2 interface to Dataspeed drive-by-wire platforms
+ROS2 interface to Dataspeed drive-by-wire platforms with modern DBW2 firmware. See [here](dbw1) for legacy DBW1 firmware support
 
 # Launch
 
 * Joystick demo
-    * DBW2:         `ros2 launch ds_dbw_joystick_demo joystick_demo.launch.xml sys:=true`
-    * DBW1 FCA:     `ros2 launch dbw_fca_joystick_demo joystick_demo.launch.xml sys:=true`
-    * DBW1 Ford:    `ros2 launch dbw_ford_joystick_demo joystick_demo.launch.xml sys:=true`
-    * DBW1 Polaris: `ros2 launch dbw_polaris_joystick_demo joystick_demo.launch.xml sys:=true`
+    * `ros2 launch ds_dbw_joystick_demo joystick_demo.launch.xml sys:=true`
 * Drive-by-wire only
-    * DBW2:         `ros2 launch ds_dbw_can dbw.launch.xml`
-    * DBW1 FCA:     `ros2 launch dbw_fca_can dbw.launch.xml`
-    * DBW1 Ford:    `ros2 launch dbw_ford_can dbw.launch.xml`
-    * DBW1 Polaris: `ros2 launch dbw_polaris_can dbw.launch.xml`
-* RViz visualization
-    * DBW1 FCA:     `ros2 launch dbw_fca_description rviz.launch.xml`
-    * DBW1 Ford:    `ros2 launch dbw_ford_description rviz.launch.xml`
-    * DBW1 Polaris: `ros2 launch dbw_polaris_description rviz.launch.xml`
+    * `ros2 launch ds_dbw_can dbw.launch.xml`
 
 # Binaries
 
@@ -29,17 +19,11 @@ ROS2 interface to Dataspeed drive-by-wire platforms
 
 * Use this option to install ROS2 package binaries on a workstation that already has ROS2 installed.
 * Paste the following into a terminal to install the binary packages. This script will configure apt-get to connect to the Dataspeed server and install the binary packages.
-* DBW2:    ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/ds_dbw/scripts/sdk_install.bash)```
-* FCA:     ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_fca/scripts/sdk_install.bash)```
-* Ford:    ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_ford/scripts/sdk_install.bash)```
-* Polaris: ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_polaris/scripts/sdk_install.bash)```
+* ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/ds_dbw/scripts/sdk_install.bash)```
 
 # One Line ROS2 and Packages Install (binary)
 
 * Use this option to install ROS2 and this SDK on a clean Ubuntu install.
-* This should ONLY be run on a fresh install of Ubuntu Desktop [22.04](http://releases.ubuntu.com/22.04/)/[20.04](http://releases.ubuntu.com/20.04/).
-* Paste the following into a terminal to install ROS2 and this SDK. This script will change some operating system parameters, install ROS2 [Humble](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html)/[Foxy](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html), install the SDK, and configure the joystick demo with rviz to run at startup.
-* DBW2:    ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/ds_dbw/scripts/ros_install.bash)```
-* FCA:     ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_fca/scripts/ros_install.bash)```
-* Ford:    ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_ford/scripts/ros_install.bash)```
-* Polaris: ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_polaris/scripts/ros_install.bash)```
+* This should ONLY be run on a fresh install of Ubuntu Desktop [24.04](http://releases.ubuntu.com/24.04/)/[22.04](http://releases.ubuntu.com/22.04/).
+* Paste the following into a terminal to install ROS2 and this SDK. This script will change some operating system parameters, install ROS2 [Jazzy](https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debians.html)/[Humble](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html), install the SDK, and configure the joystick demo with rviz to run at startup.
+* ```bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/ds_dbw/scripts/ros_install.bash)```

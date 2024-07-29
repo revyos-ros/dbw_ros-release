@@ -2,6 +2,12 @@
 Changelog for package ds_dbw_joystick_demo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.2.0 (2024-07-17)
+------------------
+* Separate turn signal messages with diagnostics
+  Keep functionality in misc cmd/report for a while to ease the transition
+* Contributors: Kevin Hallenbeck
+
 2.1.16 (2024-06-17)
 -------------------
 

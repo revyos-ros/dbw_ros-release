@@ -136,10 +136,10 @@ struct MsgSteerCmd {
         rc = save;
     }
     void setCmdTorqueNm(float nm) {
-        cmd = std::clamp<float>(nm / 0.0078125f, -INT16_MAX, INT16_MAX);
+        cmd = std::clamp<float>(std::round(nm / 0.0078125f), -INT16_MAX, INT16_MAX);
     }
     void setCmdAngleDeg(float deg, float deg_s = 0, float deg_s2 = 0) {
-        cmd = std::clamp<float>(deg / 0.1f, -INT16_MAX, INT16_MAX);
+        cmd = std::clamp<float>(std::round(deg / 0.1f), -INT16_MAX, INT16_MAX);
         if (deg_s < 0 || std::isinf(deg_s)) {
             rate = UINT8_MAX; // Unlimited
         } else if (deg_s > 0) {
@@ -159,7 +159,7 @@ struct MsgSteerCmd {
         setCmdAngleDeg(rad * (float)(180 / M_PI), rad_s * (float)(180 / M_PI), rad_s2 * (float)(180 / M_PI));
     }
     void setCmdCurvMDeg(float curv, float deg_s = 0, float deg_s2 = 0) {
-        cmd = std::clamp<float>(curv / 0.0000061f, -INT16_MAX, INT16_MAX);
+        cmd = std::clamp<float>(std::round(curv / 0.0000061f), -INT16_MAX, INT16_MAX);
         if (deg_s < 0 || std::isinf(deg_s)) {
             rate = UINT8_MAX; // Unlimited
         } else if (deg_s > 0) {
@@ -179,7 +179,7 @@ struct MsgSteerCmd {
         setCmdCurvMDeg(curv, rad_s * (float)(180 / M_PI), rad_s2 * (float)(180 / M_PI));
     }
     void setCmdYawRateDegS(float yaw_deg_s, float deg_s = 0, float deg_s2 = 0) {
-        cmd = std::clamp<float>(yaw_deg_s / 0.015f, -INT16_MAX, INT16_MAX);
+        cmd = std::clamp<float>(std::round(yaw_deg_s / 0.015f), -INT16_MAX, INT16_MAX);
         if (deg_s < 0 || std::isinf(deg_s)) {
             rate = UINT8_MAX; // Unlimited
         } else if (deg_s > 0) {
@@ -199,7 +199,7 @@ struct MsgSteerCmd {
         setCmdYawRateDegS(yaw_rad_s * (float)(180 / M_PI), rad_s * (float)(180 / M_PI), rad_s2 * (float)(180 / M_PI));
     }
     void setCmdPercentDeg(float percent, float deg_s = 0, float deg_s2 = 0) {
-        cmd = std::clamp<float>(percent / 0.01f, -INT16_MAX, INT16_MAX);
+        cmd = std::clamp<float>(std::round(percent / 0.01f), -INT16_MAX, INT16_MAX);
         if (deg_s < 0 || std::isinf(deg_s)) {
             rate = UINT8_MAX; // Unlimited
         } else if (deg_s > 0) {
@@ -317,13 +317,13 @@ struct MsgSteerReport1 {
     }
     void setAngleDeg(float deg) {
         if (std::isfinite(deg)) {
-            angle = std::clamp<float>(deg * 10, -INT16_MAX >> 2, INT16_MAX >> 2);
+            angle = std::clamp<float>(std::round(deg * 10), -(INT16_MAX >> 2), INT16_MAX >> 2);
         } else {
-            angle = (uint16_t)0xE000;
+            angle = INT16_MIN >> 2;
         }
     }
     bool angleValid() const {
-        return (uint16_t)angle != (uint16_t)0xE000;
+        return angle != INT16_MIN >> 2;
     }
     float angleDeg() const {
         if (angleValid()) {
@@ -335,7 +335,7 @@ struct MsgSteerReport1 {
         return angleDeg() * (float)(M_PI / 180);
     }
     bool cmdValid() const {
-        return (uint16_t)cmd != (uint16_t)0xE000;
+        return cmd != INT16_MIN >> 2;
     }
     float cmdAngleDeg() const {
         if (cmdValid()) {
@@ -355,24 +355,24 @@ struct MsgSteerReport1 {
     void setCmd(MsgSteerCmd::CmdType type, float deg, float nm) {
         if (type == MsgSteerCmd::CmdType::Angle && std::isfinite(deg)) {
             cmd_type = CmdType::Angle;
-            cmd = std::clamp<float>(deg * 10, -INT16_MAX >> 2, INT16_MAX >> 2);
+            cmd = std::clamp<float>(deg * 10, -(INT16_MAX >> 2), INT16_MAX >> 2);
         } else if (type == MsgSteerCmd::CmdType::Torque && std::isfinite(nm)) {
             cmd_type = CmdType::Torque;
-            cmd = std::clamp<float>(nm * 128, -INT16_MAX >> 2, INT16_MAX >> 2);
+            cmd = std::clamp<float>(nm * 128, -(INT16_MAX >> 2), INT16_MAX >> 2);
         } else {
             cmd_type = CmdType::None;
-            cmd = (uint16_t)0xE000;
+            cmd = INT16_MIN >> 2;
         }
     }
     void setTorqueNm(float nm) {
         if (std::isfinite(nm)) {
-            torque = std::clamp<float>(nm * 16, -INT8_MAX, INT8_MAX);
+            torque = std::clamp<float>(std::round(nm * 16), -INT8_MAX, INT8_MAX);
         } else {
-            torque = (uint8_t)0x80;
+            torque = INT8_MIN;
         }
     }
     bool torqueValid() const {
-        return (uint8_t)torque != (uint8_t)0x80;
+        return torque != INT8_MIN;
     }
     float torqueNm() const {
         if (torqueValid()) {
@@ -428,26 +428,26 @@ struct MsgSteerReport2 {
     }
     void setLimitRateDegS(float deg_s) {
         if (std::isfinite(deg_s)) {
-            limit_rate = std::clamp<float>(std::round(std::abs(deg_s / 4)), 0, 0xFE);
+            limit_rate = std::clamp<float>(std::round(std::abs(deg_s / 4)), 0, UINT8_MAX - 1);
         } else {
-            limit_rate = 0xFF; // Unlimited
+            limit_rate = UINT8_MAX; // Unlimited
         }
     }
     float getLimitRateDegS() const {
-        if (limit_rate != 0xFF) {
+        if (limit_rate != UINT8_MAX) {
             return limit_rate * 4;
         }
         return INFINITY; // Unlimited
     }
     void setLimitValueDeg(float deg) {
         if (std::isfinite(deg)) {
-            limit_value = std::clamp<float>(std::round(std::abs(deg)), 0, 0x3FE);
+            limit_value = std::clamp<float>(std::round(std::abs(deg)), 0, (UINT16_MAX >> 6) - 1);
         } else {
-            limit_value = 0x3FF; // Unlimited
+            limit_value = UINT16_MAX >> 6; // Unlimited
         }
     }
     float getLimitValueDeg() const {
-        if (limit_value != 0x3FF) {
+        if (limit_value != UINT16_MAX >> 6) {
             return limit_value;
         }
         return INFINITY; // Unlimited
@@ -561,7 +561,7 @@ struct MsgBrakeCmd {
         rc = save;
     }
     void setCmdPressureBar(float bar, float bar_s_inc = 0, float bar_s_dec = 0) {
-        cmd = std::clamp<float>(bar / 0.01f, 0, UINT16_MAX);
+        cmd = std::clamp<float>(std::round(bar / 0.01f), 0, UINT16_MAX);
         if (bar_s_inc < 0 || std::isinf(bar_s_inc)) {
             rate_inc = UINT8_MAX; // Unlimited
         } else if (bar_s_inc > 0) {
@@ -578,7 +578,7 @@ struct MsgBrakeCmd {
         }
     }
     void setCmdTorqueNm(float nm, float nm_s_inc = 0, float nm_s_dec = 0) {
-        cmd = std::clamp<float>(nm, 0, UINT16_MAX);
+        cmd = std::clamp<float>(std::round(nm), 0, UINT16_MAX);
         if (nm_s_inc < 0 || std::isinf(nm_s_inc)) {
             rate_inc = UINT8_MAX; // Unlimited
         } else if (nm_s_inc > 0) {
@@ -595,7 +595,7 @@ struct MsgBrakeCmd {
         }
     }
     void setCmdAccelMpS(float accel, float jerk_inc = 0, float jerk_dec = 0) {
-        cmd = (int16_t)std::clamp<float>(accel / 0.001f, -INT16_MAX, INT16_MAX);
+        cmd = (int16_t)std::clamp<float>(std::round(accel / 0.001f), -INT16_MAX, INT16_MAX);
         if (jerk_inc < 0 || std::isinf(jerk_inc)) {
             rate_inc = UINT8_MAX; // Unlimited
         } else if (jerk_inc > 0) {
@@ -612,7 +612,7 @@ struct MsgBrakeCmd {
         }
     }
     void setCmdPercent(float x, float inc = 0, float dec = 0) {
-        cmd = std::clamp<float>(x / 0.01f, 0, UINT16_MAX);
+        cmd = std::clamp<float>(std::round(x / 0.01f), 0, UINT16_MAX);
         if (inc < 0 || std::isinf(inc)) {
             rate_inc = UINT8_MAX; // Unlimited
         } else if (inc > 0) {
@@ -743,11 +743,29 @@ struct MsgBrakeCmd {
             return UINT16_MAX; // Unlimited
         }
     }
+    int16_t cmdRateIncMS3I16() const {
+        if (rate_inc == 0) {
+            return 0; // Default
+        } else if (rate_inc < UINT8_MAX) {
+            return std::max(rate_inc, (uint8_t)5); // Minimum of 5 m/s^3
+        } else {
+            return INT16_MAX; // Unlimited
+        }
+    }
+    int16_t cmdRateDecMS3I16() const {
+        if (rate_dec == 0) {
+            return 0; // Default
+        } else if (rate_dec < UINT8_MAX) {
+            return std::max(rate_dec, (uint8_t)5); // Minimum of 5 m/s^3
+        } else {
+            return INT16_MAX; // Unlimited
+        }
+    }
     uint16_t cmdRateIncPercentSU16() const { // %/ms (0.001%/s)
         if (rate_inc == 0) {
             return 0; // Default
         } else if (rate_inc < UINT8_MAX) {
-            return std::max<uint16_t>(rate_inc * (uint16_t)(10e-2 * 1e-3 * UINT16_MAX), (uint16_t)(50e-2 * 1e-3 * UINT16_MAX)); // Minimum of 50 %/s
+            return std::max<uint32_t>((rate_inc << 16) / (10u * 1000u), (uint16_t)(50e-2 * 1e-3 * UINT16_MAX)); // Minimum of 50 %/s
         } else {
             return UINT16_MAX; // Unlimited
         }
@@ -756,7 +774,7 @@ struct MsgBrakeCmd {
         if (rate_dec == 0) {
             return 0; // Default
         } else if (rate_dec < UINT8_MAX) {
-            return std::max<uint16_t>(rate_dec * (uint16_t)(10e-2 * 1e-3 * UINT16_MAX), (uint16_t)(50e-2 * 1e-3 * UINT16_MAX)); // Minimum of 50 %/s
+            return std::max<uint32_t>((rate_dec << 16) / (10u * 1000u), (uint16_t)(50e-2 * 1e-3 * UINT16_MAX)); // Minimum of 50 %/s
         } else {
             return UINT16_MAX; // Unlimited
         }
@@ -880,17 +898,17 @@ struct MsgBrakeReport1 {
     void setAccel(uint16_t in_nm, int16_t cmd_ms2_x1k, int16_t out_ms2_x1k) {
         cmd_type = CmdType::Accel;
         if (in_nm != UINT16_MAX) {
-            input = std::clamp<uint32_t>(in_nm / 4, 0, (UINT16_MAX >> 4) - 1);
+            input = std::clamp<uint16_t>(in_nm / 4, 0, (UINT16_MAX >> 4) - 1);
         } else {
             input = UINT16_MAX >> 4;
         }
-        if (std::isfinite(cmd_ms2_x1k)) {
-            cmd = std::clamp<int16_t>(cmd_ms2_x1k / 5, -INT16_MAX >> 4, INT16_MAX >> 4);
+        if (cmd_ms2_x1k != INT16_MIN) {
+            cmd = std::clamp<int16_t>(cmd_ms2_x1k / 5, -(INT16_MAX >> 4), INT16_MAX >> 4);
         } else {
             cmd = (uint16_t)INT16_MIN >> 4;
         }
-        if (std::isfinite(out_ms2_x1k)) {
-            output = std::clamp<int16_t>(out_ms2_x1k / 5, -INT16_MAX >> 4, INT16_MAX >> 4);
+        if (out_ms2_x1k != INT16_MIN) {
+            output = std::clamp<int16_t>(out_ms2_x1k / 5, -(INT16_MAX >> 4), INT16_MAX >> 4);
         } else {
             output = (uint16_t)INT16_MIN >> 4;
         }
@@ -947,7 +965,7 @@ struct MsgBrakeReport1 {
             case MsgBrakeCmd::CmdType::Accel:
             case MsgBrakeCmd::CmdType::AccelAcc:
             case MsgBrakeCmd::CmdType::AccelAeb:
-                if (cmd != (uint16_t)(INT16_MIN >> 4)) {
+                if ((int16_t)(cmd << 4) != INT16_MIN) {
                     return (int16_t)(cmd << 4) >> 4; // Sign extend bit-field
                 }
                 return 0;
@@ -1005,12 +1023,12 @@ struct MsgBrakeReport1 {
         } else {
             in_nm = NAN;
         }
-        if (cmd != INT16_MIN >> 4) {
+        if ((int16_t)(cmd << 4) != INT16_MIN) {
             cmd_ms2 = ((int16_t)(cmd << 4) >> 4) * 0.005f;
         } else {
             cmd_ms2 = NAN;
         }
-        if (output != INT16_MIN >> 4) {
+        if ((int16_t)(output << 4) != INT16_MIN) {
             out_ms2 = ((int16_t)(output << 4) >> 4) * 0.005f;
         } else {
             out_ms2 = NAN;
@@ -1094,44 +1112,44 @@ struct MsgBrakeReport2 {
             constexpr uint16_t MAX = 100 / 0.1;
             limit_value = (percent  * MAX) / UINT16_MAX;
         } else {
-            limit_value = 0x3FF; // Unlimited
+            limit_value = UINT16_MAX >> 6; // Unlimited
         }
     }
     void setLimitValuePercent(float percent) {
         if (std::isfinite(percent)) {
-            limit_value = std::clamp<float>(std::round(std::abs(percent) / 0.1f), 0, 0x3FE);
+            limit_value = std::clamp<float>(std::round(std::abs(percent) / 0.1f), 0, (UINT16_MAX >> 6) - 1);
         } else {
-            limit_value = 0x3FF; // Unlimited
+            limit_value = UINT16_MAX >> 6; // Unlimited
         }
     }
     float getLimitValuePercent() const {
-        if (limit_value != 0x3FF) {
+        if (limit_value != UINT16_MAX >> 6) {
             return limit_value * 0.1f;
         }
         return INFINITY; // Unlimited
     }
     void setLimitValuePressureBar(float bar) {
         if (std::isfinite(bar)) {
-            limit_value = std::clamp<float>(std::round(std::abs(bar) / 0.2f), 0, 0x3FE);
+            limit_value = std::clamp<float>(std::round(std::abs(bar) / 0.2f), 0, (UINT16_MAX >> 6) - 1);
         } else {
-            limit_value = 0x3FF; // Unlimited
+            limit_value = UINT16_MAX >> 6; // Unlimited
         }
     }
     float getLimitValuePressureBar() const {
-        if (limit_value != 0x3FF) {
+        if (limit_value != UINT16_MAX >> 6) {
             return limit_value * 0.2f;
         }
         return INFINITY; // Unlimited
     }
     void setLimitValueDecelMps2x1k(int16_t ms2_x1k) {
         if (ms2_x1k != INT16_MIN) {
-            limit_value = std::clamp<uint16_t>(std::abs(ms2_x1k) / 20, 0, 0x3FE);
+            limit_value = std::clamp<uint16_t>(std::abs(ms2_x1k) / 20, 0, (UINT16_MAX >> 6) - 1);
         } else {
-            limit_value = 0x3FF; // Unlimited
+            limit_value = UINT16_MAX >> 6; // Unlimited
         }
     }
     float getLimitValueDecelMps2() const {
-        if (limit_value != 0x3FF) {
+        if (limit_value != UINT16_MAX >> 6) {
             return limit_value * 0.02f;
         }
         return INFINITY; // Unlimited
@@ -1290,7 +1308,7 @@ struct MsgThrtlCmd {
         rc = save;
     }
     void setCmdPercent(float percent, float inc_percent_s = 0, float dec_percent_s = 0) {
-        cmd = std::clamp<float>(percent / 0.025f, 0, UINT16_MAX);
+        cmd = std::clamp<float>(std::round(percent / 0.025f), 0, UINT16_MAX);
         if (inc_percent_s < 0 || std::isinf(inc_percent_s)) {
             rate_inc = UINT8_MAX; // Unlimited
         } else if (inc_percent_s > 0) {
@@ -1338,7 +1356,7 @@ struct MsgThrtlCmd {
         if (rate_inc == 0) {
             return 0; // Default
         } else if (rate_inc < UINT8_MAX) {
-            return std::max<uint16_t>(rate_inc * (uint16_t)(10e-2 * 1e-3 * UINT16_MAX), (uint16_t)(100e-2 * 1e-3 * UINT16_MAX)); // Minimum of 100 %/s
+            return std::max<uint32_t>((rate_inc << 16) / (10u * 1000u), (uint16_t)(100e-2 * 1e-3 * UINT16_MAX)); // Minimum of 100 %/s
         } else {
             return UINT16_MAX; // Unlimited
         }
@@ -1347,7 +1365,7 @@ struct MsgThrtlCmd {
         if (rate_dec == 0) {
             return 0; // Default
         } else if (rate_dec < UINT8_MAX) {
-            return std::max<uint16_t>(rate_dec * (uint16_t)(10e-2 * 1e-3 * UINT16_MAX), (uint16_t)(100e-2 * 1e-3 * UINT16_MAX)); // Minimum of 100 %/s
+            return std::max<uint32_t>((rate_dec << 16) / (10u * 1000u), (uint16_t)(100e-2 * 1e-3 * UINT16_MAX)); // Minimum of 100 %/s
         } else {
             return UINT16_MAX; // Unlimited
         }
@@ -1516,7 +1534,7 @@ struct MsgThrtlReport2 {
     void reset() {
         uint8_t save = rc;
         memset(this, 0x00, sizeof(*this));
-        limit_value = 0x3FF;
+        limit_value = UINT16_MAX >> 6;
         rc = save;
     }
     void setLimitValuePcU16(uint16_t pc, bool valid) {
@@ -1524,11 +1542,11 @@ struct MsgThrtlReport2 {
             constexpr uint16_t MAX = 100 / 0.1;
             limit_value = (pc  * MAX) / UINT16_MAX;
         } else {
-            limit_value = 0x3FF; // Unlimited
+            limit_value = UINT16_MAX >> 6; // Unlimited
         }
     }
     float getLimitValuePc() const {
-        if (limit_value != 0x3FF) {
+        if (limit_value != UINT16_MAX >> 6) {
             return limit_value * 0.1f;
         }
         return INFINITY; // Unlimited
@@ -1673,18 +1691,15 @@ struct MsgGearReport1 {
     Gear driver :4;
     Reject reject :3;
     uint8_t :1; // Future expansion of reject
-
     uint8_t :8;
     uint8_t :8;
     uint8_t :8;
-
     uint8_t power_latched :1;
     uint8_t :3;
     uint8_t external_control :1;
     uint8_t override_active :1;
     uint8_t override_other :1;
     uint8_t :1; // override_latched
-
     uint8_t ready :1;
     uint8_t :1; // enabled
     uint8_t fault :1;
@@ -2235,8 +2250,8 @@ struct MsgSystemReport {
     uint8_t btn_enable :1;
     uint8_t btn_disable :1;
     uint8_t :1;
-    ReasonDisengage reason_disengage :8;
-    ReasonNotReady reason_not_ready :8;
+    ReasonDisengage reason_disengage;
+    ReasonNotReady reason_not_ready;
     uint16_t time_phase :10; // Milliseconds 0-999, 0x3FF for unknown
     State state :3;
     uint8_t :3;
@@ -2308,8 +2323,8 @@ struct MsgVehicleVelocity {
         PRNDL = 1,  // Transmission reverse gear sets negative direction
         Sensor = 2, // Explicit wheel speed/direction sensors
     };
-    int16_t veh_vel_brk :16;  // 0.01 kph, measured by brakes
-    int16_t veh_vel_prpl :16; // 0.01 kph, measured by propulsion
+    int16_t veh_vel_brk;  // 0.01 kph, measured by brakes
+    int16_t veh_vel_prpl; // 0.01 kph, measured by propulsion
     uint8_t :8;
     uint8_t :8;
     DirSrc dir_src :2;
@@ -2319,6 +2334,8 @@ struct MsgVehicleVelocity {
     void reset() {
         uint8_t save = rc;
         memset(this, 0x00, sizeof(*this));
+        veh_vel_brk = INT16_MIN;
+        veh_vel_prpl = INT16_MIN;
         rc = save;
     }
     void setVelocityBrkKph(float kph) {
@@ -2450,13 +2467,46 @@ struct MsgThrtlInfo {
         On = 2,
         Fault = 3,
     };
+    enum class DriveMode : uint8_t {
+        Unknown = 0,
+        Normal = 1,
+        Economy = 2,
+        Comfort = 3,
+        Sport = 4,
+        TowHaul = 5,
+        Snow = 6,
+        Sand = 7,
+        Mud = 8,
+        Rock = 9,
+        Baja = 10,
+        Track = 11,
+    };
+    enum class GearNumber : uint8_t {
+        Unknown =   0, // Unknown
+        Drive01 =   1, //  1st (Drive)
+        Drive02 =   2, //  2nd (Drive)
+        Drive03 =   3, //  3rd (Drive)
+        Drive04 =   4, //  4th (Drive)
+        Drive05 =   5, //  5th (Drive)
+        Drive06 =   6, //  6th (Drive)
+        Drive07 =   7, //  7th (Drive)
+        Drive08 =   8, //  8th (Drive)
+        Drive09 =   9, //  9th (Drive)
+        Drive10 =  10, // 10th (Drive)
+        Neutral =  16, // Neutral (N)
+        Reverse1 = 17, // 1st (Reverse)
+        Reverse2 = 18, // 2nd (Reverse)
+        Park     = 31, // Park (P)
+    };
     uint16_t accel_pedal_pc :12; // 0.025 %, 0x3FF=unknown
     Quality accel_pedal_qf :2;
     OnePedalMode one_pedal_drive :2;
     uint16_t engine_rpm; // 0.25 RPM, 0xFFFF=unknown
     uint8_t :8;
-    uint8_t /*gear_num*/ :8;
-    uint8_t :6;
+    uint8_t :4;
+    DriveMode drive_mode :4;
+    GearNumber gear_num :5;
+    uint8_t :1;
     uint8_t rc :2;
     uint8_t crc;
     void reset() {
@@ -2466,6 +2516,7 @@ struct MsgThrtlInfo {
         accel_pedal_pc = UINT16_MAX >> 4;
         one_pedal_drive = OnePedalMode::Unknown;
         engine_rpm = UINT16_MAX;
+        gear_num = GearNumber::Unknown;
         rc = save;
     }
     void setAccelPedalPercent(float pc) {
@@ -2509,7 +2560,7 @@ struct MsgThrtlInfo {
         if (std::isfinite(rpm)) {
             engine_rpm = std::clamp<float>(rpm * 4, 0, UINT16_MAX - 1);
         } else {
-            engine_rpm = UINT16_MAX >> 4;
+            engine_rpm = UINT16_MAX;
         }
     }
     bool engineRpmValid() const {
@@ -2565,6 +2616,7 @@ struct MsgBrakeInfo {
         brake_torque_pedal = UINT16_MAX >> 3;
         brake_torque_request = UINT16_MAX >> 3;
         brake_torque_actual = UINT16_MAX >> 3;
+        brake_vacuum = UINT8_MAX >> 2;
         rc = save;
     }
     void setBrakeTorquePedalNm(uint16_t nm)   { brake_torque_pedal   = setBrakeTorqueNm(nm); }
@@ -2581,16 +2633,19 @@ struct MsgBrakeInfo {
     float brakeTorqueActualNm() const { return brakeTorqueNm(brake_torque_actual); }
     void setBrakeVacuumBarX1000(uint16_t mbar) {
         if (mbar != UINT16_MAX) {
-            brake_vacuum = std::clamp<uint16_t>(mbar / 16, 0, 0x3E);
+            brake_vacuum = std::clamp<uint16_t>(mbar / 16, 0, (UINT8_MAX >> 2) - 1);
         } else {
-            brake_vacuum = 0x3F;
+            brake_vacuum = UINT8_MAX >> 2;
         }
     }
+    bool brakeVacuumValid() const {
+        return brake_vacuum != UINT8_MAX >> 2;
+    }
     uint16_t brakeVacuumBarX1000() const {
-        return brake_vacuum != 0x3F ? brake_vacuum * 16 : UINT16_MAX;
+        return brakeVacuumValid() ? brake_vacuum * 16 : UINT16_MAX;
     }
     float brakeVacuumBar() const {
-        return brake_vacuum != 0x3F ? brake_vacuum * 16e-3f : NAN;
+        return brakeVacuumValid() ? brake_vacuum * 16e-3f : NAN;
     }
     void setCrc() {
         static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
@@ -2630,6 +2685,111 @@ private:
 };
 static_assert(8 == sizeof(MsgBrakeInfo));
 
+struct MsgSteerOffset {
+    static constexpr uint32_t ID = 0x10C;
+    static constexpr size_t PERIOD_MIN =    8;
+    static constexpr size_t PERIOD_MS  =  500;
+    static constexpr size_t PERIOD_MAX =  500;
+    static constexpr size_t TIMEOUT_MS = 1750;
+    enum class OffsetType : uint8_t {
+        Unknown = 0,
+        Relative = 1,
+        Absolute = 2,
+    };
+    int16_t angle :14; // 0.1 deg, raw + offset
+    uint8_t :2;
+    int16_t angle_raw; // 0.1 deg, angle - offset
+    int16_t angle_offset; // 0.1 deg, angle - raw
+    OffsetType offset_type :2;
+    uint8_t :4;
+    uint8_t rc :2;
+    uint8_t crc;
+    void reset() {
+        uint8_t save = rc;
+        memset(this, 0x00, sizeof(*this));
+        angle = INT16_MIN >> 2;
+        angle_raw = INT16_MIN;
+        angle_offset = INT16_MIN;
+        rc = save;
+    }
+    void setAngleDeg(float deg) {
+        if (std::isfinite(deg)) {
+            angle = std::clamp<float>(std::round(deg * 10), -(INT16_MAX >> 2), INT16_MAX >> 2);
+        } else {
+            angle = INT16_MIN >> 2;
+        }
+    }
+    bool angleValid() const {
+        return angle != INT16_MIN >> 2;
+    }
+    float angleDeg() const {
+        if (angleValid()) {
+            return angle * 0.1f;
+        }
+        return NAN;
+    }
+    void setAngleRawDegX10(int32_t deg) {
+        if (INT16_MAX >= deg && deg >= -INT16_MAX) {
+            angle_raw = deg;
+        } else {
+            angle_raw = INT16_MIN;
+        }
+    }
+    void setAngleRawDeg(float deg) {
+        deg = std::round(deg * 10);
+        if (INT16_MAX >= deg && deg >= -INT16_MAX) {
+            angle_raw = deg;
+        } else {
+            angle_raw = INT16_MIN;
+        }
+    }
+    bool angleRawValid() const {
+        return angle_raw != INT16_MIN;
+    }
+    float angleRawDeg() const {
+        if (angleRawValid()) {
+            return angle_raw * 0.1f;
+        }
+        return NAN;
+    }
+    void setAngleOffsetDegX10(int32_t deg) {
+        if (INT16_MAX >= deg && deg >= -INT16_MAX) {
+            angle_offset = deg;
+        } else {
+            angle_offset = INT16_MIN;
+        }
+    }
+    void setAngleOffsetDeg(float deg) {
+        deg = std::round(deg * 10);
+        if (INT16_MAX >= deg && deg >= -INT16_MAX) {
+            angle_offset = deg;
+        } else {
+            angle_offset = INT16_MIN;
+        }
+    }
+    bool angleOffsetValid() const {
+        return angle_offset != INT16_MIN;
+    }
+    float angleOffsetDeg() const {
+        if (angleOffsetValid()) {
+            return angle_offset * 0.1f;
+        }
+        return NAN;
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validRc(uint8_t rc) const {
+        return rc != this->rc;
+    }
+};
+static_assert(8 == sizeof(MsgSteerOffset));
+
 struct MsgUlcCmd {
     static constexpr uint32_t ID = 0x284;
     static constexpr size_t PERIOD_MS = 20;
@@ -2643,7 +2803,7 @@ struct MsgUlcCmd {
         UseBrakes = 0, // Use brakes to slow down
         NoBrakes = 1,  // Coast, don't use brakes
     };
-    int16_t cmd :16; // Interpretation changes with cmd_type
+    int16_t cmd; // Interpretation changes with cmd_type
     CmdType cmd_type :3;
     uint8_t :1;
     uint8_t enable :1;
@@ -2816,13 +2976,13 @@ struct MsgUlcReport {
     }
     void setVelocityRefMps(float velocity_m_s) {
         if (std::isfinite(velocity_m_s)) {
-            vel_ref = std::clamp<float>(velocity_m_s * 50, -INT16_MAX >> 3, INT16_MAX >> 3);
+            vel_ref = std::clamp<float>(velocity_m_s * 50, -(INT16_MAX >> 3), INT16_MAX >> 3);
         } else {
-            vel_ref = (uint16_t)0xF000;
+            vel_ref = INT16_MIN >> 3;
         }
     }
     bool velocityRefValid() const {
-        return (uint16_t)vel_ref != (uint16_t)0xF000;
+        return vel_ref != INT16_MIN >> 3;
     }
     float velocityRefMps() const {
         if (velocityRefValid()) {
@@ -2832,13 +2992,13 @@ struct MsgUlcReport {
     }
     void setVelocityMeasMps(float velocity_m_s) {
         if (std::isfinite(velocity_m_s)) {
-            vel_meas = std::clamp<float>(velocity_m_s * 50, -INT16_MAX >> 3, INT16_MAX >> 3);
+            vel_meas = std::clamp<float>(velocity_m_s * 50, -(INT16_MAX >> 3), INT16_MAX >> 3);
         } else {
-            vel_meas = (uint16_t)0xF000;
+            vel_meas = INT16_MIN >> 3;
         }
     }
     bool velocityMeasValid() const {
-        return (uint16_t)vel_meas != (uint16_t)0xF000;
+        return vel_meas != INT16_MIN >> 3;
     }
     float velocityMeasMps() const {
         if (velocityMeasValid()) {
@@ -2850,11 +3010,11 @@ struct MsgUlcReport {
         if (std::isfinite(accel_m_s2)) {
             accel_ref = std::clamp<float>(accel_m_s2 * 20, -INT8_MAX, INT8_MAX);
         } else {
-            accel_ref = (int8_t)0x80;
+            accel_ref = INT8_MIN;
         }
     }
     bool accelRefValid() const {
-        return accel_ref != (int8_t)0x80;
+        return accel_ref != INT8_MIN;
     }
     float accelRefMps() const {
         if (accelRefValid()) {
@@ -2866,11 +3026,11 @@ struct MsgUlcReport {
         if (std::isfinite(accel_m_s2)) {
             accel_meas = std::clamp<float>(accel_m_s2 * 20, -INT8_MAX, INT8_MAX);
         } else {
-            accel_meas = (int8_t)0x80;
+            accel_meas = INT8_MIN;
         }
     }
     bool accelMeasValid() const {
-        return accel_meas != (int8_t)0x80;
+        return accel_meas != INT8_MIN;
     }
     int8_t accelMeasMpsx20() const {
         return accel_meas;
@@ -2908,6 +3068,9 @@ struct MsgAccel {
     void reset() {
         uint8_t save = rc;
         memset(this, 0x00, sizeof(*this));
+        x = UNKNOWN;
+        y = UNKNOWN;
+        z = UNKNOWN;
         rc = save;
     }
     void setAccelXMps2(float m_s2) { setAccelMps2(x, m_s2); }
@@ -2965,6 +3128,9 @@ struct MsgGyro {
     void reset() {
         uint8_t save = rc;
         memset(this, 0x00, sizeof(*this));
+        x = UNKNOWN;
+        y = UNKNOWN;
+        z = UNKNOWN;
         rc = save;
     }
     void setGyroXRadS(float rad_s) { setGyroRadS(x, rad_s); }
@@ -3042,7 +3208,10 @@ struct MsgWheelSpeed {
     float rearRightRadS() const { return speedRadS(rear_right); }
     float rearRightDegS() const { return speedDegS(rear_right); }
     void reset() {
-        memset(this, 0x00, sizeof(*this));
+        front_left = UNKNOWN;
+        front_right = UNKNOWN;
+        rear_left = UNKNOWN;
+        rear_right = UNKNOWN;
     }
 private:
     static void setSpeedRadS(int16_t &x, float rad_s) {
@@ -3081,6 +3250,83 @@ struct MsgWheelPosition {
 };
 static_assert(8 == sizeof(MsgWheelPosition));
 
+struct MsgTurnSignalCmd {
+    static constexpr uint32_t ID = 0x2C1;
+    static constexpr size_t PERIOD_MS = 50;
+    static constexpr size_t TIMEOUT_MS = 250;
+    TurnSignal cmd :2;
+    uint8_t :2;
+    uint8_t rc :4;
+    uint8_t crc;
+    void reset() {
+        uint8_t save = rc;
+        memset(this, 0x00, sizeof(*this));
+        rc = save;
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validRc(uint8_t rc) const {
+        return rc != this->rc;
+    }
+};
+static_assert(2 == sizeof(MsgTurnSignalCmd));
+
+struct MsgTurnSignalReport {
+    static constexpr uint32_t ID = 0x2C2;
+    static constexpr size_t PERIOD_MIN =  20;
+    static constexpr size_t PERIOD_MS  = 100;
+    static constexpr size_t PERIOD_MAX = 125;
+    static constexpr size_t TIMEOUT_MS = 400;
+    TurnSignal input :2;
+    TurnSignal cmd :2;
+    TurnSignal output :2;
+    TurnSignal feedback :2;
+    uint8_t fault_comms_vehicle :1;
+    uint8_t :7;
+    uint8_t degraded_cmd_type :1;
+    uint8_t degraded_comms_dbw_steer :1;
+    uint8_t degraded_comms_dbw_brake :1;
+    uint8_t degraded_comms_dbw_thrtl :1;
+    uint8_t degraded_comms_vehicle :1;
+    uint8_t degraded_control_performance :1;
+    uint8_t :2;
+    uint8_t :5;
+    uint8_t override_active :1;
+    uint8_t override_other :1;
+    uint8_t :1;
+    uint8_t ready :1;
+    uint8_t degraded :1;
+    uint8_t fault :1;
+    uint8_t timeout :1;
+    uint8_t bad_crc :1;
+    uint8_t bad_rc :1;
+    uint8_t rc :2;
+    uint8_t crc;
+    void reset() {
+        uint8_t save = rc;
+        memset(this, 0x00, sizeof(*this));
+        rc = save;
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validRc(uint8_t rc) const {
+        return rc != this->rc;
+    }
+};
+static_assert(6 == sizeof(MsgTurnSignalReport));
+
 struct MsgMiscCmd {
     static constexpr uint32_t ID = 0x2C0;
     static constexpr size_t PERIOD_MS = 50;
@@ -3101,7 +3347,7 @@ struct MsgMiscCmd {
         Open = 1,
         Close = 2,
     };
-    TurnSignal turn_signal_cmd :2;
+    TurnSignal turn_signal_cmd :2; // Deprecated
     PrkBrkCmd parking_brake_cmd :2;
     DoorSelect door_select :2;
     DoorCmd door_cmd :2;
@@ -3132,7 +3378,7 @@ struct MsgMiscReport1 {
         Off = 2,
         Transition = 3,
     };
-    TurnSignal turn_signal :2;
+    TurnSignal turn_signal :2; // Deprecated
     PrkBrkStat parking_brake :2;
     uint8_t pasngr_detect :1;
     uint8_t pasngr_airbag :1;
@@ -3208,22 +3454,78 @@ struct MsgMiscReport2 {
     static constexpr uint32_t ID = 0x2C5;
     static constexpr size_t PERIOD_MS = 50;
     static constexpr size_t TIMEOUT_MS = 200;
-    uint8_t outside_air_temp :8;
-    uint8_t cabin_air_temp :8;
-    uint8_t wiper_front :4;
-    uint8_t head_light_hi :2;
-    uint8_t :2;
-    uint8_t light_ambient :3;
-    uint8_t :5;
+    enum class HeadlightCtrlLow : uint8_t {
+        Unknown = 0,
+        Off = 1,
+        On = 2,
+        Auto = 3,
+        Park = 4,
+    };
+    enum class HeadlightCtrlHigh : uint8_t {
+        Unknown = 0,
+        Off = 1,
+        On = 2,
+        Auto = 3,
+        Flash = 4,
+    };
+    enum class WiperFront : uint8_t {
+        Unknown = 0,
+        Off = 1,
+        MovingOff = 2,
+        ManualOff = 3,
+        ManualOn = 4,
+        ManualLow = 5,
+        ManualHigh = 6,
+        AutoOff = 7,
+        AutoLow = 8,
+        AutoHigh = 9,
+        AutoAdjust = 10,
+        MistFlick = 11,
+        Wash = 12,
+        CourtesyWipe = 13,
+        Stalled = 14,
+    };
+    enum class AmbientLight : uint8_t {
+        Unknown = 0,
+        Dark = 1,
+        Medium = 2,
+        Light = 3,
+    };
+    HeadlightCtrlLow headlight_low_control :3;
+    uint8_t headlight_low :1;
+    HeadlightCtrlHigh headlight_high_control :3;
+    uint8_t headlight_high :1;
+    WiperFront wiper_front :4;
+    uint8_t /*wiper_rear*/ :2;
+    AmbientLight ambient_light :2;
     uint8_t :8;
     uint8_t :8;
+    uint8_t :8;
+    uint8_t outside_air_temp;
     uint8_t :6;
     uint8_t rc :2;
     uint8_t crc;
     void reset() {
         uint8_t save = rc;
         memset(this, 0x00, sizeof(*this));
+        outside_air_temp = UINT8_MAX;
         rc = save;
+    }
+    void setOutsideAirTempDegC(float deg_c) {
+        if (std::isfinite(deg_c)) {
+            outside_air_temp = std::clamp<float>((deg_c + 40) * 2, 0, UINT8_MAX - 1);
+        } else {
+            outside_air_temp = UINT8_MAX;
+        }
+    }
+    bool outsideAirTempValid() const {
+        return outside_air_temp != UINT8_MAX;
+    }
+    float outsideAirTempDegC() const {
+        if (outsideAirTempValid()) {
+            return (outside_air_temp * 0.5f) - 40;
+        }
+        return NAN;
     }
     void setCrc() {
         static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
@@ -3238,6 +3540,293 @@ struct MsgMiscReport2 {
     }
 };
 static_assert(8 == sizeof(MsgMiscReport2));
+
+struct MsgDriverAssist {
+    static constexpr uint32_t ID = 0x2C8;
+    static constexpr size_t PERIOD_MIN =  10;
+    static constexpr size_t PERIOD_MAX = 100;
+    static constexpr size_t TIMEOUT_MS = 350;
+    enum class DecelSrc : uint8_t {
+        None = 0,
+        AEB = 1,
+        ACC = 2,
+    };
+    uint8_t decel; // 0.05 m/s^2
+    DecelSrc decel_src :3;
+    uint8_t fcw_active :1;    // Forward Collision Warning
+    uint8_t fcw_enabled :1;   // Forward Collision Warning
+    uint8_t :3;
+    uint8_t aeb_active :1;    // Automated Emergency Braking
+    uint8_t aeb_precharge :1; // Automated Emergency Braking
+    uint8_t aeb_enabled :1;   // Automated Emergency Braking
+    uint8_t acc_braking :1;   // Adaptive Cruise Control
+    uint8_t acc_enabled :1;   // Adaptive Cruise Control
+    uint8_t :3;
+    uint8_t blis_l_alert :1;   // Blind Spot Information System
+    uint8_t blis_l_enabled :1; // Blind Spot Information System
+    uint8_t blis_r_alert :1;   // Blind Spot Information System
+    uint8_t blis_r_enabled :1; // Blind Spot Information System
+    uint8_t cta_l_alert :1;    // Cross Traffic Alert
+    uint8_t cta_l_enabled :1;  // Cross Traffic Alert
+    uint8_t cta_r_alert :1;    // Cross Traffic Alert
+    uint8_t cta_r_enabled :1;  // Cross Traffic Alert
+    uint8_t :6;
+    uint8_t rc :2;
+    uint8_t crc;
+    void reset() {
+        uint8_t save = rc;
+        memset(this, 0x00, sizeof(*this));
+        rc = save;
+    }
+    void setDecelMps2(float m_s2, DecelSrc src) {
+        if (src != DecelSrc::None && std::isfinite(m_s2)) {
+            decel = std::clamp<float>(std::round(m_s2 / 0.05f), 0u, UINT8_MAX);
+            decel_src = src;
+        } else {
+            decel = 0;
+            decel_src = DecelSrc::None;
+        }
+    }
+    float decelMps2() const {
+        if (decel_src != DecelSrc::None) {
+            return decel * 0.05f;
+        }
+        return NAN;
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validRc(uint8_t rc) const {
+        return rc != this->rc;
+    }
+    bool operator==(const MsgDriverAssist& _other) const {
+        return memcmp(this, &_other, sizeof(*this)) == 0;
+    }
+    bool operator!=(const MsgDriverAssist& _other) const {
+        return !(*this == _other);
+    }
+};
+static_assert(6 == sizeof(MsgDriverAssist));
+
+struct MsgBattery {
+    static constexpr uint32_t ID = 0x2C9;
+    static constexpr size_t PERIOD_MS = 100;
+    static constexpr size_t TIMEOUT_MS = 350;
+    enum class Ignition : uint8_t {
+        Unknown = 0,
+        Off = 1,
+        Accessory = 2,
+        Run = 3,
+        Start = 4,
+    };
+    uint16_t soc :10; // 0.1 %
+    Ignition ignition :3;
+    uint16_t voltage :11; // 0.02 V
+    int16_t current :14; // 0.0625 A
+    uint16_t :2;
+    uint8_t temperature; // degC
+    uint8_t :6;
+    uint8_t rc :2;
+    uint8_t crc;
+    void reset() {
+        uint8_t save = rc;
+        memset(this, 0x00, sizeof(*this));
+        soc = UINT16_MAX >> 6;
+        ignition = Ignition::Unknown;
+        voltage = UINT16_MAX >> 5;
+        current = INT16_MIN >> 2;
+        temperature = UINT8_MAX;
+        rc = save;
+    }
+    void setSocPercent(float pc) {
+        if (std::isfinite(pc)) {
+            soc = std::clamp<float>(pc / 0.1f, 0, (UINT16_MAX >> 6) - 1);
+        } else {
+            soc = UINT16_MAX >> 6;
+        }
+    }
+    bool socValid() const {
+        return soc != UINT16_MAX >> 6;
+    }
+    float socPercent() const {
+        if (socValid()) {
+            return soc * 0.1f;
+        }
+        return NAN;
+    }
+    void setVoltageVolts(float volts) {
+        if (std::isfinite(volts)) {
+            voltage = std::clamp<float>(volts / 0.02f, 0, (UINT16_MAX >> 5) - 1);
+        } else {
+            voltage = UINT16_MAX >> 5;
+        }
+    }
+    bool voltageValid() const {
+        return voltage != UINT16_MAX >> 5;
+    }
+    float voltageVolts() const {
+        if (voltageValid()) {
+            return voltage * 0.02f;
+        }
+        return NAN;
+    }
+    void setCurrentAmps(float amps) {
+        if (std::isfinite(amps)) {
+            current = std::clamp<float>(amps / 0.0625f, -(INT16_MAX >> 2), INT16_MAX >> 2);
+        } else {
+            current = INT16_MIN >> 2;
+        }
+    }
+    bool currentValid() const {
+        return current != INT16_MIN >> 2;
+    }
+    float currentAmps() const {
+        if (currentValid()) {
+            return current * 0.0625f;
+        }
+        return NAN;
+    }
+    void setTemperatureDegC(float deg_c) {
+        if (std::isfinite(deg_c)) {
+            temperature = std::clamp<float>(deg_c + 40, 0, UINT8_MAX - 1);
+        } else {
+            temperature = UINT8_MAX;
+        }
+    }
+    bool temperatureValid() const {
+        return temperature != UINT8_MAX;
+    }
+    float temperatureDegC() const {
+        if (temperatureValid()) {
+            return temperature - 40;
+        }
+        return NAN;
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validRc(uint8_t rc) const {
+        return rc != this->rc;
+    }
+};
+static_assert(8 == sizeof(MsgBattery));
+
+struct MsgBatteryTraction {
+    static constexpr uint32_t ID = 0x2CA;
+    static constexpr size_t PERIOD_MS = 100;
+    static constexpr size_t TIMEOUT_MS = 350;
+    enum class ChargeStatus : uint8_t {
+        Unknown = 0,
+        NotCharging = 1,
+        Charging = 2,
+        Complete = 3,
+        Fault = 7,
+    };
+    uint16_t soc :10; // 0.1 %
+    ChargeStatus status :3;
+    uint16_t voltage :11; // 0.5 V
+    int16_t current :14; // 0.1 A
+    uint8_t :2;
+    uint8_t temperature; // degC
+    uint8_t :6;
+    uint8_t rc :2;
+    uint8_t crc;
+    void reset() {
+        uint8_t save = rc;
+        memset(this, 0x00, sizeof(*this));
+        soc = UINT16_MAX >> 6;
+        voltage = UINT16_MAX >> 5;
+        current = INT16_MIN >> 2;
+        temperature = UINT8_MAX;
+        rc = save;
+    }
+    void setSocPercent(float pc) {
+        if (std::isfinite(pc)) {
+            soc = std::clamp<float>(pc / 0.1f, 0, (UINT16_MAX >> 6) - 1);
+        } else {
+            soc = UINT16_MAX >> 6;
+        }
+    }
+    bool socValid() const {
+        return soc != UINT16_MAX >> 6;
+    }
+    float socPercent() const {
+        if (socValid()) {
+            return soc * 0.1f;
+        }
+        return NAN;
+    }
+    void setVoltageVolts(float volts) {
+        if (std::isfinite(volts)) {
+            voltage = std::clamp<float>(volts / 0.5f, 0, (UINT16_MAX >> 5) - 1);
+        } else {
+            voltage = UINT16_MAX >> 5;
+        }
+    }
+    bool voltageValid() const {
+        return voltage != UINT16_MAX >> 5;
+    }
+    float voltageVolts() const {
+        if (voltageValid()) {
+            return voltage * 0.5f;
+        }
+        return NAN;
+    }
+    void setCurrentAmps(float amps) {
+        if (std::isfinite(amps)) {
+            current = std::clamp<float>(amps / 0.1f, -(INT16_MAX >> 2), INT16_MAX >> 2);
+        } else {
+            current = INT16_MIN >> 2;
+        }
+    }
+    bool currentValid() const {
+        return current != INT16_MIN >> 2;
+    }
+    float currentAmps() const {
+        if (currentValid()) {
+            return current * 0.1f;
+        }
+        return NAN;
+    }
+    void setTemperatureDegC(float deg_c) {
+        if (std::isfinite(deg_c)) {
+            temperature = std::clamp<float>(deg_c + 40, 0, UINT8_MAX - 1);
+        } else {
+            temperature = UINT8_MAX;
+        }
+    }
+    bool temperatureValid() const {
+        return temperature != UINT8_MAX;
+    }
+    float temperatureDegC() const {
+        if (temperatureValid()) {
+            return temperature - 40;
+        }
+        return NAN;
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validRc(uint8_t rc) const {
+        return rc != this->rc;
+    }
+};
+static_assert(8 == sizeof(MsgBatteryTraction));
 
 struct MsgReserved1 {
     static constexpr uint32_t ID = 0x360;
@@ -3329,182 +3918,238 @@ private:
 };
 static_assert(8 == sizeof(MsgTirePressure));
 
-#if 0 ///@TODO
-struct MsgReportGps1 {
-    static constexpr uint32_t ID = 0x06D;
-    static constexpr size_t PERIOD_MS = 1000;
-    int32_t latitude :31;
-    int32_t lat_valid :1;
-    int32_t longitude :31;
-    int32_t long_valid :1;
-};
-static_assert(8 == sizeof(MsgReportGps1));
-
-struct MsgReportGps2 {
-    static constexpr uint32_t ID = 0x06E;
-    static constexpr size_t PERIOD_MS = 1000;
-    uint8_t utc_year :7;
-    uint8_t :1;
-    uint8_t utc_month :4;
-    uint8_t :4;
-    uint8_t utc_day :5;
+struct MsgFuelLevel {
+    static constexpr uint32_t ID = 0x381;
+    static constexpr size_t PERIOD_MS = 500;
+    static constexpr size_t TIMEOUT_MS = 2500;
+    uint16_t fuel_level :10; // 0.1 %
     uint8_t :3;
-    uint8_t utc_hours :5;
-    uint8_t :3;
-    uint8_t utc_minutes :6;
-    uint8_t :2;
-    uint8_t utc_seconds :6;
-    uint8_t :2;
-    uint8_t compass_dir :4;
-    uint8_t :4;
-    uint8_t pdop :5;
-    uint8_t fault :1;
-    uint8_t inferred :1;
-    uint8_t :1;
-};
-static_assert(8 == sizeof(MsgReportGps2));
-
-struct MsgReportGps3 {
-    static constexpr uint32_t ID = 0x06F;
-    static constexpr size_t PERIOD_MS = 1000;
-    int16_t altitude;
-    uint16_t heading;
-    uint8_t speed;
-    uint8_t hdop :5;
-    uint8_t :3;
-    uint8_t vdop :5;
-    uint8_t :3;
-    uint8_t quality :3;
-    uint8_t num_sats :5;
-};
-static_assert(8 == sizeof(MsgReportGps3));
-
-struct MsgReportFuelLevel {
-    static constexpr uint32_t ID = 0x072;
-    static constexpr size_t PERIOD_MS = 100;
-    int16_t  fuel_level :11;    // 0.18696 %
-    uint8_t :3;
-    uint16_t battery_hev :10;   // 0.5 V
-    uint8_t  battery_12v :8;    // 0.0625 V
-    uint32_t odometer :24;      // 0.1 km
-    uint8_t :8;
-};
-static_assert(8 == sizeof(MsgReportFuelLevel));
-
-struct MsgReportSurround {
-    static constexpr uint32_t ID = 0x073;
-    static constexpr size_t PERIOD_MS = 200;
-    uint8_t l_cta_alert :1;
-    uint8_t l_cta_enabled :1;
-    uint8_t l_blis_alert :1;
-    uint8_t l_blis_enabled :1;
-    uint8_t r_cta_alert :1;
-    uint8_t r_cta_enabled :1;
-    uint8_t r_blis_alert :1;
-    uint8_t r_blis_enabled :1;
-    uint8_t sonar_00 :4;
-    uint8_t sonar_01 :4;
-    uint8_t sonar_02 :4;
-    uint8_t sonar_03 :4;
-    uint8_t sonar_04 :4;
-    uint8_t sonar_05 :4;
-    uint8_t sonar_06 :4;
-    uint8_t sonar_07 :4;
-    uint8_t sonar_08 :4;
-    uint8_t sonar_09 :4;
-    uint8_t sonar_10 :4;
-    uint8_t sonar_11 :4;
+    uint16_t fuel_range :11; // km
+    uint32_t odometer :24; // 0.1 km
     uint8_t :6;
-    uint8_t sonar_enabled :1;
-    uint8_t sonar_fault :1;
+    uint8_t rc :2;
+    uint8_t crc;
+    void reset() {
+        uint8_t save = rc;
+        memset(this, 0x00, sizeof(*this));
+        fuel_level = UINT16_MAX >> 6;
+        fuel_range = UINT16_MAX >> 5;
+        odometer = UINT32_MAX >> 8;
+        rc = save;
+    }
+    void setFuelLevelPercent(float pc) {
+        if (std::isfinite(pc)) {
+            fuel_level = std::clamp<float>(pc / 0.1f, 0, (UINT16_MAX >> 6) - 1);
+        } else {
+            fuel_level = UINT16_MAX >> 6;
+        }
+    }
+    float fuelLevelPercent() const {
+        return fuel_level != UINT16_MAX >> 6 ? fuel_level * 0.1f : NAN;
+    }
+    void setFuelRangeKm(uint16_t km) {
+        if (km != UINT16_MAX) {
+            fuel_range = std::clamp<uint16_t>(km, 0, (UINT16_MAX >> 5) - 1);
+        } else {
+            fuel_range = UINT16_MAX >> 5;
+        }
+    }
+    void setFuelRangeKm(float km) {
+        if (std::isfinite(km)) {
+            fuel_range = std::clamp<float>(km, 0, (UINT16_MAX >> 5) - 1);
+        } else {
+            fuel_range = UINT16_MAX >> 5;
+        }
+    }
+    float fuelRangeKm() const {
+        return fuel_range != UINT16_MAX >> 5 ? fuel_range : NAN;
+    }
+    void setOdometerKmX10(uint32_t km) {
+        if (km != UINT32_MAX) {
+            odometer = std::clamp<uint32_t>(km, 0, (UINT32_MAX >> 8) - 1);
+        } else {
+            odometer = UINT32_MAX >> 8;
+        }
+    }
+    void setOdometerKm(float km) {
+        if (std::isfinite(km)) {
+            odometer = std::clamp<float>(km * 10, 0, (UINT32_MAX >> 8) - 1);
+        } else {
+            odometer = UINT32_MAX >> 8;
+        }
+    }
+    bool odometerValid() const {
+        return odometer != UINT32_MAX >> 8;
+    }
+    float odometerKm() const {
+        return odometerValid() ? odometer * 0.1f : NAN;
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validRc(uint8_t rc) const {
+        return rc != this->rc;
+    }
 };
-static_assert(8 == sizeof(MsgReportSurround));
+static_assert(8 == sizeof(MsgFuelLevel));
 
-// struct MsgReportBrakeInfo {
-//     static constexpr uint32_t ID = 0x074;
-//     static constexpr size_t PERIOD_MS = 20;
-//     static constexpr size_t TIMEOUT_MS = 200;
-//     uint16_t brake_torque_request :12;
-//     uint8_t hsa_stat :3;
-//     uint8_t stationary :1;
-//     uint16_t brake_torque_actual :12;
-//     uint8_t hsa_mode :2;
-//     uint8_t :2; // parking_brake
-//     int16_t wheel_torque :14;
-//     Quality bped_qf :2;
-//     int16_t accel_over_ground_est :10;
-//     uint8_t abs_active :1;
-//     uint8_t abs_enabled :1;
-//     uint8_t stab_active :1;
-//     uint8_t stab_enabled :1;
-//     uint8_t trac_active :1;
-//     uint8_t trac_enabled :1;
-// };
-// static_assert(8 == sizeof(MsgReportBrakeInfo));
-
-// struct MsgReportThrottleInfo {
-//     static constexpr uint32_t ID = 0x075;
-//     static constexpr size_t PERIOD_MS = 10;
-//     uint16_t engine_rpm :16;
-//     uint16_t throttle_pc :10;
-//     uint8_t :4;
-//     Quality aped_qf :2;
-//     int8_t throttle_rate :8;
-//     uint8_t gear_num :5;
-//     uint8_t :3;
-//     uint8_t ign_stat :2;
-//     int16_t batt_curr :14;
-// };
-// static_assert(8 == sizeof(MsgReportThrottleInfo));
-// typedef enum {
-//     GEAR_NUM_X   =  0, // SNA, Unknown, Undefined
-//     GEAR_NUM_D01 =  1, //  1st (Drive)
-//     GEAR_NUM_D02 =  2, //  2nd (Drive)
-//     GEAR_NUM_D03 =  3, //  3rd (Drive)
-//     GEAR_NUM_D04 =  4, //  4th (Drive)
-//     GEAR_NUM_D05 =  5, //  5th (Drive)
-//     GEAR_NUM_D06 =  6, //  6th (Drive)
-//     GEAR_NUM_D07 =  7, //  7th (Drive)
-//     GEAR_NUM_D08 =  8, //  8th (Drive)
-//     GEAR_NUM_D09 =  9, //  9th (Drive)
-//     GEAR_NUM_D10 = 10, // 10th (Drive)
-//                        // Room for expansion
-//     GEAR_NUM_N   = 16, // Neutral (N)
-//     GEAR_NUM_R01 = 17, //  1st (Reverse)
-//     GEAR_NUM_R02 = 18, //  2nd (Reverse)
-//                        // Room for expansion
-//     GEAR_NUM_P   = 31, // Park (P)
-// } GearNum; // Dataspeed defined number
-// typedef enum {
-//     IGN_STAT_X   =  0, // Unknown
-//     IGN_STAT_OFF =  1,
-//     IGN_STAT_ACC =  2, // Accessory
-//     IGN_STAT_RUN =  3,
-// } IgnStat; // Dataspeed defined status
-
-struct MsgReportDriverAssist {
-    static constexpr uint32_t ID = 0x079;
-    static constexpr size_t PERIOD_MS = 200;
-    uint8_t decel :8; // 0.0625 m/s^2
-    uint8_t decel_src :2;
-    uint8_t :1;
-    uint8_t fcw_enabled :1;
-    uint8_t fcw_active :1;
-    uint8_t aeb_enabled :1;
-    uint8_t aeb_precharge :1;
-    uint8_t aeb_active :1;
-    uint8_t :1;
-    uint8_t acc_enabled :1;
-    uint8_t acc_braking :1;
-    uint8_t :5;
+struct MsgGpsLatLong {
+    static constexpr uint32_t ID = 0x390;
+    static constexpr size_t PERIOD_MS = 1000;
+    static constexpr size_t TIMEOUT_MS = 3500;
+    int32_t latitude :28;  //  8e-7 deg,  -90 to 90
+    int32_t longitude :28; // 16e-7 deg, -180 to 180
+    uint8_t crc;
+    void reset() {
+        latitude = INT32_MIN >> 4;
+        longitude = INT32_MIN >> 4;
+        crc = 0;
+    }
+    void setLatitudeDeg(double deg) {
+        if (std::isfinite(deg)) {
+            latitude = std::clamp<double>(std::round(deg / 8e-7), -(INT32_MAX >> 4), INT32_MAX >> 4);
+        } else {
+            latitude = INT32_MIN >> 4;
+        }
+    }
+    void setLongitudeDeg(double deg) {
+        if (std::isfinite(deg)) {
+            longitude = std::clamp<double>(std::round(deg / 16e-7), -(INT32_MAX >> 4), INT32_MAX >> 4);
+        } else {
+            longitude = INT32_MIN >> 4;
+        }
+    }
+    bool latitudeValid() const {
+        return latitude != INT32_MIN >> 4;
+    }
+    bool longitudeValid() const {
+        return longitude != INT32_MIN >> 4;
+    }
+    double latitudeDeg() const {
+        return latitudeValid() ? latitude * 8e-7 : NAN;
+    }
+    double longitudeDeg() const {
+        return longitudeValid() ? longitude * 16e-7 : NAN;
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
 };
-static_assert(3 == sizeof(MsgReportDriverAssist));
-typedef enum {
-    DECEL_SRC_NONE = 0,
-    DECEL_SRC_AEB  = 1,
-    DECEL_SRC_ACC  = 2,
-} DecelSrc;
-#endif
+static_assert(8 == sizeof(MsgGpsLatLong));
+
+struct MsgGpsAltitude {
+    static constexpr uint32_t ID = 0x391;
+    static constexpr size_t PERIOD_MS = 1000;
+    static constexpr size_t TIMEOUT_MS = 3500;
+    int16_t altitude; // 0.25 m
+    uint16_t heading; // 0.01 deg
+    uint16_t speed :11; // 0.25 kph
+    uint8_t num_sats :5; // Number of satellites
+    uint8_t :8;
+    uint8_t crc;
+    void reset() {
+        memset(this, 0x00, sizeof(*this));
+        altitude = INT16_MIN;
+        heading = UINT16_MAX;
+        speed = UINT16_MAX >> 5;
+        num_sats = 0;
+    }
+    void setAltitudeM(float m) {
+        if (std::isfinite(m)) {
+            altitude = std::clamp<float>(std::round(m / 0.25f), -INT16_MAX, INT16_MAX);
+        } else {
+            altitude = INT16_MIN;
+        }
+    }
+    bool altitudeValid() const {
+        return altitude != INT16_MIN;
+    }
+    float altitudeM() const {
+        return altitudeValid() ? altitude * 0.25f : NAN;
+    }
+    void setHeadingDeg(float deg) {
+        if (std::isfinite(deg)) {
+            heading = std::clamp<float>(std::round(fmodPos(deg, 360) / 0.01f), 0, UINT16_MAX - 1);
+        } else {
+            heading = UINT16_MAX;
+        }
+    }
+    bool headingValid() const {
+        return heading != UINT16_MAX;
+    }
+    float headingDeg() const {
+        return headingValid() ? heading * 0.01f : NAN;
+    }
+    void setSpeedKph(float kph) {
+        if (std::isfinite(kph)) {
+            speed = std::clamp<float>(std::round(kph / 0.25f), 0, (UINT16_MAX >> 5) - 1);
+        } else {
+            speed = UINT16_MAX >> 5;
+        }
+    }
+    bool speedValid() const {
+        return speed != UINT16_MAX >> 5;
+    }
+    float speedKph() const {
+        return speedValid() ? speed * 0.25f : NAN;
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+private:
+    static constexpr float fmodPos(float a, float b) {
+        float x = std::fmod(a, b);
+        return x >= 0 ? x : x + b;
+    }
+};
+static_assert(8 == sizeof(MsgGpsAltitude));
+
+struct MsgGpsTime {
+    static constexpr uint32_t ID = 0x392;
+    static constexpr size_t PERIOD_MS = 1000;
+    static constexpr size_t TIMEOUT_MS = 3500;
+    uint8_t utc_year_2000 :7; // Years since 2000
+    uint8_t valid :1;
+    uint8_t utc_month :4; // 0-11 -> 1-12
+    uint8_t :4;
+    uint8_t utc_day :5; // 0-30 -> 1-31
+    uint8_t :3;
+    uint8_t utc_hours :5; // 0-23
+    uint8_t :3;
+    uint8_t utc_minutes :6; // 0-59
+    uint8_t :2;
+    uint8_t utc_seconds :6; // 0-59
+    uint8_t :2;
+    uint8_t :8;
+    uint8_t crc;
+    void reset() {
+        memset(this, 0x00, sizeof(*this));
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+};
+static_assert(8 == sizeof(MsgGpsTime));
 
 struct MsgEcuInfo {
     static constexpr size_t PERIOD_MS = 200;
@@ -3529,7 +4174,7 @@ struct MsgEcuInfo {
         VIN2         = 0x52,
         Logging      = 0x60,
     };
-    Mux mux :8;
+    Mux mux;
     union {
         struct {
             uint8_t platform;
@@ -3658,7 +4303,7 @@ struct MsgEcuInfoMonitor  : public MsgEcuInfo { static constexpr uint32_t ID = 0
 
 
 // Verify that IDs are unique and in the desired order of priorities (unit test)
-static constexpr std::array<uint32_t, 57> IDS {
+static constexpr std::array<uint32_t, 67> IDS {
     // Primary reports
     MsgSteerReport1::ID,
     MsgBrakeReport1::ID,
@@ -3670,6 +4315,7 @@ static constexpr std::array<uint32_t, 57> IDS {
     MsgVehicleVelocity::ID,
     MsgThrtlInfo::ID,
     MsgBrakeInfo::ID,
+    MsgSteerOffset::ID,
     // Commands (remote control)
     MsgSteerCmdRmt::ID,
     MsgBrakeCmdRmt::ID,
@@ -3698,8 +4344,13 @@ static constexpr std::array<uint32_t, 57> IDS {
     MsgMonitorThrtl::ID,
     // Misc
     MsgMiscCmd::ID,
+    MsgTurnSignalCmd::ID,
+    MsgTurnSignalReport::ID,
     MsgMiscReport1::ID,
     MsgMiscReport2::ID,
+    MsgDriverAssist::ID,
+    MsgBattery::ID,
+    MsgBatteryTraction::ID,
     // Secondary reports
     MsgSteerReport2::ID,
     MsgBrakeReport2::ID,
@@ -3720,6 +4371,10 @@ static constexpr std::array<uint32_t, 57> IDS {
     MsgReservedDebug::ID,
     // Other sensors
     MsgTirePressure::ID,
+    MsgFuelLevel::ID,
+    MsgGpsLatLong::ID,
+    MsgGpsAltitude::ID,
+    MsgGpsTime::ID,
     // ECU info
     MsgEcuInfoGateway::ID,
     MsgEcuInfoSteer::ID,

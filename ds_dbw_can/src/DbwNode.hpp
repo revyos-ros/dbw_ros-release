@@ -57,15 +57,24 @@
 #include <ds_dbw_msgs/msg/vehicle_velocity.hpp>
 #include <ds_dbw_msgs/msg/throttle_info.hpp>
 #include <ds_dbw_msgs/msg/brake_info.hpp>
+#include <ds_dbw_msgs/msg/steering_offset.hpp>
 #include <ds_dbw_msgs/msg/ulc_cmd.hpp>
 #include <ds_dbw_msgs/msg/ulc_report.hpp>
 #include <ds_dbw_msgs/msg/wheel_speeds.hpp>
 #include <ds_dbw_msgs/msg/wheel_positions.hpp>
+#include <ds_dbw_msgs/msg/turn_signal_cmd.hpp>
+#include <ds_dbw_msgs/msg/turn_signal_report.hpp>
 #include <ds_dbw_msgs/msg/misc_cmd.hpp>
 #include <ds_dbw_msgs/msg/misc_report.hpp>
+#include <ds_dbw_msgs/msg/driver_assist.hpp>
+#include <ds_dbw_msgs/msg/battery.hpp>
+#include <ds_dbw_msgs/msg/battery_traction.hpp>
 #include <ds_dbw_msgs/msg/tire_pressures.hpp>
+#include <ds_dbw_msgs/msg/fuel_level.hpp>
 #include <ds_dbw_msgs/msg/ecu_info.hpp>
 #include <sensor_msgs/msg/imu.hpp>
+#include <sensor_msgs/msg/nav_sat_fix.hpp>
+#include <sensor_msgs/msg/time_reference.hpp>
 #include <std_msgs/msg/empty.hpp>
 
 // The following messages are deprecated
@@ -95,6 +104,7 @@ private:
   void recvBrakeCmd(const ds_dbw_msgs::msg::BrakeCmd::ConstSharedPtr msg);
   void recvThrottleCmd(const ds_dbw_msgs::msg::ThrottleCmd::ConstSharedPtr msg);
   void recvGearCmd(const ds_dbw_msgs::msg::GearCmd::ConstSharedPtr msg);
+  void recvTurnSignalCmd(const ds_dbw_msgs::msg::TurnSignalCmd::ConstSharedPtr msg);
   void recvMiscCmd(const ds_dbw_msgs::msg::MiscCmd::ConstSharedPtr msg);
   void recvUlcCmd(const ds_dbw_msgs::msg::UlcCmd::ConstSharedPtr msg);
   void recvMonitorCmd(const ds_dbw_msgs::msg::MonitorCmd::ConstSharedPtr msg);
@@ -129,6 +139,7 @@ private:
   MsgVehicleVelocity msg_veh_vel_ = {0};
   MsgThrtlInfo       msg_thrtl_info_ = {0};
   MsgBrakeInfo       msg_brake_info_ = {0};
+  MsgSteerOffset     msg_steer_offset_ = {0};
   MsgUlcCmd          msg_ulc_cmd_ = {0};
   MsgUlcCfg          msg_ulc_cfg_ = {0};
   MsgUlcReport       msg_ulc_rpt_ = {0};
@@ -136,10 +147,19 @@ private:
   MsgGyro            msg_gyro_ = {0};
   MsgWheelSpeed      msg_wheel_speed_ = {0};
   MsgWheelPosition   msg_wheel_position_ = {0};
+  MsgTurnSignalCmd   msg_turn_signal_cmd_ = {TurnSignal::None};
+  MsgTurnSignalReport msg_turn_signal_rpt_ = {TurnSignal::None};
   MsgMiscCmd         msg_misc_cmd_ = {TurnSignal::None};
   MsgMiscReport1     msg_misc_rpt_1_ = {TurnSignal::None};
-  MsgMiscReport2     msg_misc_rpt_2_ = {0};
+  MsgMiscReport2     msg_misc_rpt_2_ = {MsgMiscReport2::HeadlightCtrlLow::Unknown};
+  MsgDriverAssist    msg_driver_assist_ = {0};
+  MsgBattery         msg_battery_ = {0};
+  MsgBatteryTraction msg_battery_traction_ = {0};
   MsgTirePressure    msg_tire_pressure_ = {0};
+  MsgFuelLevel       msg_fuel_level_ = {0};
+  MsgGpsLatLong      msg_gps_lat_long_ = {0};
+  MsgGpsAltitude     msg_gps_altitude_ = {0};
+  MsgGpsTime         msg_gps_time_ = {0};
   #pragma GCC diagnostic pop
 
   // Clock for received message timestamps
@@ -295,11 +315,17 @@ private:
   RollingCounterValidation<MsgVehicleVelocity> msg_veh_vel_rc_;
   RollingCounterValidation<MsgThrtlInfo>       msg_thrtl_info_rc_;
   RollingCounterValidation<MsgBrakeInfo>       msg_brake_info_rc_;
+  RollingCounterValidation<MsgSteerOffset>     msg_steer_offset_rc_;
   RollingCounterValidation<MsgUlcReport>       msg_ulc_rpt_rc_;
   RollingCounterValidation<MsgAccel>           msg_accel_rc_;
   RollingCounterValidation<MsgGyro>            msg_gyro_rc_;
+  RollingCounterValidation<MsgTurnSignalReport> msg_turn_signal_rpt_rc_;
   RollingCounterValidation<MsgMiscReport1>     msg_misc_rpt_1_rc_;
   RollingCounterValidation<MsgMiscReport2>     msg_misc_rpt_2_rc_;
+  RollingCounterValidation<MsgDriverAssist>    msg_driver_assist_rc_;
+  RollingCounterValidation<MsgBattery>         msg_battery_rc_;
+  RollingCounterValidation<MsgBatteryTraction> msg_battery_traction_rc_;
+  RollingCounterValidation<MsgFuelLevel>       msg_fuel_level_rc_;
 
 #if 0
   template <typename T>
@@ -375,6 +401,7 @@ private:
   rclcpp::Subscription<ds_dbw_msgs::msg::BrakeCmd>::SharedPtr sub_brake_;
   rclcpp::Subscription<ds_dbw_msgs::msg::ThrottleCmd>::SharedPtr sub_thrtl_;
   rclcpp::Subscription<ds_dbw_msgs::msg::GearCmd>::SharedPtr sub_gear_;
+  rclcpp::Subscription<ds_dbw_msgs::msg::TurnSignalCmd>::SharedPtr sub_turn_signal_;
   rclcpp::Subscription<ds_dbw_msgs::msg::MiscCmd>::SharedPtr sub_misc_;
   rclcpp::Subscription<ds_dbw_msgs::msg::UlcCmd>::SharedPtr sub_ulc_;
   rclcpp::Subscription<ds_dbw_msgs::msg::MonitorCmd>::SharedPtr sub_monitor_cmd_;
@@ -396,13 +423,21 @@ private:
   rclcpp::Publisher<ds_dbw_msgs::msg::VehicleVelocity>::SharedPtr pub_veh_vel_;
   rclcpp::Publisher<ds_dbw_msgs::msg::ThrottleInfo>::SharedPtr pub_thrtl_info_;
   rclcpp::Publisher<ds_dbw_msgs::msg::BrakeInfo>::SharedPtr pub_brake_info_;
+  rclcpp::Publisher<ds_dbw_msgs::msg::SteeringOffset>::SharedPtr pub_steer_offset_;
   rclcpp::Publisher<ds_dbw_msgs::msg::UlcReport>::SharedPtr pub_ulc_;
   rclcpp::Publisher<ds_dbw_msgs::msg::WheelSpeeds>::SharedPtr pub_wheel_speeds_;
   rclcpp::Publisher<ds_dbw_msgs::msg::WheelPositions>::SharedPtr pub_wheel_positions_;
+  rclcpp::Publisher<ds_dbw_msgs::msg::TurnSignalReport>::SharedPtr pub_turn_signal_;
   rclcpp::Publisher<ds_dbw_msgs::msg::MiscReport>::SharedPtr pub_misc_;
+  rclcpp::Publisher<ds_dbw_msgs::msg::DriverAssist>::SharedPtr pub_driver_assist_;
+  rclcpp::Publisher<ds_dbw_msgs::msg::Battery>::SharedPtr pub_battery_;
+  rclcpp::Publisher<ds_dbw_msgs::msg::BatteryTraction>::SharedPtr pub_battery_traction_;
   rclcpp::Publisher<ds_dbw_msgs::msg::TirePressures>::SharedPtr pub_tire_pressures_;
+  rclcpp::Publisher<ds_dbw_msgs::msg::FuelLevel>::SharedPtr pub_fuel_level_;
   rclcpp::Publisher<ds_dbw_msgs::msg::EcuInfo>::SharedPtr pub_ecu_info_;
   rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr pub_imu_;
+  rclcpp::Publisher<sensor_msgs::msg::NavSatFix>::SharedPtr pub_gps_;
+  rclcpp::Publisher<sensor_msgs::msg::TimeReference>::SharedPtr pub_gps_time_;
   rclcpp::Publisher<std_msgs::msg::String>::SharedPtr pub_vin_;      // Deprecated message
   rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr pub_sys_enable_; // Deprecated message
 

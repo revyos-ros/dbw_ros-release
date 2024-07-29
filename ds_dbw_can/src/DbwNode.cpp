@@ -87,17 +87,17 @@ static can_msgs::msg::Frame FrameFromDbw(const T &msg) {
 
 // Latest firmware versions
 static const PlatformMap FIRMWARE_LATEST({
-  {PlatformVersion(Platform::FORD_CD4,        Module::Gateway,  ModuleVersion(3,1,2))},
-  {PlatformVersion(Platform::FORD_CD4,        Module::Brake,    ModuleVersion(3,1,2))},
-  {PlatformVersion(Platform::FORD_CD4,        Module::Throttle, ModuleVersion(3,1,2))},
-  {PlatformVersion(Platform::FORD_CD4,        Module::Shift,    ModuleVersion(3,1,2))},
-  {PlatformVersion(Platform::FORD_CD5,        Module::Gateway,  ModuleVersion(1,3,0))},
-  {PlatformVersion(Platform::FORD_CD5,        Module::Throttle, ModuleVersion(1,3,0))},
-  {PlatformVersion(Platform::FORD_CD5,        Module::BOO,      ModuleVersion(1,3,0))},
-  {PlatformVersion(Platform::FORD_GE1,        Module::Gateway,  ModuleVersion(2,1,2))},
-  {PlatformVersion(Platform::FORD_GE1,        Module::Throttle, ModuleVersion(2,1,2))},
-  {PlatformVersion(Platform::FORD_GE1,        Module::Shift,    ModuleVersion(2,1,2))},
-  {PlatformVersion(Platform::FORD_GE1,        Module::Monitor,  ModuleVersion(2,1,2))},
+  {PlatformVersion(Platform::FORD_CD4,        Module::Gateway,  ModuleVersion(3,2,0))},
+  {PlatformVersion(Platform::FORD_CD4,        Module::Brake,    ModuleVersion(3,2,0))},
+  {PlatformVersion(Platform::FORD_CD4,        Module::Throttle, ModuleVersion(3,2,0))},
+  {PlatformVersion(Platform::FORD_CD4,        Module::Shift,    ModuleVersion(3,2,0))},
+  {PlatformVersion(Platform::FORD_CD5,        Module::Gateway,  ModuleVersion(1,3,1))},
+  {PlatformVersion(Platform::FORD_CD5,        Module::Throttle, ModuleVersion(1,3,1))},
+  {PlatformVersion(Platform::FORD_CD5,        Module::BOO,      ModuleVersion(1,3,1))},
+  {PlatformVersion(Platform::FORD_GE1,        Module::Gateway,  ModuleVersion(2,2,0))},
+  {PlatformVersion(Platform::FORD_GE1,        Module::Throttle, ModuleVersion(2,2,0))},
+  {PlatformVersion(Platform::FORD_GE1,        Module::Shift,    ModuleVersion(2,2,0))},
+  {PlatformVersion(Platform::FORD_GE1,        Module::Monitor,  ModuleVersion(2,1,5))},
 #if 0
   {PlatformVersion(Platform::FORD_P5,         Module::Gateway,  ModuleVersion(0,0,1))},
   {PlatformVersion(Platform::FORD_P5,         Module::Brake,    ModuleVersion(0,0,1))},
@@ -105,34 +105,34 @@ static const PlatformMap FIRMWARE_LATEST({
   {PlatformVersion(Platform::FORD_P5,         Module::Shift,    ModuleVersion(0,0,1))},
   {PlatformVersion(Platform::FORD_P5,         Module::BOO,      ModuleVersion(0,0,1))},
 #endif
-  {PlatformVersion(Platform::FORD_P702,       Module::Gateway,  ModuleVersion(2,1,2))},
-  {PlatformVersion(Platform::FORD_P702,       Module::Throttle, ModuleVersion(2,1,2))},
-  {PlatformVersion(Platform::FORD_P702,       Module::Shift,    ModuleVersion(2,1,2))},
+  {PlatformVersion(Platform::FORD_P702,       Module::Gateway,  ModuleVersion(2,2,0))},
+  {PlatformVersion(Platform::FORD_P702,       Module::Throttle, ModuleVersion(2,2,0))},
+  {PlatformVersion(Platform::FORD_P702,       Module::Shift,    ModuleVersion(2,2,0))},
 #if 0
   {PlatformVersion(Platform::FORD_T6,         Module::Gateway,  ModuleVersion(0,0,1))},
   {PlatformVersion(Platform::FORD_T6,         Module::Throttle, ModuleVersion(0,0,1))},
   {PlatformVersion(Platform::FORD_T6,         Module::Shift,    ModuleVersion(0,0,1))},
 #endif
-  {PlatformVersion(Platform::FORD_U6,         Module::Gateway,  ModuleVersion(2,1,2))},
-  {PlatformVersion(Platform::FORD_U6,         Module::Brake,    ModuleVersion(2,1,2))},
-  {PlatformVersion(Platform::FORD_U6,         Module::Throttle, ModuleVersion(2,1,2))},
-  {PlatformVersion(Platform::FORD_U6,         Module::Shift,    ModuleVersion(2,1,2))},
-  {PlatformVersion(Platform::FORD_U6,         Module::BOO,      ModuleVersion(2,1,2))},
-  {PlatformVersion(Platform::FORD_V3,         Module::Gateway,  ModuleVersion(0,3,2))},
-  {PlatformVersion(Platform::FORD_V3,         Module::Throttle, ModuleVersion(0,3,2))},
-  {PlatformVersion(Platform::FORD_V3,         Module::Shift,    ModuleVersion(0,3,2))},
-  {PlatformVersion(Platform::FORD_V3,         Module::BOO,      ModuleVersion(0,3,2))},
+  {PlatformVersion(Platform::FORD_U6,         Module::Gateway,  ModuleVersion(2,2,0))},
+  {PlatformVersion(Platform::FORD_U6,         Module::Brake,    ModuleVersion(2,2,0))},
+  {PlatformVersion(Platform::FORD_U6,         Module::Throttle, ModuleVersion(2,2,0))},
+  {PlatformVersion(Platform::FORD_U6,         Module::Shift,    ModuleVersion(2,2,0))},
+  {PlatformVersion(Platform::FORD_U6,         Module::BOO,      ModuleVersion(2,2,0))},
+  {PlatformVersion(Platform::FORD_V3,         Module::Gateway,  ModuleVersion(1,0,0))},
+  {PlatformVersion(Platform::FORD_V3,         Module::Throttle, ModuleVersion(1,0,0))},
+  {PlatformVersion(Platform::FORD_V3,         Module::Shift,    ModuleVersion(1,0,0))},
+  {PlatformVersion(Platform::FORD_V3,         Module::BOO,      ModuleVersion(1,0,0))},
 #if 0
   {PlatformVersion(Platform::POLARIS_GEM,     Module::Gateway,  ModuleVersion(0,0,1))},
   {PlatformVersion(Platform::POLARIS_GEM,     Module::Throttle, ModuleVersion(0,0,1))},
 #endif
-  {PlatformVersion(Platform::POLARIS_RANGER,  Module::Gateway,  ModuleVersion(0,0,5))},
-  {PlatformVersion(Platform::POLARIS_RANGER,  Module::Throttle, ModuleVersion(0,0,5))},
-  {PlatformVersion(Platform::POLARIS_RZRR,    Module::Gateway,  ModuleVersion(1,1,2))},
-  {PlatformVersion(Platform::POLARIS_RZRR,    Module::Steer,    ModuleVersion(1,1,2))},
-  {PlatformVersion(Platform::POLARIS_RZRR,    Module::Throttle, ModuleVersion(1,1,2))},
-  {PlatformVersion(Platform::POLARIS_RZRXP,   Module::Gateway,  ModuleVersion(1,1,2))},
-  {PlatformVersion(Platform::POLARIS_RZRXP,   Module::Throttle, ModuleVersion(1,1,2))},
+  {PlatformVersion(Platform::POLARIS_RANGER,  Module::Gateway,  ModuleVersion(0,0,6))},
+  {PlatformVersion(Platform::POLARIS_RANGER,  Module::Throttle, ModuleVersion(0,0,6))},
+  {PlatformVersion(Platform::POLARIS_RZRR,    Module::Gateway,  ModuleVersion(1,1,3))},
+  {PlatformVersion(Platform::POLARIS_RZRR,    Module::Steer,    ModuleVersion(1,1,3))},
+  {PlatformVersion(Platform::POLARIS_RZRR,    Module::Throttle, ModuleVersion(1,1,3))},
+  {PlatformVersion(Platform::POLARIS_RZRXP,   Module::Gateway,  ModuleVersion(1,1,3))},
+  {PlatformVersion(Platform::POLARIS_RZRXP,   Module::Throttle, ModuleVersion(1,1,3))},
 });
 
 using std::placeholders::_1;
@@ -176,12 +176,20 @@ DbwNode::DbwNode(const rclcpp::NodeOptions &options)
   pub_veh_vel_ = create_publisher<ds_dbw_msgs::msg::VehicleVelocity>("vehicle_velocity", 2);
   pub_thrtl_info_ = create_publisher<ds_dbw_msgs::msg::ThrottleInfo>("throttle/info", 2);
   pub_brake_info_ = create_publisher<ds_dbw_msgs::msg::BrakeInfo>("brake/info", 2);
+  pub_steer_offset_ = create_publisher<ds_dbw_msgs::msg::SteeringOffset>("steering/offset", 2);
   pub_ulc_ = create_publisher<ds_dbw_msgs::msg::UlcReport>("ulc/report", 2);
   pub_wheel_speeds_ = create_publisher<ds_dbw_msgs::msg::WheelSpeeds>("wheel_speeds", 2);
   pub_wheel_positions_ = create_publisher<ds_dbw_msgs::msg::WheelPositions>("wheel_positions", 2);
+  pub_turn_signal_ = create_publisher<ds_dbw_msgs::msg::TurnSignalReport>("turn_signal/report", 2);
   pub_misc_ = create_publisher<ds_dbw_msgs::msg::MiscReport>("misc/report", 2);
+  pub_driver_assist_ = create_publisher<ds_dbw_msgs::msg::DriverAssist>("driver_assist", 2);
+  pub_battery_ = create_publisher<ds_dbw_msgs::msg::Battery>("battery", 2);
+  pub_battery_traction_ = create_publisher<ds_dbw_msgs::msg::BatteryTraction>("battery_traction", 2);
   pub_tire_pressures_ = create_publisher<ds_dbw_msgs::msg::TirePressures>("tire_pressures", 2);
+  pub_fuel_level_ = create_publisher<ds_dbw_msgs::msg::FuelLevel>("fuel_level", 2);
   pub_imu_ = create_publisher<sensor_msgs::msg::Imu>("imu/data_raw", 10);
+  pub_gps_ = create_publisher<sensor_msgs::msg::NavSatFix>("gps/fix", 10);
+  pub_gps_time_ = create_publisher<sensor_msgs::msg::TimeReference>("gps/time", 10);
   pub_ecu_info_ = create_publisher<ds_dbw_msgs::msg::EcuInfo>("ecu_info", 10);
   pub_monitor_rpt_ = create_publisher<ds_dbw_msgs::msg::MonitorReport>("monitor/report", 2);
   pub_monitor_thrtl_ = create_publisher<ds_dbw_msgs::msg::MonitorThrottle>("monitor/throttle", 2);
@@ -197,6 +205,7 @@ DbwNode::DbwNode(const rclcpp::NodeOptions &options)
   sub_brake_ = create_subscription<ds_dbw_msgs::msg::BrakeCmd>("brake/cmd", 1, std::bind(&DbwNode::recvBrakeCmd, this, _1));
   sub_thrtl_ = create_subscription<ds_dbw_msgs::msg::ThrottleCmd>("throttle/cmd", 1, std::bind(&DbwNode::recvThrottleCmd, this, _1));
   sub_gear_ = create_subscription<ds_dbw_msgs::msg::GearCmd>("gear/cmd", 1, std::bind(&DbwNode::recvGearCmd, this, _1));
+  sub_turn_signal_ = create_subscription<ds_dbw_msgs::msg::TurnSignalCmd>("turn_signal/cmd", 1, std::bind(&DbwNode::recvTurnSignalCmd, this, _1));
   sub_misc_ = create_subscription<ds_dbw_msgs::msg::MiscCmd>("misc/cmd", 1, std::bind(&DbwNode::recvMiscCmd, this, _1));
   sub_ulc_ = create_subscription<ds_dbw_msgs::msg::UlcCmd>("ulc/cmd", 1, std::bind(&DbwNode::recvUlcCmd, this, _1));
   sub_monitor_cmd_ = create_subscription<ds_dbw_msgs::msg::MonitorCmd>("monitor/cmd", 1, std::bind(&DbwNode::recvMonitorCmd, this, _1));
@@ -881,6 +890,8 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
               out.accel_pedal_qf.value = (uint8_t)msg.accel_pedal_qf;
               out.one_pedal.value = (uint8_t)msg.one_pedal_drive;
               out.engine_rpm = msg.engineRpm();
+              out.drive_mode.value = (uint8_t)msg.drive_mode;
+              out.gear_num.value = (uint8_t)msg.gear_num;
               pub_thrtl_info_->publish(out);
             } else {
               RCLCPP_WARN(get_logger(), "Ignoring throttle info with repeated rolling counter value");
@@ -921,6 +932,30 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring brake info with invalid size of %u", msg_can->dlc);
+        }
+        break;
+
+      case msg_steer_offset_.ID:
+        if (msg_can->dlc == sizeof(msg_steer_offset_)) {
+          memcpy(&msg_steer_offset_, msg_can->data.data(), sizeof(msg_steer_offset_));
+          const auto &msg = msg_steer_offset_;
+          if (msg.validCrc()) {
+            if (msg_steer_offset_rc_.valid(msg, msg_can->header.stamp)) {
+              ds_dbw_msgs::msg::SteeringOffset out;
+              out.header.stamp = msg_can->header.stamp;
+              out.steering_wheel_angle = msg.angleDeg();
+              out.steering_wheel_angle_raw = msg.angleRawDeg();
+              out.steering_wheel_angle_offset = msg.angleOffsetDeg();
+              out.offset_type = (uint8_t)msg.offset_type;
+              pub_steer_offset_->publish(out);
+            } else {
+              RCLCPP_WARN(get_logger(), "Ignoring steer offset with repeated rolling counter value");
+            }
+          } else {
+            RCLCPP_WARN(get_logger(), "Ignoring steer offset with invalid CRC");
+          }
+        } else {
+          RCLCPP_WARN(get_logger(), "Ignoring steer offset with invalid size of %u", msg_can->dlc);
         }
         break;
 
@@ -1035,6 +1070,77 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
         }
         break;
 
+      case msg_turn_signal_rpt_.ID:
+        if (msg_can->dlc == sizeof(msg_turn_signal_rpt_)) {
+          bool fault_prev = msg_turn_signal_rpt_.fault;
+          bool degraded_prev = msg_turn_signal_rpt_.degraded;
+          memcpy(&msg_turn_signal_rpt_, msg_can->data.data(), sizeof(msg_turn_signal_rpt_));
+          const auto &msg = msg_turn_signal_rpt_;
+          if (msg.validCrc()) {
+            if (msg_turn_signal_rpt_rc_.valid(msg, msg_can->header.stamp)) {
+              static_assert(ds_dbw_msgs::msg::TurnSignal::NONE   == (uint8_t)TurnSignal::None);
+              static_assert(ds_dbw_msgs::msg::TurnSignal::LEFT   == (uint8_t)TurnSignal::Left);
+              static_assert(ds_dbw_msgs::msg::TurnSignal::RIGHT  == (uint8_t)TurnSignal::Right);
+              static_assert(ds_dbw_msgs::msg::TurnSignal::HAZARD == (uint8_t)TurnSignal::Hazard);
+              const auto &msg = msg_turn_signal_rpt_;
+              ds_dbw_msgs::msg::TurnSignalReport out;
+              out.header.stamp = msg_can->header.stamp;
+              out.input.value = (uint8_t)msg.input;
+              out.cmd.value = (uint8_t)msg.cmd;
+              out.output.value = (uint8_t)msg.output;
+              out.feedback.value = (uint8_t)msg.feedback;
+              out.ready = msg.ready;
+              out.override_active = msg.override_active;
+              out.override_other = msg.override_other;
+              out.timeout = msg.timeout;
+              out.bad_crc = msg.bad_crc;
+              out.bad_rc = msg.bad_rc;
+              out.degraded = msg.degraded;
+              out.degraded_cmd_type = msg.degraded_cmd_type;
+              out.degraded_comms_dbw_steer = msg.degraded_comms_dbw_steer;
+              out.degraded_comms_dbw_brake = msg.degraded_comms_dbw_brake;
+              out.degraded_comms_dbw_thrtl = msg.degraded_comms_dbw_thrtl;
+              out.degraded_comms_vehicle = msg.degraded_comms_vehicle;
+              out.degraded_control_performance = msg.degraded_control_performance;
+              out.fault = msg.fault;
+              out.fault_comms_vehicle = msg.fault_comms_vehicle;
+              pub_turn_signal_->publish(out);
+              if (msg.fault) {
+                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal fault");
+              } else if (fault_prev) {
+                RCLCPP_INFO(get_logger(), "Turn signal fault cleared");
+              }
+              if (msg.degraded) {
+                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded");
+              } else if (degraded_prev) {
+                RCLCPP_INFO(get_logger(), "Turn signal degraded state cleared");
+              }
+              if (msg.degraded_comms_dbw_steer) {
+                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded: Lost comms with other Drive-By-Wire steer module");
+              }
+              if (msg.degraded_comms_dbw_brake) {
+                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded: Lost comms with other Drive-By-Wire brake module");
+              }
+              if (msg.degraded_comms_dbw_thrtl) {
+                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded: Lost comms with other Drive-By-Wire throttle module");
+              }
+              if (msg.degraded_comms_vehicle) {
+                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded: Lost comms with vehicle module(s)");
+              }
+              if (msg.degraded_control_performance) {
+                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded: Insufficient control performance");
+              }
+            } else {
+              RCLCPP_WARN(get_logger(), "Ignoring turn signal report with repeated rolling counter value");
+            }
+          } else {
+            RCLCPP_WARN(get_logger(), "Ignoring turn signal report with invalid CRC");
+          }
+        } else {
+          RCLCPP_WARN(get_logger(), "Ignoring turn signal report with invalid size of %u", msg_can->dlc);
+        }
+        break;
+
       case msg_misc_rpt_1_.ID:
         if (msg_can->dlc == sizeof(msg_misc_rpt_1_)) {
           memcpy(&msg_misc_rpt_1_, msg_can->data.data(), sizeof(msg_misc_rpt_1_));
@@ -1079,6 +1185,93 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring misc report 2 report with invalid size of %u", msg_can->dlc);
+        }
+        break;
+
+      case msg_driver_assist_.ID:
+        if (msg_can->dlc == sizeof(msg_driver_assist_)) {
+          memcpy(&msg_driver_assist_, msg_can->data.data(), sizeof(msg_driver_assist_));
+          const auto &msg = msg_driver_assist_;
+          if (msg.validCrc()) {
+            if (msg_driver_assist_rc_.valid(msg, msg_can->header.stamp)) {
+              ds_dbw_msgs::msg::DriverAssist out;
+              out.header.stamp = msg_can->header.stamp;
+              out.decel = msg.decelMps2();
+              out.decel_src.value = (uint8_t)msg.decel_src;
+              out.fcw_active = msg.fcw_active;
+              out.fcw_enabled = msg.fcw_enabled;
+              out.aeb_active = msg.aeb_active;
+              out.aeb_precharge = msg.aeb_precharge;
+              out.aeb_enabled = msg.aeb_enabled;
+              out.acc_braking = msg.acc_braking;
+              out.acc_enabled = msg.acc_enabled;
+              out.blis_l_alert = msg.blis_l_alert;
+              out.blis_l_enabled = msg.blis_l_enabled;
+              out.blis_r_alert = msg.blis_r_alert;
+              out.blis_r_enabled = msg.blis_r_enabled;
+              out.cta_l_alert = msg.cta_l_alert;
+              out.cta_l_enabled = msg.cta_l_enabled;
+              out.cta_r_alert = msg.cta_r_alert;
+              out.cta_r_enabled = msg.cta_r_enabled;
+              pub_driver_assist_->publish(out);
+            } else {
+              RCLCPP_WARN(get_logger(), "Ignoring driver assist with repeated rolling counter value");
+            }
+          } else {
+            RCLCPP_WARN(get_logger(), "Ignoring driver assist with invalid CRC");
+          }
+        } else {
+          RCLCPP_WARN(get_logger(), "Ignoring driver assist with invalid size of %u", msg_can->dlc);
+        }
+        break;
+
+      case msg_battery_.ID:
+        if (msg_can->dlc == sizeof(msg_battery_)) {
+          memcpy(&msg_battery_, msg_can->data.data(), sizeof(msg_battery_));
+          const auto &msg = msg_battery_;
+          if (msg.validCrc()) {
+            if (msg_battery_rc_.valid(msg, msg_can->header.stamp)) {
+              ds_dbw_msgs::msg::Battery out;
+              out.header.stamp = msg_can->header.stamp;
+              out.state_of_charge = msg.socPercent();
+              out.voltage = msg.voltageVolts();
+              out.current = msg.currentAmps();
+              out.temperature = msg.temperatureDegC();
+              out.ignition.value = (uint8_t)msg.ignition;
+              pub_battery_->publish(out);
+            } else {
+              RCLCPP_WARN(get_logger(), "Ignoring battery with repeated rolling counter value");
+            }
+          } else {
+            RCLCPP_WARN(get_logger(), "Ignoring battery with invalid CRC");
+          }
+        } else {
+          RCLCPP_WARN(get_logger(), "Ignoring battery with invalid size of %u", msg_can->dlc);
+        }
+        break;
+
+      case msg_battery_traction_.ID:
+        if (msg_can->dlc == sizeof(msg_battery_traction_)) {
+          memcpy(&msg_battery_traction_, msg_can->data.data(), sizeof(msg_battery_traction_));
+          const auto &msg = msg_battery_traction_;
+          if (msg.validCrc()) {
+            if (msg_battery_traction_rc_.valid(msg, msg_can->header.stamp)) {
+              ds_dbw_msgs::msg::BatteryTraction out;
+              out.header.stamp = msg_can->header.stamp;
+              out.state_of_charge = msg.socPercent();
+              out.voltage = msg.voltageVolts();
+              out.current = msg.currentAmps();
+              out.temperature = msg.temperatureDegC();
+              out.status = (uint8_t)msg.status;
+              pub_battery_traction_->publish(out);
+            } else {
+              RCLCPP_WARN(get_logger(), "Ignoring battery traction with repeated rolling counter value");
+            }
+          } else {
+            RCLCPP_WARN(get_logger(), "Ignoring battery traction with invalid CRC");
+          }
+        } else {
+          RCLCPP_WARN(get_logger(), "Ignoring battery traction with invalid size of %u", msg_can->dlc);
         }
         break;
 
@@ -1993,6 +2186,108 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
         }
         break;
 
+      case msg_fuel_level_.ID:
+        if (msg_can->dlc == sizeof(msg_fuel_level_)) {
+          memcpy(&msg_fuel_level_, msg_can->data.data(), sizeof(msg_fuel_level_));
+          const auto &msg = msg_fuel_level_;
+          if (msg.validCrc()) {
+            if (msg_fuel_level_rc_.valid(msg, msg_can->header.stamp)) {
+              ds_dbw_msgs::msg::FuelLevel out;
+              out.header.stamp = msg_can->header.stamp;
+              out.fuel_level = msg.fuelLevelPercent();
+              out.fuel_range = msg.fuelRangeKm();
+              out.odometer = msg.odometerKm();
+              pub_fuel_level_->publish(out);
+            } else {
+              RCLCPP_WARN(get_logger(), "Ignoring fuel level with repeated rolling counter value");
+            }
+          } else {
+            RCLCPP_WARN(get_logger(), "Ignoring fuel level with invalid CRC");
+          }
+        } else {
+          RCLCPP_WARN(get_logger(), "Ignoring fuel level with invalid size of %u", msg_can->dlc);
+        }
+        break;
+
+      case msg_gps_lat_long_.ID:
+        if (msg_can->dlc == sizeof(msg_gps_lat_long_)) {
+          memcpy(&msg_gps_lat_long_, msg_can->data.data(), sizeof(msg_gps_lat_long_));
+          const auto &msg = msg_gps_lat_long_;
+          if (msg.validCrc()) {
+            using NavSatStatus = sensor_msgs::msg::NavSatStatus;
+            sensor_msgs::msg::NavSatFix out;
+            out.header.stamp = msg_can->header.stamp;
+            out.status.status = msg.latitudeValid() && msg.longitudeValid() ? NavSatStatus::STATUS_FIX : NavSatStatus::STATUS_NO_FIX;
+            out.latitude = msg.latitudeDeg();
+            out.longitude = msg.longitudeDeg();
+            if (true) { // msg_gps_altitude_.valid()
+              out.altitude = msg_gps_altitude_.altitudeM();
+            } else {
+              out.altitude = NAN;
+            }
+            pub_gps_->publish(out);
+          } else {
+            RCLCPP_WARN(get_logger(), "Ignoring GPS lat/long with invalid CRC");
+          }
+        } else {
+          RCLCPP_WARN(get_logger(), "Ignoring GPS lat/long with invalid size of %u", msg_can->dlc);
+        }
+        break;
+
+      case msg_gps_altitude_.ID:
+        if (msg_can->dlc == sizeof(msg_gps_altitude_)) {
+          memcpy(&msg_gps_altitude_, msg_can->data.data(), sizeof(msg_gps_altitude_));
+          const auto &msg = msg_gps_altitude_;
+          if (msg.validCrc()) {
+            // Used with MsgGpsLatLong
+            #if 0
+            RCLCPP_INFO(get_logger(), "GPS altitude: %0.2f m, heading: %6.2f deg, speed: %5.2f kph, satellites: %u",
+                msg.altitudeM(), msg.headingDeg(), msg.speedKph(), msg.num_sats);
+            #endif
+          } else {
+            RCLCPP_WARN(get_logger(), "Ignoring GPS altitude with invalid CRC");
+          }
+        } else {
+          RCLCPP_WARN(get_logger(), "Ignoring GPS altitude with invalid size of %u", msg_can->dlc);
+        }
+        break;
+
+      case msg_gps_time_.ID:
+        if (msg_can->dlc == sizeof(msg_gps_time_)) {
+          memcpy(&msg_gps_time_, msg_can->data.data(), sizeof(msg_gps_time_));
+          const auto &msg = msg_gps_time_;
+          if (msg.validCrc()) {
+            if (msg.valid) {
+              struct tm datetime;
+              datetime.tm_year = msg_gps_time_.utc_year_2000 + (2000 - 1900);
+              datetime.tm_mon = msg_gps_time_.utc_month;
+              datetime.tm_mday = msg_gps_time_.utc_day + 1;
+              datetime.tm_hour = msg_gps_time_.utc_hours;
+              datetime.tm_min = msg_gps_time_.utc_minutes;
+              datetime.tm_sec = msg_gps_time_.utc_seconds;
+              datetime.tm_isdst = -1;
+              sensor_msgs::msg::TimeReference out;
+              out.header.stamp = msg_can->header.stamp;
+              out.time_ref.sec = timegm(&datetime);
+              out.time_ref.nanosec = 0;
+              out.source = "Vehicle GPS";
+              pub_gps_time_->publish(out);
+              RCLCPP_INFO_ONCE(get_logger(), "GPS UTC date/time %04u/%02u/%02u %02u:%02u:%02u",
+                  msg_gps_time_.utc_year_2000 + 2000u,
+                  msg_gps_time_.utc_month + 1,
+                  msg_gps_time_.utc_day + 1,
+                  msg_gps_time_.utc_hours,
+                  msg_gps_time_.utc_minutes,
+                  msg_gps_time_.utc_seconds);
+            }
+          } else {
+            RCLCPP_WARN(get_logger(), "Ignoring GPS time with invalid CRC");
+          }
+        } else {
+          RCLCPP_WARN(get_logger(), "Ignoring GPS time with invalid size of %u", msg_can->dlc);
+        }
+        break;
+
       case MsgSteerParamHash::ID:
         if (msg_can->dlc >= sizeof(MsgSteerParamHash)) {
           MsgSteerParamHash msg;
@@ -2404,7 +2699,13 @@ void DbwNode::recvCanMisc(const std::vector<can_msgs::msg::Frame::ConstSharedPtr
   out.btn_next = msg1.btn_next;
   out.btn_call_start = msg1.btn_call_start;
   out.btn_call_end = msg1.btn_call_end;
-  (void)msg2;
+  out.wiper.value = (uint8_t)msg2.wiper_front;
+  out.headlight_low = msg2.headlight_low;
+  out.headlight_high = msg2.headlight_high;
+  out.headlight_low_control.value = (uint8_t)msg2.headlight_low_control;
+  out.headlight_high_control.value = (uint8_t)msg2.headlight_high_control;
+  out.ambient_light.value = (uint8_t)msg2.ambient_light;
+  out.outside_air_temp = msg2.outsideAirTempDegC();
   pub_misc_->publish(out);
   printSyncDelta(msgs[0], msgs[1], "misc");
 }
@@ -2598,6 +2899,24 @@ void DbwNode::recvGearCmd(const ds_dbw_msgs::msg::GearCmd::ConstSharedPtr msg) {
   }
   msg_gear_cmd_.setCrc();
   pub_can_->publish(FrameFromDbw(msg_gear_cmd_));
+}
+
+void DbwNode::recvTurnSignalCmd(const ds_dbw_msgs::msg::TurnSignalCmd::ConstSharedPtr msg) {
+  msg_turn_signal_cmd_.reset();
+  if (!modeSyncNone() || enabled()) {
+    switch (msg->cmd.value) {
+      default:
+        RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 1e3, "Unknown turn signal command: %u", msg->cmd.value);
+        [[fallthrough]];
+      case ds_dbw_msgs::msg::TurnSignal::NONE:  msg_turn_signal_cmd_.cmd = TurnSignal::None;  break;
+      case ds_dbw_msgs::msg::TurnSignal::LEFT:  msg_turn_signal_cmd_.cmd = TurnSignal::Left;  break;
+      case ds_dbw_msgs::msg::TurnSignal::RIGHT: msg_turn_signal_cmd_.cmd = TurnSignal::Right; break;
+    }
+  }
+  msg_turn_signal_cmd_.rc++;
+  msg_turn_signal_cmd_.setCrc();
+
+  pub_can_->publish(FrameFromDbw(msg_turn_signal_cmd_));
 }
 
 void DbwNode::recvMiscCmd(const ds_dbw_msgs::msg::MiscCmd::ConstSharedPtr msg) {
