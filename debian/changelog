@@ -1,0 +1,96 @@
+ros-humble-ds-dbw-msgs (2.1.16-1bookworm) bookworm; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Sun, 16 Jun 2024 16:00:00 -0000
+
+ros-humble-ds-dbw-msgs (2.1.15-1bookworm) bookworm; urgency=high
+
+  * Brake on comms loss and system lockout
+  * Contributors: Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Thu, 06 Jun 2024 16:00:00 -0000
+
+ros-humble-ds-dbw-msgs (2.1.14-1bookworm) bookworm; urgency=high
+
+  * Add gear command option for calibration
+  * Add gear fault_actuator_config diagnostic
+  * Contributors: Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Tue, 28 May 2024 16:00:00 -0000
+
+ros-humble-ds-dbw-msgs (2.1.13-1bookworm) bookworm; urgency=high
+
+  * Add gear reject enumeration for excessive vehicle speed
+  * Add actuator pedal position quality diagnostics
+  * Add logging status to EcuInfo message
+  * Contributors: Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Sun, 12 May 2024 16:00:00 -0000
+
+ros-humble-ds-dbw-msgs (2.1.12-1bookworm) bookworm; urgency=high
+
+  * Add support for DBW Monitor module
+  * Contributors: Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Sun, 31 Mar 2024 16:00:00 -0000
+
+ros-humble-ds-dbw-msgs (2.1.11-1bookworm) bookworm; urgency=high
+
+  * Add control performance fault
+  * Add support for system lockout
+  * Contributors: Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Mon, 04 Mar 2024 16:00:00 -0000
+
+ros-humble-ds-dbw-msgs (2.1.10-1bookworm) bookworm; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Mon, 26 Feb 2024 16:00:00 -0000
+
+ros-humble-ds-dbw-msgs (2.1.9-1bookworm) bookworm; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Thu, 22 Feb 2024 16:00:00 -0000
+
+ros-humble-ds-dbw-msgs (2.1.8-1bookworm) bookworm; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Mon, 19 Feb 2024 16:00:00 -0000
+
+ros-humble-ds-dbw-msgs (2.1.7-1bookworm) bookworm; urgency=high
+
+  * Add support for system sync option
+  * Steering wheel angle as degrees instead of radians
+  * Add brake vacuum pressure
+  * Contributors: Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Sun, 11 Feb 2024 16:00:00 -0000
+
+ros-humble-ds-dbw-msgs (2.1.6-1bookworm) bookworm; urgency=high
+
+  * Command limits vs vehicle speed
+  * Report calculated steer value/rate limits
+  * Report brake/throttle value limits
+  * Add warning on invalid steer/brake/throttle limit parameters
+  * Contributors: Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Mon, 15 Jan 2024 16:00:00 -0000
+
+ros-humble-ds-dbw-msgs (2.1.5-1bookworm) bookworm; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Tue, 02 Jan 2024 16:00:00 -0000
+
+ros-humble-ds-dbw-msgs (2.1.4-1bookworm) bookworm; urgency=high
+
+  * Single package for all platforms with new DBW2 CAN API
+  * Contributors: Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Tue, 12 Dec 2023 16:00:00 -0000
+
+
