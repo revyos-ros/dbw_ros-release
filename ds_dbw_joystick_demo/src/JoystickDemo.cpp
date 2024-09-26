@@ -168,6 +168,7 @@ JoystickDemo::JoystickDemo(const rclcpp::NodeOptions &options) : rclcpp::Node("j
     sub_gear_ = create_subscription<GearReport>("gear/report", 1, std::bind(&JoystickDemo::recvGear, this, _1));
   }
   if (misc_) {
+    pub_turn_signal_ = create_publisher<TurnSignalCmd>("turn_signal/cmd", 1);
     pub_misc_ = create_publisher<MiscCmd>("misc/cmd", 1);
   }
   if (enable_) {
@@ -326,12 +327,16 @@ void JoystickDemo::cmdCallback() {
 
   // Turn signal
   if (misc_) {
-    MiscCmd msg;
-    msg.turn_signal.value = data_.turn_signal_cmd;
-    // msg.parking_brake.value = 0;
-    // msg.door.select = data_.door_select;
-    // msg.door.action = data_.door_action;
-    pub_misc_->publish(msg);
+    TurnSignalCmd msg_turn_signal;
+    msg_turn_signal.cmd.value = data_.turn_signal_cmd;
+    pub_turn_signal_->publish(msg_turn_signal);
+
+    MiscCmd msg_misc;
+    msg_misc.turn_signal.value = data_.turn_signal_cmd;
+    // msg_misc.parking_brake.value = 0;
+    // msg_misc.door.select = data_.door_select;
+    // msg_misc.door.action = data_.door_action;
+    pub_misc_->publish(msg_misc);
   }
 }
 

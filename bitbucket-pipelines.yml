@@ -14,8 +14,8 @@ pipelines:
             - for x in build/**/test_results; do cp -r $x/ .; done && mv test_results $BITBUCKET_CLONE_DIR/test-results # Create top level test-results folder for Pipelines
             - colcon test-result --verbose
       - step:
-          name: Iron
-          image: dataspeedinc/ros:iron
+          name: Jazzy
+          image: dataspeedinc/ros:jazzy
           size: 2x # 8GB RAM
           script:
             - source `find /opt/ros -maxdepth 2 -name setup.bash | sort | head -1` && echo $ROS_DISTRO # Source ROS environment
