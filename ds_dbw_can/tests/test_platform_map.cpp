@@ -1,13 +1,15 @@
 /*********************************************************************
- * C++ unit test for dbw_common/PlatformMap.h
+ * C++ unit test for ds_dbw_can/PlatformMap.hpp
  *********************************************************************/
-
-#include <gtest/gtest.h>
 
 // File under test
 #include <ds_dbw_can/PlatformMap.hpp>
-using namespace ds_dbw_can;
 
+// Google testing suite
+#include <gtest/gtest.h>
+
+// Shorter names
+using namespace ds_dbw_can;
 using PV = PlatformVersion;
 using MV = ModuleVersion;
 

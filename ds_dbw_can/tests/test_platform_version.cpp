@@ -1,13 +1,15 @@
 /*********************************************************************
- * C++ unit test for dbw_common/PV.h
+ * C++ unit test for ds_dbw_can/PlatformVersion.hpp
  *********************************************************************/
-
-#include <gtest/gtest.h>
 
 // File under test
 #include <ds_dbw_can/PlatformVersion.hpp>
-using namespace ds_dbw_can;
 
+// Google testing suite
+#include <gtest/gtest.h>
+
+// Shorter names
+using namespace ds_dbw_can;
 using PV = PlatformVersion;
 using MV = ModuleVersion;
 

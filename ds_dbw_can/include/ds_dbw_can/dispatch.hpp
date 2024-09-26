@@ -1234,7 +1234,7 @@ struct MsgBrakeReport3 {
     uint8_t degraded_actuator_aeb_deny :1;
     uint8_t degraded_actuator_1 :1;
     uint8_t degraded_actuator_2 :1;
-    uint8_t :1;
+    uint8_t degraded_actuator_warm :1;
     uint8_t degraded_calibration :1;
     uint8_t fault_comms_dbw :1;
     uint8_t fault_comms_dbw_gateway :1;
@@ -2628,6 +2628,9 @@ struct MsgBrakeInfo {
     bool brakeTorquePedalValid() const { return brakeTorqueValid(brake_torque_pedal); }
     bool brakeTorqueRequestValid() const { return brakeTorqueValid(brake_torque_request); }
     bool brakeTorqueActualValid() const { return brakeTorqueValid(brake_torque_actual); }
+    uint16_t brakeTorquePedalNmU16() const { return brakeTorqueNmU16(brake_torque_pedal); }
+    uint16_t brakeTorqueRequestNmU16() const { return brakeTorqueNmU16(brake_torque_request); }
+    uint16_t brakeTorqueActualNmU16() const { return brakeTorqueNmU16(brake_torque_actual); }
     float brakeTorquePedalNm() const { return brakeTorqueNm(brake_torque_pedal); }
     float brakeTorqueRequestNm() const { return brakeTorqueNm(brake_torque_request); }
     float brakeTorqueActualNm() const { return brakeTorqueNm(brake_torque_actual); }
@@ -2675,6 +2678,12 @@ private:
     }
     static bool brakeTorqueValid(uint16_t torque) {
         return torque != UINT16_MAX >> 3;
+    }
+    static uint16_t brakeTorqueNmU16(uint16_t torque) {
+        if (brakeTorqueValid(torque)) {
+            return torque * 4;
+        }
+        return UINT16_MAX;
     }
     static float brakeTorqueNm(uint16_t torque) {
         if (brakeTorqueValid(torque)) {

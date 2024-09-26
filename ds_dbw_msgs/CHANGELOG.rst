@@ -2,6 +2,14 @@
 Changelog for package ds_dbw_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.2.2 (2024-09-09)
+------------------
+* Add warning for brake actuator warm
+* Contributors: Kevin Hallenbeck
+
+2.2.1 (2024-08-12)
+------------------
+
 2.2.0 (2024-07-17)
 ------------------
 * Add steering offset message

@@ -2,6 +2,12 @@
 Changelog for package ds_dbw
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.2.2 (2024-09-09)
+------------------
+
+2.2.1 (2024-08-12)
+------------------
+
 2.2.0 (2024-07-17)
 ------------------
 * Remove some settings changes in ROS install script

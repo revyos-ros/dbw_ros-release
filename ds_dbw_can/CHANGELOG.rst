@@ -2,6 +2,19 @@
 Changelog for package ds_dbw_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.2.2 (2024-09-09)
+------------------
+* Bump firmware versions to match 2024/09/09 release package
+* Fix offline launch file
+* Add warning for brake actuator warm
+* Contributors: Kevin Hallenbeck
+
+2.2.1 (2024-08-12)
+------------------
+* Bump firmware versions to match 2024/08/08 release package
+* Add timeout to CAN message receive validation
+* Contributors: Kevin Hallenbeck
+
 2.2.0 (2024-07-17)
 ------------------
 * Bump firmware versions to match 2024/06/17 release package

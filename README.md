@@ -11,6 +11,7 @@ ROS2 interface to Dataspeed drive-by-wire platforms with modern DBW2 firmware. S
 # Binaries
 
 * ROS buildfarm with infrequent updates:
+    * http://repo.ros2.org/status_page/ros_jazzy_default.html?q=dbw_ros
     * http://repo.ros2.org/status_page/ros_humble_default.html?q=dbw_ros
 * Dataspeed buildfarm with frequent updates:
     * https://bitbucket.org/DataspeedInc/ros_binaries/

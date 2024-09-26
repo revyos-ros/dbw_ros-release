@@ -84,6 +84,9 @@
 // CAN messages
 #include <ds_dbw_can/dispatch.hpp>
 
+// CAN message validation
+#include <ds_dbw_can/CanMsgRecv.hpp>
+
 // Platform and module version map
 #include <ds_dbw_can/PlatformMap.hpp>
 
@@ -110,57 +113,62 @@ private:
   void recvMonitorCmd(const ds_dbw_msgs::msg::MonitorCmd::ConstSharedPtr msg);
   void recvSteeringCalibrate(const std_msgs::msg::Empty::ConstSharedPtr msg);
 
-  // CAN messages
+  // Transmitted CAN messages
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
   MsgSteerCmdUsr     msg_steer_cmd_ = {0};
-  MsgSteerReport1    msg_steer_rpt_1_ = {0};
-  MsgSteerReport2    msg_steer_rpt_2_ = {0};
-  MsgSteerReport3    msg_steer_rpt_3_ = {0};
   MsgBrakeCmdUsr     msg_brake_cmd_ = {0};
-  MsgBrakeReport1    msg_brake_rpt_1_ = {0};
-  MsgBrakeReport2    msg_brake_rpt_2_ = {0};
-  MsgBrakeReport3    msg_brake_rpt_3_ = {0};
   MsgThrtlCmdUsr     msg_thrtl_cmd_ = {0};
-  MsgThrtlReport1    msg_thrtl_rpt_1_ = {0};
-  MsgThrtlReport2    msg_thrtl_rpt_2_ = {0};
-  MsgThrtlReport3    msg_thrtl_rpt_3_ = {0};
   MsgGearCmdUsr      msg_gear_cmd_ = {Gear::None};
-  MsgGearReport1     msg_gear_rpt_1_ = {Gear::None};
-  MsgGearReport2     msg_gear_rpt_2_ = {0};
-  MsgGearReport3     msg_gear_rpt_3_ = {0};
   MsgMonitorCmd      msg_monitor_cmd_ = {MsgMonitorCmd::CmdType::None};
-  MsgMonitorReport1  msg_monitor_rpt_1_ = {0};
-  MsgMonitorReport2  msg_monitor_rpt_2_ = {MsgMonitorReport2::Fault::None};
-  MsgMonitorReport3  msg_monitor_rpt_3_ = {MsgMonitorReport3::Fault::None};
-  MsgMonitorThrtl    msg_monitor_thrtl_ = {0};
-  MsgSystemReport    msg_system_rpt_ = {0};
   MsgSystemCmd       msg_system_cmd_ = {MsgSystemCmd::Cmd::None};
-  MsgVehicleVelocity msg_veh_vel_ = {0};
-  MsgThrtlInfo       msg_thrtl_info_ = {0};
-  MsgBrakeInfo       msg_brake_info_ = {0};
-  MsgSteerOffset     msg_steer_offset_ = {0};
   MsgUlcCmd          msg_ulc_cmd_ = {0};
   MsgUlcCfg          msg_ulc_cfg_ = {0};
-  MsgUlcReport       msg_ulc_rpt_ = {0};
-  MsgAccel           msg_accel_ = {0};
-  MsgGyro            msg_gyro_ = {0};
-  MsgWheelSpeed      msg_wheel_speed_ = {0};
-  MsgWheelPosition   msg_wheel_position_ = {0};
   MsgTurnSignalCmd   msg_turn_signal_cmd_ = {TurnSignal::None};
-  MsgTurnSignalReport msg_turn_signal_rpt_ = {TurnSignal::None};
   MsgMiscCmd         msg_misc_cmd_ = {TurnSignal::None};
-  MsgMiscReport1     msg_misc_rpt_1_ = {TurnSignal::None};
-  MsgMiscReport2     msg_misc_rpt_2_ = {MsgMiscReport2::HeadlightCtrlLow::Unknown};
-  MsgDriverAssist    msg_driver_assist_ = {0};
-  MsgBattery         msg_battery_ = {0};
-  MsgBatteryTraction msg_battery_traction_ = {0};
-  MsgTirePressure    msg_tire_pressure_ = {0};
-  MsgFuelLevel       msg_fuel_level_ = {0};
-  MsgGpsLatLong      msg_gps_lat_long_ = {0};
-  MsgGpsAltitude     msg_gps_altitude_ = {0};
-  MsgGpsTime         msg_gps_time_ = {0};
   #pragma GCC diagnostic pop
+
+  // Received CAN messages (with validation)
+  CanMsgRecvCrcRc<MsgSteerReport1>     msg_steer_rpt_1_;
+  CanMsgRecvCrcRc<MsgSteerReport2>     msg_steer_rpt_2_;
+  CanMsgRecvCrc  <MsgSteerReport3>     msg_steer_rpt_3_;
+  CanMsgRecvCrcRc<MsgBrakeReport1>     msg_brake_rpt_1_;
+  CanMsgRecvCrcRc<MsgBrakeReport2>     msg_brake_rpt_2_;
+  CanMsgRecvCrc  <MsgBrakeReport3>     msg_brake_rpt_3_;
+  CanMsgRecvCrcRc<MsgThrtlReport1>     msg_thrtl_rpt_1_;
+  CanMsgRecvCrcRc<MsgThrtlReport2>     msg_thrtl_rpt_2_;
+  CanMsgRecvCrc  <MsgThrtlReport3>     msg_thrtl_rpt_3_;
+  CanMsgRecvCrcRc<MsgGearReport1>      msg_gear_rpt_1_;
+  CanMsgRecvCrcRc<MsgGearReport2>      msg_gear_rpt_2_;
+  CanMsgRecvCrc  <MsgGearReport3>      msg_gear_rpt_3_;
+  CanMsgRecvCrcRc<MsgMonitorReport1>   msg_monitor_rpt_1_;
+  CanMsgRecvCrcRc<MsgMonitorReport2>   msg_monitor_rpt_2_;
+  CanMsgRecvCrcRc<MsgMonitorReport3>   msg_monitor_rpt_3_;
+  CanMsgRecvCrcRc<MsgMonitorThrtl>     msg_monitor_thrtl_;
+  CanMsgRecvCrcRc<MsgSystemReport>     msg_system_rpt_;
+  CanMsgRecvCrcRc<MsgVehicleVelocity>  msg_veh_vel_;
+  CanMsgRecvCrcRc<MsgThrtlInfo>        msg_thrtl_info_;
+  CanMsgRecvCrcRc<MsgBrakeInfo>        msg_brake_info_;
+  CanMsgRecvCrcRc<MsgSteerOffset>      msg_steer_offset_;
+  CanMsgRecvCrcRc<MsgUlcReport>        msg_ulc_rpt_;
+  CanMsgRecvCrcRc<MsgAccel>            msg_accel_;
+  CanMsgRecvCrcRc<MsgGyro>             msg_gyro_;
+  CanMsgRecv     <MsgWheelSpeed>       msg_wheel_speed_;
+  CanMsgRecv     <MsgWheelPosition>    msg_wheel_position_;
+  CanMsgRecvCrcRc<MsgTurnSignalReport> msg_turn_signal_rpt_;
+  CanMsgRecvCrcRc<MsgMiscReport1>      msg_misc_rpt_1_;
+  CanMsgRecvCrcRc<MsgMiscReport2>      msg_misc_rpt_2_;
+  CanMsgRecvCrcRc<MsgDriverAssist>     msg_driver_assist_;
+  CanMsgRecvCrcRc<MsgBattery>          msg_battery_;
+  CanMsgRecvCrcRc<MsgBatteryTraction>  msg_battery_traction_;
+  CanMsgRecv     <MsgTirePressure>     msg_tire_pressure_;
+  CanMsgRecvCrcRc<MsgFuelLevel>        msg_fuel_level_;
+  CanMsgRecvCrc  <MsgGpsLatLong>       msg_gps_lat_long_;
+  CanMsgRecvCrc  <MsgGpsAltitude>      msg_gps_altitude_;
+  CanMsgRecvCrc  <MsgGpsTime>          msg_gps_time_;
+  CanMsgRecv     <MsgSteerParamHash>   msg_steer_param_hash_;
+  CanMsgRecv     <MsgBrakeParamHash>   msg_brake_param_hash_;
+  CanMsgRecv     <MsgThrtlParamHash>   msg_thrtl_param_hash_;
 
   // Clock for received message timestamps
   rclcpp::Clock ros_clock_ = rclcpp::Clock(RCL_ROS_TIME);
@@ -170,7 +178,7 @@ private:
 
   // Detect if mode sync is managed by firmware
   bool modeSyncNone() const {
-    return msg_system_rpt_.system_sync_mode < SystemSyncMode::AllOrNone;
+    return msg_system_rpt_.msg().system_sync_mode < SystemSyncMode::AllOrNone;
   }
 
   // With firmware mode sync
@@ -183,27 +191,27 @@ private:
   // Without firmware mode sync (manage mode here)
   bool enable_ = false;
   bool fault() const {
-    return (msg_steer_rpt_1_.fault && !msg_steer_rpt_1_.timeout)
-        || (msg_brake_rpt_1_.fault && !msg_brake_rpt_1_.timeout)
-        || (msg_thrtl_rpt_1_.fault && !msg_thrtl_rpt_1_.timeout)
-        || (msg_gear_rpt_1_.fault);
+    return (msg_steer_rpt_1_.msg().fault && !msg_steer_rpt_1_.msg().timeout)
+        || (msg_brake_rpt_1_.msg().fault && !msg_brake_rpt_1_.msg().timeout)
+        || (msg_thrtl_rpt_1_.msg().fault && !msg_thrtl_rpt_1_.msg().timeout)
+        || (msg_gear_rpt_1_.msg().fault);
   }
   bool overrideActive() const {
-    return (msg_steer_rpt_1_.override_active && !msg_steer_rpt_1_.timeout)
-        || (msg_brake_rpt_1_.override_active && !msg_brake_rpt_1_.timeout)
-        || (msg_thrtl_rpt_1_.override_active && !msg_thrtl_rpt_1_.timeout)
-        || (msg_gear_rpt_1_.override_active);
+    return (msg_steer_rpt_1_.msg().override_active && !msg_steer_rpt_1_.msg().timeout)
+        || (msg_brake_rpt_1_.msg().override_active && !msg_brake_rpt_1_.msg().timeout)
+        || (msg_thrtl_rpt_1_.msg().override_active && !msg_thrtl_rpt_1_.msg().timeout)
+        || (msg_gear_rpt_1_.msg().override_active);
   }
   bool overrideOther() const {
-    return (msg_steer_rpt_1_.override_other && !msg_steer_rpt_1_.timeout)
-        || (msg_brake_rpt_1_.override_other && !msg_brake_rpt_1_.timeout)
-        || (msg_thrtl_rpt_1_.override_other && !msg_thrtl_rpt_1_.timeout)
-        || (msg_gear_rpt_1_.override_other);
+    return (msg_steer_rpt_1_.msg().override_other && !msg_steer_rpt_1_.msg().timeout)
+        || (msg_brake_rpt_1_.msg().override_other && !msg_brake_rpt_1_.msg().timeout)
+        || (msg_thrtl_rpt_1_.msg().override_other && !msg_thrtl_rpt_1_.msg().timeout)
+        || (msg_gear_rpt_1_.msg().override_other);
   }
   bool overrideLatched() const {
-    return (msg_steer_rpt_1_.override_latched && !msg_steer_rpt_1_.timeout)
-        || (msg_brake_rpt_1_.override_latched && !msg_brake_rpt_1_.timeout)
-        || (msg_thrtl_rpt_1_.override_latched && !msg_thrtl_rpt_1_.timeout);
+    return (msg_steer_rpt_1_.msg().override_latched && !msg_steer_rpt_1_.msg().timeout)
+        || (msg_brake_rpt_1_.msg().override_latched && !msg_brake_rpt_1_.msg().timeout)
+        || (msg_thrtl_rpt_1_.msg().override_latched && !msg_thrtl_rpt_1_.msg().timeout);
   }
   bool override() const {
     return overrideActive()
@@ -219,7 +227,7 @@ private:
     if (modeSyncNone()) {
       return enable_ && !fault() && !override();
     } else {
-      return msg_system_rpt_.state == MsgSystemReport::State::Active;
+      return msg_system_rpt_.msg().state == MsgSystemReport::State::Active;
     }
   }
   bool publishDbwEnabled(bool force = false);
@@ -258,106 +266,6 @@ private:
   bool ulc_preempt_warned_ = false;
   bool system_sync_mode_printed_ = false;
   bool remote_control_printed_ = false;
-
-  #if 1
-  ///@TODO: Remove after implementing proper timeouts
-  bool msg_misc_rpt_2_valid_ = false;
-  #else
-  template <typename T>
-  class Recv {
-  public:
-    using Stamp = std_msgs::msg::Header::_stamp_type;
-    bool valid() const {
-      // Calculate difference
-      int64_t diff_ns = (rclcpp::Time(stamp) - rclcpp::Time(stamp_)).nanoseconds();
-      return diff_ns > TIMEOUT_NS;
-    }
-  private:
-    static constexpr int64_t TIMEOUT_NS = T::TIMEOUT_MS * 1000000;
-    Stamp stamp_;
-  };
-  Recv<MsgBrakeReport1>    asdf_;
-  #endif
-
-  // Rolling counter validation for received messages
-  template <typename T>
-  class RollingCounterValidation {
-  public:
-    using Stamp = std_msgs::msg::Header::_stamp_type;
-    bool valid(const T& msg, Stamp stamp) {
-      // Calculate difference
-      int64_t diff_ns = (rclcpp::Time(stamp) - rclcpp::Time(stamp_)).nanoseconds();
-      bool valid_rc = msg.validRc(rc_);
-      // Save inputs for next time
-      rc_ = msg.rc;
-      stamp_ = stamp;
-      // Valid if rolling counter is valid or enough time has passed to accept any value
-      return valid_rc || (diff_ns > TIMEOUT_NS);
-    }
-  private:
-    static constexpr int64_t TIMEOUT_NS = T::TIMEOUT_MS * 1000000;
-    uint8_t rc_ = 0;
-    Stamp stamp_;
-  };
-  RollingCounterValidation<MsgSteerReport1>    msg_steer_rpt_1_rc_;
-  RollingCounterValidation<MsgSteerReport2>    msg_steer_rpt_2_rc_;
-  RollingCounterValidation<MsgBrakeReport1>    msg_brake_rpt_1_rc_;
-  RollingCounterValidation<MsgBrakeReport2>    msg_brake_rpt_2_rc_;
-  RollingCounterValidation<MsgThrtlReport1>    msg_thrtl_rpt_1_rc_;
-  RollingCounterValidation<MsgThrtlReport2>    msg_thrtl_rpt_2_rc_;
-  RollingCounterValidation<MsgGearReport1>     msg_gear_rpt_1_rc_;
-  RollingCounterValidation<MsgGearReport2>     msg_gear_rpt_2_rc_;
-  RollingCounterValidation<MsgMonitorReport1>  msg_monitor_rpt_1_rc_;
-  RollingCounterValidation<MsgMonitorReport2>  msg_monitor_rpt_2_rc_;
-  RollingCounterValidation<MsgMonitorReport3>  msg_monitor_rpt_3_rc_;
-  RollingCounterValidation<MsgMonitorThrtl>    msg_monitor_thrtl_rc_;
-  RollingCounterValidation<MsgSystemReport>    msg_system_rpt_rc_;
-  RollingCounterValidation<MsgVehicleVelocity> msg_veh_vel_rc_;
-  RollingCounterValidation<MsgThrtlInfo>       msg_thrtl_info_rc_;
-  RollingCounterValidation<MsgBrakeInfo>       msg_brake_info_rc_;
-  RollingCounterValidation<MsgSteerOffset>     msg_steer_offset_rc_;
-  RollingCounterValidation<MsgUlcReport>       msg_ulc_rpt_rc_;
-  RollingCounterValidation<MsgAccel>           msg_accel_rc_;
-  RollingCounterValidation<MsgGyro>            msg_gyro_rc_;
-  RollingCounterValidation<MsgTurnSignalReport> msg_turn_signal_rpt_rc_;
-  RollingCounterValidation<MsgMiscReport1>     msg_misc_rpt_1_rc_;
-  RollingCounterValidation<MsgMiscReport2>     msg_misc_rpt_2_rc_;
-  RollingCounterValidation<MsgDriverAssist>    msg_driver_assist_rc_;
-  RollingCounterValidation<MsgBattery>         msg_battery_rc_;
-  RollingCounterValidation<MsgBatteryTraction> msg_battery_traction_rc_;
-  RollingCounterValidation<MsgFuelLevel>       msg_fuel_level_rc_;
-
-#if 0
-  template <typename T>
-  class ReportRecv {
-  public:
-    bool timeout = false;
-    bool fault = false;
-    bool override_active = false;
-    bool override_other = false;
-    bool override_latched = false;
-    bool recv(const T &msg) {
-      timeout = msg.timeout;
-      fault = msg.fault;
-      override_active = msg.override_active;
-      override_other = msg.override_other;
-      override_latched = msg.override_latched;
-    }
-    bool override(bool ignore_timeout) const {
-      if (!ignore_timeout || !timeout) {
-        return override_active || override_other || override_latched;
-      }
-      return false;
-    }
-    bool fault(bool ignore_timeout) const {
-      return !ignore_timeout && fault;
-      if (!ignore_timeout || !timeout) {
-        return fault;
-      }
-      return false;
-    }
-  };
-  #endif
 
   // Param hashes
   struct {
