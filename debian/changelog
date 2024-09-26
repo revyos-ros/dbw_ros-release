@@ -1,0 +1,103 @@
+ros-humble-ds-dbw (2.2.2-1jammy) jammy; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Sun, 08 Sep 2024 16:00:00 -0000
+
+ros-humble-ds-dbw (2.2.1-1jammy) jammy; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Sun, 11 Aug 2024 16:00:00 -0000
+
+ros-humble-ds-dbw (2.2.0-1jammy) jammy; urgency=high
+
+  * Remove some settings changes in ROS install script
+  * Better desktop startup launcher with ROS environment already sourced in bashrc
+  * Add support for Ubuntu Noble with ROS Jazzy in ROS install script
+  * Contributors: Gabe, Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Tue, 16 Jul 2024 16:00:00 -0000
+
+ros-humble-ds-dbw (2.1.16-1jammy) jammy; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Sun, 16 Jun 2024 16:00:00 -0000
+
+ros-humble-ds-dbw (2.1.15-1jammy) jammy; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Thu, 06 Jun 2024 16:00:00 -0000
+
+ros-humble-ds-dbw (2.1.14-1jammy) jammy; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Tue, 28 May 2024 16:00:00 -0000
+
+ros-humble-ds-dbw (2.1.13-1jammy) jammy; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Sun, 12 May 2024 16:00:00 -0000
+
+ros-humble-ds-dbw (2.1.12-1jammy) jammy; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Sun, 31 Mar 2024 16:00:00 -0000
+
+ros-humble-ds-dbw (2.1.11-1jammy) jammy; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Mon, 04 Mar 2024 16:00:00 -0000
+
+ros-humble-ds-dbw (2.1.10-1jammy) jammy; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Mon, 26 Feb 2024 16:00:00 -0000
+
+ros-humble-ds-dbw (2.1.9-1jammy) jammy; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Thu, 22 Feb 2024 16:00:00 -0000
+
+ros-humble-ds-dbw (2.1.8-1jammy) jammy; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Mon, 19 Feb 2024 16:00:00 -0000
+
+ros-humble-ds-dbw (2.1.7-1jammy) jammy; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Sun, 11 Feb 2024 16:00:00 -0000
+
+ros-humble-ds-dbw (2.1.6-1jammy) jammy; urgency=high
+
+
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Mon, 15 Jan 2024 16:00:00 -0000
+
+ros-humble-ds-dbw (2.1.5-1jammy) jammy; urgency=high
+
+  * Merge DBW1/DBW2 README
+  * Use main branch for DBW2 install scripts
+  * Contributors: Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Tue, 02 Jan 2024 16:00:00 -0000
+
+ros-humble-ds-dbw (2.1.4-1jammy) jammy; urgency=high
+
+  * Single package for all platforms with new DBW2 CAN API
+  * Contributors: Kevin Hallenbeck
+
+ -- Kevin Hallenbeck <khallenbeck@dataspeedinc.com>  Tue, 12 Dec 2023 16:00:00 -0000
+
+
