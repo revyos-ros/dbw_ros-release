@@ -59,14 +59,17 @@ bool btn_next         # Media next
 bool btn_call_start   # Call start/answer
 bool btn_call_end     # Call end/disconnect
 
-# Outside air temperature
-# float32 outside_temperature # Degrees Celsius
-
-# High beams
-# bool high_beam_headlights
-
 # Front Windshield Wipers enumeration
-# Wiper wiper
+Wiper wiper
+
+# Headlight enumerations
+bool headlight_low
+bool headlight_high
+HeadlightCtrlLow headlight_low_control
+HeadlightCtrlHigh headlight_high_control
 
 # Ambient Light Sensor enumeration
-# AmbientLight ambient_light
+AmbientLight ambient_light
+
+# Outside air temperature
+float32 outside_air_temp # Degrees Celsius
