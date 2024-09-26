@@ -1,3 +1,30 @@
+## dbw_ros (humble) - 2.2.2-1
+
+The packages in the `dbw_ros` repository were released into the `humble` distro by running `/home/z572/gits/revyos-ros/venv2/bin/bloom-release -r humble dbw_ros --override-release-repository-push-url git@github.com:revyos-ros/dbw_ros-release.git` on `Thu, 26 Sep 2024 05:55:31 -0000`
+
+These packages were released:
+- `ds_dbw`
+- `ds_dbw_can`
+- `ds_dbw_joystick_demo`
+- `ds_dbw_msgs`
+
+Version of package(s) in repository `dbw_ros`:
+
+- upstream repository: https://bitbucket.org/dataspeedinc/dbw_ros.git
+- release repository: https://github.com/revyos-ros/dbw_ros-release.git
+- rosdistro version: `2.1.16-1`
+- old version: `2.1.16-1`
+- new version: `2.2.2-1`
+
+Versions of tools used:
+
+- bloom version: `0.12.0`
+- catkin_pkg version: `1.0.0`
+- rosdep version: `0.22.2`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## dbw_ros (jazzy) - 2.2.0-1
 
 The packages in the `dbw_ros` repository were released into the `jazzy` distro by running `/usr/bin/bloom-release dbw_ros --rosdistro jazzy` on `Mon, 29 Jul 2024 16:44:01 -0000`
