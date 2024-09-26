@@ -37,10 +37,11 @@
 #include <sensor_msgs/msg/joy.hpp>
 #include <std_msgs/msg/empty.hpp>
 
-#include <ds_dbw_msgs/msg/brake_cmd.hpp>
-#include <ds_dbw_msgs/msg/gear_cmd.hpp>
 #include <ds_dbw_msgs/msg/steering_cmd.hpp>
+#include <ds_dbw_msgs/msg/brake_cmd.hpp>
 #include <ds_dbw_msgs/msg/throttle_cmd.hpp>
+#include <ds_dbw_msgs/msg/gear_cmd.hpp>
+#include <ds_dbw_msgs/msg/turn_signal_cmd.hpp>
 #include <ds_dbw_msgs/msg/misc_cmd.hpp>
 #include <ds_dbw_msgs/msg/gear_report.hpp>
 #include <ds_dbw_msgs/msg/vehicle_velocity.hpp>
@@ -65,6 +66,7 @@ private:
   rclcpp::Publisher<ds_dbw_msgs::msg::BrakeCmd>::SharedPtr pub_brake_;
   rclcpp::Publisher<ds_dbw_msgs::msg::ThrottleCmd>::SharedPtr pub_thrtl_;
   rclcpp::Publisher<ds_dbw_msgs::msg::GearCmd>::SharedPtr pub_gear_;
+  rclcpp::Publisher<ds_dbw_msgs::msg::TurnSignalCmd>::SharedPtr pub_turn_signal_;
   rclcpp::Publisher<ds_dbw_msgs::msg::MiscCmd>::SharedPtr pub_misc_;
   rclcpp::Publisher<std_msgs::msg::Empty>::SharedPtr pub_enable_;
   rclcpp::Publisher<std_msgs::msg::Empty>::SharedPtr pub_disable_;

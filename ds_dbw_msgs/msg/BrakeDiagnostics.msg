@@ -24,6 +24,7 @@ bool degraded_actuator
 bool degraded_actuator_1
 bool degraded_actuator_2
 bool degraded_actuator_aeb_deny
+bool degraded_actuator_warm
 bool degraded_calibration
 
 # Faults

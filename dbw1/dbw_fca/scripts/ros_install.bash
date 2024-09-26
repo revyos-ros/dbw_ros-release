@@ -59,11 +59,11 @@ echo "export ROS_LOCALHOST_ONLY=1" >> ~/.bashrc
 
 # Install SDK
 echo "Installing SDK..."
-bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_fca/scripts/sdk_install.bash)
+bash <(wget -q -O - https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw1/dbw_fca/scripts/sdk_install.bash)
 
 # Configure startup script
 mkdir -p $HOME/.config/autostart
-wget -q https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw_fca/scripts/joystick_demo.desktop -O $HOME/.config/autostart/joystick_demo.desktop
+wget -q https://bitbucket.org/DataspeedInc/dbw_ros/raw/ros2/dbw1/dbw_fca/scripts/joystick_demo.desktop -O $HOME/.config/autostart/joystick_demo.desktop
 
 ### Misc fixes ###
 # Fix launcher icons
