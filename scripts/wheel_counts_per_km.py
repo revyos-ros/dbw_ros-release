@@ -30,7 +30,7 @@
 
 import rclpy
 from rclpy.node import Node
-from dbw_ford_msgs.msg import WheelPositionReport, FuelLevelReport
+from ds_dbw_msgs.msg import WheelPositions, FuelLevel
 from math import fabs
 
 class WheelCountsPerKm(Node):
@@ -40,14 +40,14 @@ class WheelCountsPerKm(Node):
     # Variables
     self.wheel_position_old = 0
     self.wheel_position_old_ready = False
-    self.msg_fuel_level = FuelLevelReport()
+    self.msg_fuel_level = FuelLevel()
     self.msg_fuel_level_ready = False
-    self.msg_wheel_position = WheelPositionReport()
+    self.msg_wheel_position = WheelPositions()
     self.msg_wheel_position_ready = False
     
     # Subscribers
-    self.create_subscription(FuelLevelReport, '/vehicle/fuel_level_report', self.recv_fuel_level, 10)
-    self.create_subscription(WheelPositionReport, '/vehicle/wheel_position_report', self.recv_wheel_position, 10)
+    self.create_subscription(FuelLevel, '/vehicle/fuel_level', self.recv_fuel_level, 10)
+    self.create_subscription(WheelPositions, '/vehicle/wheel_positions', self.recv_wheel_position, 10)
 
   def recv_fuel_level(self, msg):
     if self.msg_fuel_level_ready:
