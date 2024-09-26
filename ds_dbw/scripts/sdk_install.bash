@@ -7,6 +7,9 @@ if [ -e /opt/ros/foxy/setup.bash ]; then
 elif [ -e /opt/ros/humble/setup.bash ]; then
   echo "Detected ROS Humble."
   source /opt/ros/humble/setup.bash
+elif [ -e /opt/ros/jazzy/setup.bash ]; then
+  echo "Detected ROS Jazzy."
+  source /opt/ros/jazzy/setup.bash
 else
   echo "Failed to detected ROS version."
   exit 1
