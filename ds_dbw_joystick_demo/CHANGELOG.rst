@@ -2,6 +2,17 @@
 Changelog for package ds_dbw_joystick_demo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.3.1 (2024-12-18)
+------------------
+
+2.3.0 (2024-11-12)
+------------------
+* Remove deprecated turn signal from MiscReport and MiscCmd
+* Contributors: Kevin Hallenbeck
+
+2.2.3 (2024-09-30)
+------------------
+
 2.2.2 (2024-09-09)
 ------------------
 

@@ -69,8 +69,10 @@
 #include <ds_dbw_msgs/msg/driver_assist.hpp>
 #include <ds_dbw_msgs/msg/battery.hpp>
 #include <ds_dbw_msgs/msg/battery_traction.hpp>
+#include <ds_dbw_msgs/msg/eye_tracker.hpp>
 #include <ds_dbw_msgs/msg/tire_pressures.hpp>
 #include <ds_dbw_msgs/msg/fuel_level.hpp>
+#include <ds_dbw_msgs/msg/traffic_sign_info.hpp>
 #include <ds_dbw_msgs/msg/ecu_info.hpp>
 #include <sensor_msgs/msg/imu.hpp>
 #include <sensor_msgs/msg/nav_sat_fix.hpp>
@@ -125,7 +127,7 @@ private:
   MsgUlcCmd          msg_ulc_cmd_ = {0};
   MsgUlcCfg          msg_ulc_cfg_ = {0};
   MsgTurnSignalCmd   msg_turn_signal_cmd_ = {TurnSignal::None};
-  MsgMiscCmd         msg_misc_cmd_ = {TurnSignal::None};
+  MsgMiscCmd         msg_misc_cmd_ = {MsgMiscCmd::PrkBrkCmd::None};
   #pragma GCC diagnostic pop
 
   // Received CAN messages (with validation)
@@ -161,8 +163,10 @@ private:
   CanMsgRecvCrcRc<MsgDriverAssist>     msg_driver_assist_;
   CanMsgRecvCrcRc<MsgBattery>          msg_battery_;
   CanMsgRecvCrcRc<MsgBatteryTraction>  msg_battery_traction_;
+  CanMsgRecvCrcRc<MsgEyeTracker>       msg_eye_tracker_;
   CanMsgRecv     <MsgTirePressure>     msg_tire_pressure_;
   CanMsgRecvCrcRc<MsgFuelLevel>        msg_fuel_level_;
+  CanMsgRecvCrcRc<MsgTrafficSignInfo>  msg_traffic_sign_info_;
   CanMsgRecvCrc  <MsgGpsLatLong>       msg_gps_lat_long_;
   CanMsgRecvCrc  <MsgGpsAltitude>      msg_gps_altitude_;
   CanMsgRecvCrc  <MsgGpsTime>          msg_gps_time_;
@@ -171,14 +175,19 @@ private:
   CanMsgRecv     <MsgThrtlParamHash>   msg_thrtl_param_hash_;
 
   // Clock for received message timestamps
+  using Stamp = std_msgs::msg::Header::_stamp_type;
   rclcpp::Clock ros_clock_ = rclcpp::Clock(RCL_ROS_TIME);
 
   // Rate limited commands
   rclcpp::Time msg_ulc_cfg_stamp_;
 
   // Detect if mode sync is managed by firmware
-  bool modeSyncNone() const {
-    return msg_system_rpt_.msg().system_sync_mode < SystemSyncMode::AllOrNone;
+  bool modeSyncFull(Stamp stamp) const { // Managed by firmware
+    return msg_system_rpt_.valid(stamp)
+        && msg_system_rpt_.msg().system_sync_mode >= SystemSyncMode::AllOrNone;
+  }
+  bool modeSyncNone(Stamp stamp) const { // Managed here
+    return !modeSyncFull(stamp);
   }
 
   // With firmware mode sync
@@ -190,44 +199,45 @@ private:
 
   // Without firmware mode sync (manage mode here)
   bool enable_ = false;
-  bool fault() const {
-    return (msg_steer_rpt_1_.msg().fault && !msg_steer_rpt_1_.msg().timeout)
-        || (msg_brake_rpt_1_.msg().fault && !msg_brake_rpt_1_.msg().timeout)
-        || (msg_thrtl_rpt_1_.msg().fault && !msg_thrtl_rpt_1_.msg().timeout)
-        || (msg_gear_rpt_1_.msg().fault);
+  bool fault(Stamp stamp) const {
+    return (msg_steer_rpt_1_.valid(stamp) && msg_steer_rpt_1_.msg().fault && !msg_steer_rpt_1_.msg().timeout)
+        || (msg_brake_rpt_1_.valid(stamp) && msg_brake_rpt_1_.msg().fault && !msg_brake_rpt_1_.msg().timeout)
+        || (msg_thrtl_rpt_1_.valid(stamp) && msg_thrtl_rpt_1_.msg().fault && !msg_thrtl_rpt_1_.msg().timeout)
+        || (msg_gear_rpt_1_.valid(stamp)  && msg_gear_rpt_1_.msg().fault);
   }
-  bool overrideActive() const {
-    return (msg_steer_rpt_1_.msg().override_active && !msg_steer_rpt_1_.msg().timeout)
-        || (msg_brake_rpt_1_.msg().override_active && !msg_brake_rpt_1_.msg().timeout)
-        || (msg_thrtl_rpt_1_.msg().override_active && !msg_thrtl_rpt_1_.msg().timeout)
-        || (msg_gear_rpt_1_.msg().override_active);
+  bool overrideActive(Stamp stamp) const {
+    return (msg_steer_rpt_1_.valid(stamp) && msg_steer_rpt_1_.msg().override_active && !msg_steer_rpt_1_.msg().timeout)
+        || (msg_brake_rpt_1_.valid(stamp) && msg_brake_rpt_1_.msg().override_active && !msg_brake_rpt_1_.msg().timeout)
+        || (msg_thrtl_rpt_1_.valid(stamp) && msg_thrtl_rpt_1_.msg().override_active && !msg_thrtl_rpt_1_.msg().timeout)
+        || (msg_gear_rpt_1_.valid(stamp)  && msg_gear_rpt_1_.msg().override_active);
   }
-  bool overrideOther() const {
-    return (msg_steer_rpt_1_.msg().override_other && !msg_steer_rpt_1_.msg().timeout)
-        || (msg_brake_rpt_1_.msg().override_other && !msg_brake_rpt_1_.msg().timeout)
-        || (msg_thrtl_rpt_1_.msg().override_other && !msg_thrtl_rpt_1_.msg().timeout)
-        || (msg_gear_rpt_1_.msg().override_other);
+  bool overrideOther(Stamp stamp) const {
+    return (msg_steer_rpt_1_.valid(stamp) && msg_steer_rpt_1_.msg().override_other && !msg_steer_rpt_1_.msg().timeout)
+        || (msg_brake_rpt_1_.valid(stamp) && msg_brake_rpt_1_.msg().override_other && !msg_brake_rpt_1_.msg().timeout)
+        || (msg_thrtl_rpt_1_.valid(stamp) && msg_thrtl_rpt_1_.msg().override_other && !msg_thrtl_rpt_1_.msg().timeout)
+        || (msg_gear_rpt_1_.valid(stamp)  && msg_gear_rpt_1_.msg().override_other);
   }
-  bool overrideLatched() const {
-    return (msg_steer_rpt_1_.msg().override_latched && !msg_steer_rpt_1_.msg().timeout)
-        || (msg_brake_rpt_1_.msg().override_latched && !msg_brake_rpt_1_.msg().timeout)
-        || (msg_thrtl_rpt_1_.msg().override_latched && !msg_thrtl_rpt_1_.msg().timeout);
+  bool overrideLatched(Stamp stamp) const {
+    return (msg_steer_rpt_1_.valid(stamp) && msg_steer_rpt_1_.msg().override_latched && !msg_steer_rpt_1_.msg().timeout)
+        || (msg_brake_rpt_1_.valid(stamp) && msg_brake_rpt_1_.msg().override_latched && !msg_brake_rpt_1_.msg().timeout)
+        || (msg_thrtl_rpt_1_.valid(stamp) && msg_thrtl_rpt_1_.msg().override_latched && !msg_thrtl_rpt_1_.msg().timeout);
   }
-  bool override() const {
-    return overrideActive()
-        || overrideOther()
-        || overrideLatched();
+  bool override(Stamp stamp) const {
+    return overrideActive(stamp)
+        || overrideOther(stamp)
+        || overrideLatched(stamp);
   }
   void enableSystem();
   void disableSystem();
 
   // Enabled status
   bool prev_enable_ = true;
-  bool enabled() const {
-    if (modeSyncNone()) {
-      return enable_ && !fault() && !override();
+  bool enabled(Stamp stamp) const {
+    if (modeSyncNone(stamp)) {
+      return enable_ && !fault(stamp) && !override(stamp);
     } else {
-      return msg_system_rpt_.msg().state == MsgSystemReport::State::Active;
+      return msg_system_rpt_.valid(stamp) 
+          && msg_system_rpt_.msg().state == MsgSystemReport::State::Active;
     }
   }
   bool publishDbwEnabled(bool force = false);
@@ -266,6 +276,8 @@ private:
   bool ulc_preempt_warned_ = false;
   bool system_sync_mode_printed_ = false;
   bool remote_control_printed_ = false;
+  bool external_braking_printed_ = false;
+  bool comms_loss_braking_printed_ = false;
 
   // Param hashes
   struct {
@@ -340,8 +352,10 @@ private:
   rclcpp::Publisher<ds_dbw_msgs::msg::DriverAssist>::SharedPtr pub_driver_assist_;
   rclcpp::Publisher<ds_dbw_msgs::msg::Battery>::SharedPtr pub_battery_;
   rclcpp::Publisher<ds_dbw_msgs::msg::BatteryTraction>::SharedPtr pub_battery_traction_;
+  rclcpp::Publisher<ds_dbw_msgs::msg::EyeTracker>::SharedPtr pub_eye_tracker_;
   rclcpp::Publisher<ds_dbw_msgs::msg::TirePressures>::SharedPtr pub_tire_pressures_;
   rclcpp::Publisher<ds_dbw_msgs::msg::FuelLevel>::SharedPtr pub_fuel_level_;
+  rclcpp::Publisher<ds_dbw_msgs::msg::TrafficSignInfo>::SharedPtr pub_traffic_sign_info_;
   rclcpp::Publisher<ds_dbw_msgs::msg::EcuInfo>::SharedPtr pub_ecu_info_;
   rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr pub_imu_;
   rclcpp::Publisher<sensor_msgs::msg::NavSatFix>::SharedPtr pub_gps_;

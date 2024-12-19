@@ -92,6 +92,7 @@ enum class Gear : uint8_t {
     Drive = 4,
     Low = 5,
     Manual = 6,
+    Sport = 7,
     Calibrate = 15,
 };
 enum class TurnSignal : uint8_t {
@@ -836,7 +837,7 @@ struct MsgBrakeReport1 {
      */
     uint16_t input :12; // Interpretation changes with cmd_type, 4095=unknown
     uint8_t btsi :1;
-    uint8_t :1;
+    uint8_t yield_request :1; // Request throttle to yield to brakes
     uint8_t limiting_value :1;
     uint8_t limiting_rate :1;
     uint16_t cmd :12; // Interpretation changes with cmd_type, 4095=unknown
@@ -982,6 +983,23 @@ struct MsgBrakeReport1 {
                 return 0;
         }
         return 0;
+    }
+    bool cmdNonZero() const {
+        switch (cmd_type) { // No default case, explicitly specify all cases
+            case MsgBrakeCmd::CmdType::Accel:
+            case MsgBrakeCmd::CmdType::AccelAcc:
+            case MsgBrakeCmd::CmdType::AccelAeb:
+                return cmdRawSigned() < 0;
+            case MsgBrakeCmd::CmdType::Pressure:
+            case MsgBrakeCmd::CmdType::Torque:
+            case MsgBrakeCmd::CmdType::PedalRaw:
+            case MsgBrakeCmd::CmdType::Percent:
+                return cmdRawSigned() > 0;
+            case MsgBrakeCmd::CmdType::None:
+            case MsgBrakeCmd::CmdType::Calibrate:
+                return false;
+        }
+        return false;
     }
     void getPressureBar(float &in_bar, float &cmd_bar, float &out_bar) const {
         if (input != UINT16_MAX >> 4) {
@@ -1227,7 +1245,7 @@ struct MsgBrakeReport3 {
     uint8_t degraded_comms_actuator :1;
     uint8_t degraded_comms_actuator_1 :1;
     uint8_t degraded_comms_actuator_2 :1;
-    uint8_t :1;
+    uint8_t degraded_bped_feedback :1;
     uint8_t degraded_vehicle_speed :1;
     uint8_t degraded_btsi_stuck_low :1;
     uint8_t degraded_btsi_stuck_high :1;
@@ -1417,7 +1435,8 @@ struct MsgThrtlReport1 {
     static constexpr size_t TIMEOUT_MS = 100;
     typedef MsgThrtlCmd::CmdType CmdType;
     uint16_t input :12; // 0.025 %, 4095=unknown
-    uint16_t :2;
+    uint16_t :1;
+    uint8_t yield_request :1; // Request brakes to yield to throttle
     uint8_t limiting_value :1;
     uint8_t limiting_rate :1;
     uint16_t cmd :12; // 0.025 %
@@ -1488,6 +1507,21 @@ struct MsgThrtlReport1 {
             out_pc = output * 0.025f;
         } else {
             out_pc = NAN;
+        }
+    }
+    float getPercentInput() const {
+        if (input != UINT16_MAX >> 4) {
+            return input * 0.025f;
+        } else {
+            return NAN;
+        }
+    }
+    uint16_t getPercentInputU16() const {
+        if (input != UINT16_MAX >> 4) {
+            constexpr uint16_t MAX = 100 / 0.025;
+            return std::min((input << 16) / MAX, UINT16_MAX - 1);
+        } else {
+            return UINT16_MAX;
         }
     }
     void setCrc() {
@@ -2108,6 +2142,10 @@ struct MsgSystemReport {
         FaultBrake             = 0x19,
         FaultThrtl             = 0x1A,
         FaultGear              = 0x1B,
+        BadCrcRcCmdSteer       = 0x1C,
+        BadCrcRcCmdBrake       = 0x1D,
+        BadCrcRcCmdThrtl       = 0x1E,
+        BadCrcCmdGear          = 0x1F,
         OverrideActiveSteer    = 0x20,
         OverrideActiveBrake    = 0x21,
         OverrideActiveThrtl    = 0x22,
@@ -2138,6 +2176,7 @@ struct MsgSystemReport {
     };
     enum class ReasonDisengage : uint8_t {
         None                   = 0x00,
+        PowerCycle             = 0x01,
         LockoutVehicleVelocity = 0x10,
         LockoutVehicleAccel    = 0x11,
         LockoutGearReverse     = 0x12,
@@ -2180,6 +2219,10 @@ struct MsgSystemReport {
             case ReasonNotReady::FaultBrake:             return "FaultBrake";
             case ReasonNotReady::FaultThrtl:             return "FaultThrtl";
             case ReasonNotReady::FaultGear:              return "FaultGear";
+            case ReasonNotReady::BadCrcRcCmdSteer:       return "BadCrcRcCmdSteer";
+            case ReasonNotReady::BadCrcRcCmdBrake:       return "BadCrcRcCmdBrake";
+            case ReasonNotReady::BadCrcRcCmdThrtl:       return "BadCrcRcCmdThrtl";
+            case ReasonNotReady::BadCrcCmdGear:          return "BadCrcCmdGear";
             case ReasonNotReady::OverrideActiveSteer:    return "OverrideActiveSteer";
             case ReasonNotReady::OverrideActiveBrake:    return "OverrideActiveBrake";
             case ReasonNotReady::OverrideActiveThrtl:    return "OverrideActiveThrtl";
@@ -2206,12 +2249,14 @@ struct MsgSystemReport {
             case ReasonNotReady::SystemReengageDelay:    return "SystemReengageDelay";
             case ReasonNotReady::SystemLockout:          return "SystemLockout";
             case ReasonNotReady::SystemDisabled:         return "SystemDisabled";
-            case ReasonNotReady::Unknown:    default:    return "Unknown";
+            case ReasonNotReady::Unknown:                return "Unknown";
         }
+        return "Unknown";
     }
     static constexpr const char * reasonToString(ReasonDisengage x) {
         switch (x) {
             case ReasonDisengage::None:                   return "";
+            case ReasonDisengage::PowerCycle:             return "PowerCycle";
             case ReasonDisengage::LockoutVehicleVelocity: return "LockoutVehicleVelocity";
             case ReasonDisengage::LockoutVehicleAccel:    return "LockoutVehicleAccel";
             case ReasonDisengage::LockoutGearReverse:     return "LockoutGearReverse";
@@ -2241,8 +2286,9 @@ struct MsgSystemReport {
             case ReasonDisengage::ExternalBrake:          return "ExternalBrake";
             case ReasonDisengage::SystemDisableCmd:       return "SystemDisableCmd";
             case ReasonDisengage::SystemDisableBtn:       return "SystemDisableBtn";
-            case ReasonDisengage::Unknown:    default:    return "Unknown";
+            case ReasonDisengage::Unknown:                return "Unknown";
         }
+        return "Unknown";
     }
     uint8_t inhibit :1; // Inhibit control for steer/brake/throttle/gear
     uint8_t validate_cmd_crc_rc :1; // Parameter ValidateCmdCrcRc value
@@ -2555,6 +2601,9 @@ struct MsgThrtlInfo {
             return UINT16_MAX;
         }
         return 0;
+    }
+    void setEngineRpmx4(uint16_t rpm_x4) {
+        engine_rpm = rpm_x4;
     }
     void setEngineRpm(float rpm) {
         if (std::isfinite(rpm)) {
@@ -3356,7 +3405,7 @@ struct MsgMiscCmd {
         Open = 1,
         Close = 2,
     };
-    TurnSignal turn_signal_cmd :2; // Deprecated
+    uint8_t :2; // Previously turn_signal_cmd
     PrkBrkCmd parking_brake_cmd :2;
     DoorSelect door_select :2;
     DoorCmd door_cmd :2;
@@ -3387,7 +3436,7 @@ struct MsgMiscReport1 {
         Off = 2,
         Transition = 3,
     };
-    TurnSignal turn_signal :2; // Deprecated
+    uint8_t :2; // Previously turn_signal
     PrkBrkStat parking_brake :2;
     uint8_t pasngr_detect :1;
     uint8_t pasngr_airbag :1;
@@ -3837,6 +3886,65 @@ struct MsgBatteryTraction {
 };
 static_assert(8 == sizeof(MsgBatteryTraction));
 
+struct MsgEyeTracker {
+    static constexpr uint32_t ID = 0x2CB;
+    static constexpr size_t PERIOD_MS = 200;
+    static constexpr size_t TIMEOUT_MS = 500;
+    enum class Gaze : uint8_t {
+        Other               = 0x0,
+        PassengerWindshield = 0x1,
+        DriverWindshield    = 0x2,
+        InstrumentPanel     = 0x3,
+        MediaTablet         = 0x4,
+        RearMirror          = 0x6,
+        DriverMirror        = 0x8,
+        PassengerMirror     = 0x9,
+        BelowDashboard      = 0xA,
+    };
+    uint8_t attention_pc; // 0.4 %
+    Gaze gaze :4;
+    uint8_t :3;
+    uint8_t eyes_present :1;
+    uint8_t :6;
+    uint8_t rc :2;
+    uint8_t crc;
+    void setAttentionPercent(float pc) {
+        if (std::isfinite(pc)) {
+            attention_pc = std::clamp<float>(pc / 0.4f, 0, UINT8_MAX - 1);
+        } else {
+            attention_pc = UINT8_MAX;
+        }
+    }
+    float attentionValid() const {
+        return attention_pc != UINT8_MAX;
+    }
+    float attentionPercent() const {
+        if (attentionValid()) {
+            return attention_pc * 0.4f;
+        } else {
+            return NAN;
+        }
+    }
+    void reset() {
+        uint8_t save = rc;
+        memset(this, 0x00, sizeof(*this));
+        attention_pc = UINT8_MAX;
+        rc = save;
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validRc(uint8_t rc) const {
+        return rc != this->rc;
+    }
+};
+static_assert(4 == sizeof(MsgEyeTracker));
+
 struct MsgReserved1 {
     static constexpr uint32_t ID = 0x360;
     static constexpr size_t TIMEOUT_MS = 500;
@@ -4006,6 +4114,60 @@ struct MsgFuelLevel {
     }
 };
 static_assert(8 == sizeof(MsgFuelLevel));
+
+struct MsgTrafficSignInfo {
+    static constexpr uint32_t ID = 0x382;
+    static constexpr size_t PERIOD_MS = 1000;
+    static constexpr size_t TIMEOUT_MS = 2500;
+    enum class Status : uint8_t {
+        Unknown = 0,
+        Off = 1,
+        Active = 2,
+        Error = 3,
+    };
+    enum class Unit : uint8_t {
+        Unknown = 0,
+        Kph = 1,
+        Mph = 2,
+    };
+    enum class Limit : uint8_t {
+        Unknown = 0x00,
+        NoLimit = 0xFF,
+    };
+    Status status :2;
+    uint8_t camera_used :1;
+    uint8_t navigation_used :1;
+    uint8_t :2;
+    Unit speed_units :2;
+    Limit speed_limit;
+    uint8_t :6;
+    uint8_t rc :2;
+    uint8_t crc;
+    void reset() {
+        uint8_t save = rc;
+        memset(this, 0x00, sizeof(*this));
+        rc = save;
+    }
+    float speedLimit() const {
+        switch (speed_limit) {
+            case Limit::Unknown: return NAN;
+            case Limit::NoLimit: return INFINITY;
+            default: return (float)speed_limit;
+        }
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validRc(uint8_t rc) const {
+        return rc != this->rc;
+    }
+};
+static_assert(4 == sizeof(MsgTrafficSignInfo));
 
 struct MsgGpsLatLong {
     static constexpr uint32_t ID = 0x390;
@@ -4312,7 +4474,7 @@ struct MsgEcuInfoMonitor  : public MsgEcuInfo { static constexpr uint32_t ID = 0
 
 
 // Verify that IDs are unique and in the desired order of priorities (unit test)
-static constexpr std::array<uint32_t, 67> IDS {
+static constexpr std::array<uint32_t, 69> IDS {
     // Primary reports
     MsgSteerReport1::ID,
     MsgBrakeReport1::ID,
@@ -4360,6 +4522,7 @@ static constexpr std::array<uint32_t, 67> IDS {
     MsgDriverAssist::ID,
     MsgBattery::ID,
     MsgBatteryTraction::ID,
+    MsgEyeTracker::ID,
     // Secondary reports
     MsgSteerReport2::ID,
     MsgBrakeReport2::ID,
@@ -4381,6 +4544,7 @@ static constexpr std::array<uint32_t, 67> IDS {
     // Other sensors
     MsgTirePressure::ID,
     MsgFuelLevel::ID,
+    MsgTrafficSignInfo::ID,
     MsgGpsLatLong::ID,
     MsgGpsAltitude::ID,
     MsgGpsTime::ID,

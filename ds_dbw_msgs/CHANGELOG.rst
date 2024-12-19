@@ -2,6 +2,23 @@
 Changelog for package ds_dbw_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.3.1 (2024-12-18)
+------------------
+
+2.3.0 (2024-11-12)
+------------------
+* Add traffic sign info message
+* Remove deprecated turn signal from MiscReport and MiscCmd
+* Add warning for missing brake pedal feedback
+* Add brake/throttle yield request flags
+* Contributors: Kevin Hallenbeck
+
+2.2.3 (2024-09-30)
+------------------
+* Add eye tracker message (Mach-E only)
+* Add gear manual and gear sport enumerations
+* Contributors: Gabriel Oetjens, Kevin Hallenbeck
+
 2.2.2 (2024-09-09)
 ------------------
 * Add warning for brake actuator warm
