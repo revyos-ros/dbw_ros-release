@@ -87,52 +87,43 @@ static can_msgs::msg::Frame FrameFromDbw(const T &msg) {
 
 // Latest firmware versions
 static const PlatformMap FIRMWARE_LATEST({
-  {PlatformVersion(Platform::FORD_CD4,        Module::Gateway,  ModuleVersion(3,2,0))},
-  {PlatformVersion(Platform::FORD_CD4,        Module::Brake,    ModuleVersion(3,2,0))},
-  {PlatformVersion(Platform::FORD_CD4,        Module::Throttle, ModuleVersion(3,2,0))},
-  {PlatformVersion(Platform::FORD_CD4,        Module::Shift,    ModuleVersion(3,2,0))},
-  {PlatformVersion(Platform::FORD_CD5,        Module::Gateway,  ModuleVersion(1,3,1))},
-  {PlatformVersion(Platform::FORD_CD5,        Module::Throttle, ModuleVersion(1,3,1))},
-  {PlatformVersion(Platform::FORD_CD5,        Module::BOO,      ModuleVersion(1,3,1))},
-  {PlatformVersion(Platform::FORD_GE1,        Module::Gateway,  ModuleVersion(2,2,0))},
-  {PlatformVersion(Platform::FORD_GE1,        Module::Throttle, ModuleVersion(2,2,0))},
-  {PlatformVersion(Platform::FORD_GE1,        Module::Shift,    ModuleVersion(2,2,0))},
-  {PlatformVersion(Platform::FORD_GE1,        Module::Monitor,  ModuleVersion(2,1,5))},
-#if 0
-  {PlatformVersion(Platform::FORD_P5,         Module::Gateway,  ModuleVersion(0,0,1))},
-  {PlatformVersion(Platform::FORD_P5,         Module::Brake,    ModuleVersion(0,0,1))},
-  {PlatformVersion(Platform::FORD_P5,         Module::Throttle, ModuleVersion(0,0,1))},
-  {PlatformVersion(Platform::FORD_P5,         Module::Shift,    ModuleVersion(0,0,1))},
-  {PlatformVersion(Platform::FORD_P5,         Module::BOO,      ModuleVersion(0,0,1))},
-#endif
-  {PlatformVersion(Platform::FORD_P702,       Module::Gateway,  ModuleVersion(2,2,0))},
-  {PlatformVersion(Platform::FORD_P702,       Module::Throttle, ModuleVersion(2,2,0))},
-  {PlatformVersion(Platform::FORD_P702,       Module::Shift,    ModuleVersion(2,2,0))},
-#if 0
-  {PlatformVersion(Platform::FORD_T6,         Module::Gateway,  ModuleVersion(0,0,1))},
-  {PlatformVersion(Platform::FORD_T6,         Module::Throttle, ModuleVersion(0,0,1))},
-  {PlatformVersion(Platform::FORD_T6,         Module::Shift,    ModuleVersion(0,0,1))},
-#endif
-  {PlatformVersion(Platform::FORD_U6,         Module::Gateway,  ModuleVersion(2,2,0))},
-  {PlatformVersion(Platform::FORD_U6,         Module::Brake,    ModuleVersion(2,2,0))},
-  {PlatformVersion(Platform::FORD_U6,         Module::Throttle, ModuleVersion(2,2,0))},
-  {PlatformVersion(Platform::FORD_U6,         Module::Shift,    ModuleVersion(2,2,0))},
-  {PlatformVersion(Platform::FORD_U6,         Module::BOO,      ModuleVersion(2,2,0))},
-  {PlatformVersion(Platform::FORD_V3,         Module::Gateway,  ModuleVersion(1,0,0))},
-  {PlatformVersion(Platform::FORD_V3,         Module::Throttle, ModuleVersion(1,0,0))},
-  {PlatformVersion(Platform::FORD_V3,         Module::Shift,    ModuleVersion(1,0,0))},
-  {PlatformVersion(Platform::FORD_V3,         Module::BOO,      ModuleVersion(1,0,0))},
-#if 0
-  {PlatformVersion(Platform::POLARIS_GEM,     Module::Gateway,  ModuleVersion(0,0,1))},
-  {PlatformVersion(Platform::POLARIS_GEM,     Module::Throttle, ModuleVersion(0,0,1))},
-#endif
-  {PlatformVersion(Platform::POLARIS_RANGER,  Module::Gateway,  ModuleVersion(0,0,6))},
-  {PlatformVersion(Platform::POLARIS_RANGER,  Module::Throttle, ModuleVersion(0,0,6))},
-  {PlatformVersion(Platform::POLARIS_RZRR,    Module::Gateway,  ModuleVersion(1,1,3))},
-  {PlatformVersion(Platform::POLARIS_RZRR,    Module::Steer,    ModuleVersion(1,1,3))},
-  {PlatformVersion(Platform::POLARIS_RZRR,    Module::Throttle, ModuleVersion(1,1,3))},
-  {PlatformVersion(Platform::POLARIS_RZRXP,   Module::Gateway,  ModuleVersion(1,1,3))},
-  {PlatformVersion(Platform::POLARIS_RZRXP,   Module::Throttle, ModuleVersion(1,1,3))},
+  {PlatformVersion(Platform::FCA_RU,          Module::Gateway,  ModuleVersion(2,0,0))},
+  {PlatformVersion(Platform::FCA_RU,          Module::Brake,    ModuleVersion(2,0,0))},
+  {PlatformVersion(Platform::FCA_RU,          Module::Throttle, ModuleVersion(2,0,0))},
+  {PlatformVersion(Platform::FCA_RU,          Module::Shift,    ModuleVersion(2,0,0))},
+  {PlatformVersion(Platform::FORD_CD4,        Module::Gateway,  ModuleVersion(3,3,1))},
+  {PlatformVersion(Platform::FORD_CD4,        Module::Brake,    ModuleVersion(3,3,1))},
+  {PlatformVersion(Platform::FORD_CD4,        Module::Throttle, ModuleVersion(3,3,1))},
+  {PlatformVersion(Platform::FORD_CD4,        Module::Shift,    ModuleVersion(3,3,1))},
+  {PlatformVersion(Platform::FORD_CD5,        Module::Gateway,  ModuleVersion(2,1,1))},
+  {PlatformVersion(Platform::FORD_CD5,        Module::Throttle, ModuleVersion(2,1,1))},
+  {PlatformVersion(Platform::FORD_CD5,        Module::BOO,      ModuleVersion(2,1,1))},
+  {PlatformVersion(Platform::FORD_GE1,        Module::Gateway,  ModuleVersion(2,3,1))},
+  {PlatformVersion(Platform::FORD_GE1,        Module::Throttle, ModuleVersion(2,3,1))},
+  {PlatformVersion(Platform::FORD_GE1,        Module::Shift,    ModuleVersion(2,3,1))},
+  {PlatformVersion(Platform::FORD_GE1,        Module::Monitor,  ModuleVersion(2,3,1))},
+  {PlatformVersion(Platform::FORD_P702,       Module::Gateway,  ModuleVersion(2,3,1))},
+  {PlatformVersion(Platform::FORD_P702,       Module::Throttle, ModuleVersion(2,3,1))},
+  {PlatformVersion(Platform::FORD_P702,       Module::Shift,    ModuleVersion(2,3,1))},
+  {PlatformVersion(Platform::FORD_P702R,      Module::Gateway,  ModuleVersion(1,0,0))},
+  {PlatformVersion(Platform::FORD_P702R,      Module::Throttle, ModuleVersion(1,0,0))},
+  {PlatformVersion(Platform::FORD_P702R,      Module::Shift,    ModuleVersion(1,0,0))},
+  {PlatformVersion(Platform::FORD_U6,         Module::Gateway,  ModuleVersion(2,3,1))},
+  {PlatformVersion(Platform::FORD_U6,         Module::Brake,    ModuleVersion(2,3,1))},
+  {PlatformVersion(Platform::FORD_U6,         Module::Throttle, ModuleVersion(2,3,1))},
+  {PlatformVersion(Platform::FORD_U6,         Module::Shift,    ModuleVersion(2,3,1))},
+  {PlatformVersion(Platform::FORD_U6,         Module::BOO,      ModuleVersion(2,3,1))},
+  {PlatformVersion(Platform::FORD_V3,         Module::Gateway,  ModuleVersion(1,1,1))},
+  {PlatformVersion(Platform::FORD_V3,         Module::Throttle, ModuleVersion(1,1,1))},
+  {PlatformVersion(Platform::FORD_V3,         Module::Shift,    ModuleVersion(1,1,1))},
+  {PlatformVersion(Platform::FORD_V3,         Module::BOO,      ModuleVersion(1,1,1))},
+  {PlatformVersion(Platform::POLARIS_RANGER,  Module::Gateway,  ModuleVersion(1,2,1))},
+  {PlatformVersion(Platform::POLARIS_RANGER,  Module::Throttle, ModuleVersion(1,2,1))},
+  {PlatformVersion(Platform::POLARIS_RZRR,    Module::Gateway,  ModuleVersion(1,2,1))},
+  {PlatformVersion(Platform::POLARIS_RZRR,    Module::Steer,    ModuleVersion(1,2,1))},
+  {PlatformVersion(Platform::POLARIS_RZRR,    Module::Throttle, ModuleVersion(1,2,1))},
+  {PlatformVersion(Platform::POLARIS_RZRXP,   Module::Gateway,  ModuleVersion(1,2,1))},
+  {PlatformVersion(Platform::POLARIS_RZRXP,   Module::Throttle, ModuleVersion(1,2,1))},
 });
 
 using std::placeholders::_1;
@@ -185,8 +176,10 @@ DbwNode::DbwNode(const rclcpp::NodeOptions &options)
   pub_driver_assist_ = create_publisher<ds_dbw_msgs::msg::DriverAssist>("driver_assist", 2);
   pub_battery_ = create_publisher<ds_dbw_msgs::msg::Battery>("battery", 2);
   pub_battery_traction_ = create_publisher<ds_dbw_msgs::msg::BatteryTraction>("battery_traction", 2);
+  pub_eye_tracker_ = create_publisher<ds_dbw_msgs::msg::EyeTracker>("eye_tracker", 2);
   pub_tire_pressures_ = create_publisher<ds_dbw_msgs::msg::TirePressures>("tire_pressures", 2);
   pub_fuel_level_ = create_publisher<ds_dbw_msgs::msg::FuelLevel>("fuel_level", 2);
+  pub_traffic_sign_info_ = create_publisher<ds_dbw_msgs::msg::TrafficSignInfo>("traffic_sign_info", 2);
   pub_imu_ = create_publisher<sensor_msgs::msg::Imu>("imu/data_raw", 10);
   pub_gps_ = create_publisher<sensor_msgs::msg::NavSatFix>("gps/fix", 10);
   pub_gps_time_ = create_publisher<sensor_msgs::msg::TimeReference>("gps/time", 10);
@@ -216,7 +209,8 @@ DbwNode::DbwNode(const rclcpp::NodeOptions &options)
 }
 
 void DbwNode::recvEnable(const std_msgs::msg::Empty::ConstSharedPtr) {
-  if (modeSyncNone()) {
+  auto stamp = ros_clock_.now();
+  if (modeSyncNone(stamp)) {
     enableSystem();
   } else {
     // Queue clear for steer/brake/throttle, followed by system enable
@@ -229,7 +223,8 @@ void DbwNode::recvEnable(const std_msgs::msg::Empty::ConstSharedPtr) {
 }
 
 void DbwNode::recvDisable(const std_msgs::msg::Empty::ConstSharedPtr) {
-  if (modeSyncNone()) {
+  auto stamp = ros_clock_.now();
+  if (modeSyncNone(stamp)) {
     disableSystem();
   } else {
     // Reset queued clear/enable requests
@@ -248,800 +243,772 @@ void DbwNode::recvDisable(const std_msgs::msg::Empty::ConstSharedPtr) {
 }
 
 void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
-  if (!msg_can->header.stamp.sec && !msg_can->header.stamp.nanosec) {
-    RCLCPP_WARN_SKIPFIRST_THROTTLE(get_logger(), *get_clock(), 60e3,
-        "CAN message timestamps always zero, rolling counter validation will not function");
-  }
+  auto stamp = ros_clock_.now();
   if (!msg_can->is_rtr && !msg_can->is_error && !msg_can->is_extended) {
     switch (msg_can->id) {
-      case msg_steer_rpt_1_.ID:
-        if (msg_can->dlc == sizeof(msg_steer_rpt_1_)) {
-          bool fault_prev = msg_steer_rpt_1_.fault;
-          memcpy(&msg_steer_rpt_1_, msg_can->data.data(), sizeof(msg_steer_rpt_1_));
-          const auto &msg = msg_steer_rpt_1_;
-          if (msg.validCrc()) {
-            if (msg_steer_rpt_1_rc_.valid(msg, msg_can->header.stamp)) {
-              warnBadCrcRc(msg.bad_crc, msg.bad_rc, "Steer");
-              warn_timeout_steer_.recv(msg);
-              ds_dbw_msgs::msg::SteeringReport out;
-              out.header.stamp = msg_can->header.stamp;
-              out.steering_wheel_angle = msg.angleDeg();
-              out.steering_column_torque = msg.torqueNm();
-              out.cmd_type = (uint8_t)msg.cmd_type;
-              if (msg.cmd_type == MsgSteerReport1::CmdType::Torque) {
-                out.cmd = msg.cmdTorqueNm();
-              } else if (msg.cmd_type == MsgSteerReport1::CmdType::Angle) {
-                out.cmd = msg.cmdAngleDeg();
-              } else {
-                out.cmd = NAN;
-              }
-              out.limiting_value = msg.limiting_value;
-              out.limiting_rate = msg.limiting_rate;
-              out.external_control = msg.external_control;
-              out.ready = msg.ready;
-              out.enabled = msg.enabled;
-              out.override_active = msg.override_active;
-              out.override_other = msg.override_other;
-              out.override_latched = msg.override_latched;
-              out.fault = msg.fault;
-              out.timeout = msg.timeout;
-              out.bad_crc = msg.bad_crc;
-              out.bad_rc = msg.bad_rc;
-              if (true) { ///@TODO: msg_steer_rpt_2_.valid()
-                out.degraded = msg_steer_rpt_2_.degraded;
-                out.limit_rate = msg_steer_rpt_2_.getLimitRateDegS();
-                out.limit_value = msg_steer_rpt_2_.getLimitValueDeg();
-                out.cmd_src.value = (uint8_t)msg_steer_rpt_2_.cmd_src;
-              } else {
-                out.limit_rate = NAN;
-                out.limit_value = NAN;
-                out.cmd_src.value = (uint8_t)CmdSrc::User;
-              }
-              pub_steer_rpt_->publish(out);
-              if (msg.fault) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering fault");
-              } else if (fault_prev) {
-                RCLCPP_INFO(get_logger(), "Steering fault cleared");
-              }
-              if (modeSyncNone()) {
-                if (publishDbwEnabled()) {
-                  if (enabled()) {
-                    RCLCPP_INFO(get_logger(), "DBW system enabled.");
+      case MsgSteerReport1::ID:
+        if (msg_can->dlc == sizeof(MsgSteerReport1)) {
+          auto &recv = msg_steer_rpt_1_;
+          bool fault_prev = recv.valid(stamp) && recv.msg().fault;
+          if (recv.receive(*(MsgSteerReport1*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            warnBadCrcRc(msg.bad_crc, msg.bad_rc, "Steer");
+            warn_timeout_steer_.recv(msg);
+            ds_dbw_msgs::msg::SteeringReport out;
+            out.header.stamp = msg_can->header.stamp;
+            out.steering_wheel_angle = msg.angleDeg();
+            out.steering_column_torque = msg.torqueNm();
+            out.cmd_type = (uint8_t)msg.cmd_type;
+            if (msg.cmd_type == MsgSteerReport1::CmdType::Torque) {
+              out.cmd = msg.cmdTorqueNm();
+            } else if (msg.cmd_type == MsgSteerReport1::CmdType::Angle) {
+              out.cmd = msg.cmdAngleDeg();
+            } else {
+              out.cmd = NAN;
+            }
+            out.limiting_value = msg.limiting_value;
+            out.limiting_rate = msg.limiting_rate;
+            out.external_control = msg.external_control;
+            out.ready = msg.ready;
+            out.enabled = msg.enabled;
+            out.override_active = msg.override_active;
+            out.override_other = msg.override_other;
+            out.override_latched = msg.override_latched;
+            out.fault = msg.fault;
+            out.timeout = msg.timeout;
+            out.bad_crc = msg.bad_crc;
+            out.bad_rc = msg.bad_rc;
+            if (msg_steer_rpt_2_.valid(stamp)) {
+              const auto &msg2 = msg_steer_rpt_2_.msg();
+              out.degraded = msg2.degraded;
+              out.limit_rate = msg2.getLimitRateDegS();
+              out.limit_value = msg2.getLimitValueDeg();
+              out.cmd_src.value = (uint8_t)msg2.cmd_src;
+            } else {
+              out.limit_rate = NAN;
+              out.limit_value = NAN;
+              out.cmd_src.value = (uint8_t)CmdSrc::User;
+            }
+            pub_steer_rpt_->publish(out);
+            if (msg.fault) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering fault");
+            } else if (fault_prev) {
+              RCLCPP_INFO(get_logger(), "Steering fault cleared");
+            }
+            if (modeSyncNone(stamp)) {
+              if (publishDbwEnabled()) {
+                if (enabled(stamp)) {
+                  RCLCPP_INFO(get_logger(), "DBW system enabled.");
+                } else {
+                  if (msg.fault) {
+                    RCLCPP_ERROR(get_logger(), "DBW system disabled. Steering fault.");
+                  } else if (msg.override_active) {
+                    RCLCPP_WARN(get_logger(), "DBW system disabled. Override on steering wheel.");
+                  } else if (msg.override_other) {
+                    RCLCPP_WARN(get_logger(), "DBW system disabled. Override on steering wheel (from other system)");
+                  } else if (msg.override_latched) {
+                    RCLCPP_WARN(get_logger(), "DBW system disabled. Latched override on steering wheel.");
                   } else {
-                    if (msg.fault) {
-                      RCLCPP_ERROR(get_logger(), "DBW system disabled. Steering fault.");
-                    } else if (msg.override_active) {
-                      RCLCPP_WARN(get_logger(), "DBW system disabled. Override on steering wheel.");
-                    } else if (msg.override_other) {
-                      RCLCPP_WARN(get_logger(), "DBW system disabled. Override on steering wheel (from other system)");
-                    } else if (msg.override_latched) {
-                      RCLCPP_WARN(get_logger(), "DBW system disabled. Latched override on steering wheel.");
-                    } else {
-                      RCLCPP_WARN(get_logger(), "DBW system disabled. Unknown cause in steering report.");
-                    }
+                    RCLCPP_WARN(get_logger(), "DBW system disabled. Unknown cause in steering report.");
                   }
                 }
               }
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring steer report 1 with repeated rolling counter value");
             }
-          } else {
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring steer report 1 with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring steer report 1 with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring steer report 1 with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_brake_rpt_1_.ID:
-        if (msg_can->dlc == sizeof(msg_brake_rpt_1_)) {
-          bool fault_prev = msg_brake_rpt_1_.fault;
-          memcpy(&msg_brake_rpt_1_, msg_can->data.data(), sizeof(msg_brake_rpt_1_));
-          const auto &msg = msg_brake_rpt_1_;
-          if (msg.validCrc()) {
-            if (msg_brake_rpt_1_rc_.valid(msg, msg_can->header.stamp)) {
-              warnBadCrcRc(msg.bad_crc, msg.bad_rc, "Brake");
-              warn_timeout_brake_.recv(msg);
-              ds_dbw_msgs::msg::BrakeReport out;
-              out.header.stamp = msg_can->header.stamp;
-              out.cmd_type = (uint8_t)msg.cmd_type;
-              out.pressure_input  = NAN;
-              out.pressure_cmd    = NAN;
-              out.pressure_output = NAN;
-              out.torque_input    = NAN;
-              out.torque_cmd      = NAN;
-              out.torque_output   = NAN;
-              out.accel_cmd       = NAN;
-              out.accel_output    = NAN;
-              out.percent_input   = NAN;
-              out.percent_cmd     = NAN;
-              out.percent_output  = NAN;
-              switch (msg.cmd_type) {
-                case MsgBrakeReport1::CmdType::Pressure:
-                  msg.getPressureBar(out.pressure_input, out.pressure_cmd, out.pressure_output);
-                  break;
-                case MsgBrakeReport1::CmdType::Torque:
-                  msg.getTorqueNm(out.torque_input, out.torque_cmd, out.torque_output);
-                  break;
-                case MsgBrakeReport1::CmdType::Accel:
-                case MsgBrakeReport1::CmdType::AccelAcc:
-                case MsgBrakeReport1::CmdType::AccelAeb:
-                  msg.getAccel(out.torque_input, out.accel_cmd, out.accel_output);
-                  break;
-                case MsgBrakeReport1::CmdType::PedalRaw:
-                case MsgBrakeReport1::CmdType::Percent:
-                  msg.getPercent(out.percent_input, out.percent_cmd, out.percent_output);
-                  break;
-                case MsgBrakeReport1::CmdType::None:
-                case MsgBrakeReport1::CmdType::Calibrate:
-                  break;
+      case MsgBrakeReport1::ID:
+        if (msg_can->dlc == sizeof(MsgBrakeReport1)) {
+          auto &recv = msg_brake_rpt_1_;
+          bool fault_prev = recv.valid(stamp) && recv.msg().fault;
+          if (recv.receive(*(MsgBrakeReport1*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            warnBadCrcRc(msg.bad_crc, msg.bad_rc, "Brake");
+            warn_timeout_brake_.recv(msg);
+            ds_dbw_msgs::msg::BrakeReport out;
+            out.header.stamp = msg_can->header.stamp;
+            out.cmd_type = (uint8_t)msg.cmd_type;
+            out.pressure_input  = NAN;
+            out.pressure_cmd    = NAN;
+            out.pressure_output = NAN;
+            out.torque_input    = NAN;
+            out.torque_cmd      = NAN;
+            out.torque_output   = NAN;
+            out.accel_cmd       = NAN;
+            out.accel_output    = NAN;
+            out.percent_input   = NAN;
+            out.percent_cmd     = NAN;
+            out.percent_output  = NAN;
+            switch (msg.cmd_type) {
+              case MsgBrakeReport1::CmdType::Pressure:
+                msg.getPressureBar(out.pressure_input, out.pressure_cmd, out.pressure_output);
+                break;
+              case MsgBrakeReport1::CmdType::Torque:
+                msg.getTorqueNm(out.torque_input, out.torque_cmd, out.torque_output);
+                break;
+              case MsgBrakeReport1::CmdType::Accel:
+              case MsgBrakeReport1::CmdType::AccelAcc:
+              case MsgBrakeReport1::CmdType::AccelAeb:
+                msg.getAccel(out.torque_input, out.accel_cmd, out.accel_output);
+                break;
+              case MsgBrakeReport1::CmdType::PedalRaw:
+              case MsgBrakeReport1::CmdType::Percent:
+                msg.getPercent(out.percent_input, out.percent_cmd, out.percent_output);
+                break;
+              case MsgBrakeReport1::CmdType::None:
+              case MsgBrakeReport1::CmdType::Calibrate:
+                break;
+            }
+            out.btsi_cmd = msg.btsi;
+            out.yield_request = msg.yield_request;
+            out.limiting_value = msg.limiting_value;
+            out.limiting_rate = msg.limiting_rate;
+            out.external_control = msg.external_control;
+            out.ready = msg.ready;
+            out.enabled = msg.enabled;
+            out.override_active = msg.override_active;
+            out.override_other = msg.override_other;
+            out.override_latched = msg.override_latched;
+            out.fault = msg.fault;
+            out.timeout = msg.timeout;
+            out.bad_crc = msg.bad_crc;
+            out.bad_rc = msg.bad_rc;
+            if (msg_brake_rpt_2_.valid(stamp)) {
+              const auto &msg2 = msg_brake_rpt_2_.msg();
+              out.degraded = msg2.degraded;
+              using Mode = MsgBrakeReport2::BrkAvlMode;
+              switch (msg2.brake_available_mux) {
+                default:                     out.limit_value = NAN; break;
+                case Mode::Unlimited:        out.limit_value = msg2.getLimitValuePercent(); break;
+                case Mode::SecondsX2:        out.limit_value = msg2.getLimitValuePressureBar(); break;
+                case Mode::MillisecondsX100: out.limit_value = msg2.getLimitValueDecelMps2(); break;
               }
-              out.btsi_cmd = msg.btsi;
-              out.limiting_value = msg.limiting_value;
-              out.limiting_rate = msg.limiting_rate;
-              out.external_control = msg.external_control;
-              out.ready = msg.ready;
-              out.enabled = msg.enabled;
-              out.override_active = msg.override_active;
-              out.override_other = msg.override_other;
-              out.override_latched = msg.override_latched;
-              out.fault = msg.fault;
-              out.timeout = msg.timeout;
-              out.bad_crc = msg.bad_crc;
-              out.bad_rc = msg.bad_rc;
-              if (true) { ///@TODO: msg_brake_rpt_2_.valid()
-                out.degraded = msg_brake_rpt_2_.degraded;
-                using Mode = MsgBrakeReport2::BrkAvlMode;
-                switch (msg_brake_rpt_2_.brake_available_mux) {
-                  default:                     out.limit_value = NAN; break;
-                  case Mode::Unlimited:        out.limit_value = msg_brake_rpt_2_.getLimitValuePercent(); break;
-                  case Mode::SecondsX2:        out.limit_value = msg_brake_rpt_2_.getLimitValuePressureBar(); break;
-                  case Mode::MillisecondsX100: out.limit_value = msg_brake_rpt_2_.getLimitValueDecelMps2(); break;
-                }
-                out.brake_available_duration = msg_brake_rpt_2_.brkAvailDurSec();
-                out.brake_available_full = msg_brake_rpt_2_.brake_available_full;
-                out.req_shift_park = msg_brake_rpt_2_.req_shift_park;
-                out.req_park_brake = msg_brake_rpt_2_.req_park_brake;
-                out.external_button = msg_brake_rpt_2_.external_button;
-                out.comms_loss_armed = msg_brake_rpt_2_.comms_loss_armed;
-                out.cmd_src.value = (uint8_t)msg_brake_rpt_2_.cmd_src;
-              } else {
-                out.limit_value = NAN;
-                out.brake_available_duration = NAN;
-                out.cmd_src.value = (uint8_t)CmdSrc::User;
-              }
-              pub_brake_rpt_->publish(out);
-              if (msg.fault) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake fault");
-              } else if (fault_prev) {
-                RCLCPP_INFO(get_logger(), "Brake fault cleared");
-              }
-              if (modeSyncNone()) {
-                if (publishDbwEnabled()) {
-                  if (enabled()) {
-                    RCLCPP_INFO(get_logger(), "DBW system enabled.");
+              out.brake_available_duration = msg2.brkAvailDurSec();
+              out.brake_available_full = msg2.brake_available_full;
+              out.req_shift_park = msg2.req_shift_park;
+              out.req_park_brake = msg2.req_park_brake;
+              out.external_button = msg2.external_button;
+              out.comms_loss_armed = msg2.comms_loss_armed;
+              out.cmd_src.value = (uint8_t)msg2.cmd_src;
+            } else {
+              out.limit_value = NAN;
+              out.brake_available_duration = NAN;
+              out.cmd_src.value = (uint8_t)CmdSrc::User;
+            }
+            pub_brake_rpt_->publish(out);
+            if (msg.fault) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake fault");
+            } else if (fault_prev) {
+              RCLCPP_INFO(get_logger(), "Brake fault cleared");
+            }
+            if (modeSyncNone(stamp)) {
+              if (publishDbwEnabled()) {
+                if (enabled(stamp)) {
+                  RCLCPP_INFO(get_logger(), "DBW system enabled.");
+                } else {
+                  if (msg.fault) {
+                    RCLCPP_ERROR(get_logger(), "DBW system disabled. Braking fault.");
+                  } else if (msg.override_active) {
+                    RCLCPP_WARN(get_logger(), "DBW system disabled. Override on brake pedal.");
+                  } else if (msg.override_other) {
+                    RCLCPP_WARN(get_logger(), "DBW system disabled. Override on brake pedal (from other system)");
+                  } else if (msg.override_latched) {
+                    RCLCPP_WARN(get_logger(), "DBW system disabled. Latched override on brake pedal.");
                   } else {
-                    if (msg.fault) {
-                      RCLCPP_ERROR(get_logger(), "DBW system disabled. Braking fault.");
-                    } else if (msg.override_active) {
-                      RCLCPP_WARN(get_logger(), "DBW system disabled. Override on brake pedal.");
-                    } else if (msg.override_other) {
-                      RCLCPP_WARN(get_logger(), "DBW system disabled. Override on brake pedal (from other system)");
-                    } else if (msg.override_latched) {
-                      RCLCPP_WARN(get_logger(), "DBW system disabled. Latched override on brake pedal.");
-                    } else {
-                      RCLCPP_WARN(get_logger(), "DBW system disabled. Unknown cause in brake report.");
-                    }
+                    RCLCPP_WARN(get_logger(), "DBW system disabled. Unknown cause in brake report.");
                   }
                 }
               }
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring brake report 1 with repeated rolling counter value");
             }
-          } else {
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring brake report 1 with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring brake report 1 with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring brake report 1 with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_thrtl_rpt_1_.ID:
-        if (msg_can->dlc == sizeof(msg_thrtl_rpt_1_)) {
-          bool fault_prev = msg_thrtl_rpt_1_.fault;
-          memcpy(&msg_thrtl_rpt_1_, msg_can->data.data(), sizeof(msg_thrtl_rpt_1_));
-          const auto &msg = msg_thrtl_rpt_1_;
-          if (msg.validCrc()) {
-            if (msg_thrtl_rpt_1_rc_.valid(msg, msg_can->header.stamp)) {
-              warnBadCrcRc(msg.bad_crc, msg.bad_rc, "Throttle");
-              warn_timeout_thrtl_.recv(msg);
-              ds_dbw_msgs::msg::ThrottleReport out;
-              out.header.stamp = msg_can->header.stamp;
-              out.cmd_type = (uint8_t)msg.cmd_type;
-              switch (msg.cmd_type) {
-                case MsgThrtlReport1::CmdType::PedalRaw:
-                case MsgThrtlReport1::CmdType::Percent:
-                  msg.getPercent(out.percent_input, out.percent_cmd, out.percent_output);
-                  break;
-                case MsgThrtlReport1::CmdType::None:
-                  out.percent_input  = NAN;
-                  out.percent_cmd    = NAN;
-                  out.percent_output = NAN;
-                  break;
-              }
-              out.limiting_value = msg.limiting_value;
-              out.limiting_rate = msg.limiting_rate;
-              out.external_control = msg.external_control;
-              out.ready = msg.ready;
-              out.enabled = msg.enabled;
-              out.override_active = msg.override_active;
-              out.override_other = msg.override_other;
-              out.override_latched = msg.override_latched;
-              out.fault = msg.fault;
-              out.timeout = msg.timeout;
-              out.bad_crc = msg.bad_crc;
-              out.bad_rc = msg.bad_rc;
-              if (true) { ///@TODO: msg_thrtl_rpt_2_.valid()
-                out.degraded = msg_thrtl_rpt_2_.degraded;
-                out.limit_value = msg_thrtl_rpt_2_.getLimitValuePc();
-                out.cmd_src.value = (uint8_t)msg_thrtl_rpt_2_.cmd_src;
-              } else {
-                out.limit_value = NAN;
-                out.cmd_src.value = (uint8_t)CmdSrc::User;
-              }
-              pub_thrtl_rpt_->publish(out);
-              if (msg.fault) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle fault");
-              } else if (fault_prev) {
-                RCLCPP_INFO(get_logger(), "Throttle fault cleared");
-              }
-              if (modeSyncNone()) {
-                if (publishDbwEnabled()) {
-                  if (enabled()) {
-                    RCLCPP_INFO(get_logger(), "DBW system enabled.");
+      case MsgThrtlReport1::ID:
+        if (msg_can->dlc == sizeof(MsgThrtlReport1)) {
+          auto &recv = msg_thrtl_rpt_1_;
+          bool fault_prev = recv.valid(stamp) && recv.msg().fault;
+          if (recv.receive(*(MsgThrtlReport1*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            warnBadCrcRc(msg.bad_crc, msg.bad_rc, "Throttle");
+            warn_timeout_thrtl_.recv(msg);
+            ds_dbw_msgs::msg::ThrottleReport out;
+            out.header.stamp = msg_can->header.stamp;
+            out.cmd_type = (uint8_t)msg.cmd_type;
+            switch (msg.cmd_type) {
+              case MsgThrtlReport1::CmdType::PedalRaw:
+              case MsgThrtlReport1::CmdType::Percent:
+                msg.getPercent(out.percent_input, out.percent_cmd, out.percent_output);
+                break;
+              case MsgThrtlReport1::CmdType::None:
+                out.percent_input  = NAN;
+                out.percent_cmd    = NAN;
+                out.percent_output = NAN;
+                break;
+            }
+            out.yield_request = msg.yield_request;
+            out.limiting_value = msg.limiting_value;
+            out.limiting_rate = msg.limiting_rate;
+            out.external_control = msg.external_control;
+            out.ready = msg.ready;
+            out.enabled = msg.enabled;
+            out.override_active = msg.override_active;
+            out.override_other = msg.override_other;
+            out.override_latched = msg.override_latched;
+            out.fault = msg.fault;
+            out.timeout = msg.timeout;
+            out.bad_crc = msg.bad_crc;
+            out.bad_rc = msg.bad_rc;
+            if (msg_thrtl_rpt_2_.valid(stamp)) {
+              const auto &msg2 = msg_thrtl_rpt_2_.msg();
+              out.degraded = msg2.degraded;
+              out.limit_value = msg2.getLimitValuePc();
+              out.cmd_src.value = (uint8_t)msg2.cmd_src;
+            } else {
+              out.limit_value = NAN;
+              out.cmd_src.value = (uint8_t)CmdSrc::User;
+            }
+            pub_thrtl_rpt_->publish(out);
+            if (msg.fault) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle fault");
+            } else if (fault_prev) {
+              RCLCPP_INFO(get_logger(), "Throttle fault cleared");
+            }
+            if (modeSyncNone(stamp)) {
+              if (publishDbwEnabled()) {
+                if (enabled(stamp)) {
+                  RCLCPP_INFO(get_logger(), "DBW system enabled.");
+                } else {
+                  if (msg.fault) {
+                    RCLCPP_ERROR(get_logger(), "DBW system disabled. Throttle fault.");
+                  } else if (msg.override_active) {
+                    RCLCPP_WARN(get_logger(), "DBW system disabled. Override on accelerator pedal.");
+                  } else if (msg.override_other) {
+                    RCLCPP_WARN(get_logger(), "DBW system disabled. Override on accelerator pedal (from other system)");
+                  } else if (msg.override_latched) {
+                    RCLCPP_WARN(get_logger(), "DBW system disabled. Latched override on accelerator pedal.");
                   } else {
-                    if (msg.fault) {
-                      RCLCPP_ERROR(get_logger(), "DBW system disabled. Throttle fault.");
-                    } else if (msg.override_active) {
-                      RCLCPP_WARN(get_logger(), "DBW system disabled. Override on accelerator pedal.");
-                    } else if (msg.override_other) {
-                      RCLCPP_WARN(get_logger(), "DBW system disabled. Override on accelerator pedal (from other system)");
-                    } else if (msg.override_latched) {
-                      RCLCPP_WARN(get_logger(), "DBW system disabled. Latched override on accelerator pedal.");
-                    } else {
-                      RCLCPP_WARN(get_logger(), "DBW system disabled. Unknown cause in throttle report.");
-                    }
+                    RCLCPP_WARN(get_logger(), "DBW system disabled. Unknown cause in throttle report.");
                   }
                 }
               }
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring throttle report 1 with repeated rolling counter value");
             }
-          } else {
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring throttle report 1 with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring throttle report 1 with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring throttle report 1 with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_gear_rpt_1_.ID:
-        if (msg_can->dlc >= sizeof(msg_gear_rpt_1_)) {
-          bool fault_prev = msg_gear_rpt_1_.fault;
-          memcpy(&msg_gear_rpt_1_, msg_can->data.data(), sizeof(msg_gear_rpt_1_));
-          const auto &msg = msg_gear_rpt_1_;
-          if (msg.validCrc()) {
-            if (msg_gear_rpt_1_rc_.valid(msg, msg_can->header.stamp)) {
-              warnBadCrcRc(msg.bad_crc, false, "Gear");
-              warnRejectGear((uint8_t)msg.reject);
-              ds_dbw_msgs::msg::GearReport out;
-              out.header.stamp = msg_can->header.stamp;
-              out.gear.value = (uint8_t)msg.gear;
-              out.cmd.value = (uint8_t)msg.cmd;
-              out.driver.value = (uint8_t)msg.driver;
-              out.reject.value = (uint8_t)msg.reject;
-              out.power_latched = msg.power_latched;
-              out.external_control = msg.external_control;
-              out.ready = msg.ready;
-              out.override_active = msg.override_active;
-              out.override_other = msg.override_other;
-              out.fault = msg.fault;
-              out.bad_crc = msg.bad_crc;
-              if (true) { ///@TODO: msg_gear_rpt_2_.valid()
-                out.degraded = msg_gear_rpt_2_.degraded;
-                out.cmd_src.value = (uint8_t)msg_gear_rpt_2_.cmd_src;
-              } else {
-                out.cmd_src.value = (uint8_t)CmdSrc::User;
-              }
-              pub_gear_rpt_->publish(out);
-              if (msg.fault) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear fault");
-              } else if (fault_prev) {
-                RCLCPP_INFO(get_logger(), "Gear fault cleared");
-              }
-              if (modeSyncNone()) {
-                if (publishDbwEnabled()) {
-                  if (enabled()) {
-                    RCLCPP_INFO(get_logger(), "DBW system enabled.");
+      case MsgGearReport1::ID:
+        if (msg_can->dlc >= sizeof(MsgGearReport1)) {
+          auto &recv = msg_gear_rpt_1_;
+          bool fault_prev = recv.valid(stamp) && recv.msg().fault;
+          if (recv.receive(*(MsgGearReport1*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            warnBadCrcRc(msg.bad_crc, false, "Gear");
+            warnRejectGear((uint8_t)msg.reject);
+            ds_dbw_msgs::msg::GearReport out;
+            out.header.stamp = msg_can->header.stamp;
+            out.gear.value = (uint8_t)msg.gear;
+            out.cmd.value = (uint8_t)msg.cmd;
+            out.driver.value = (uint8_t)msg.driver;
+            out.reject.value = (uint8_t)msg.reject;
+            out.power_latched = msg.power_latched;
+            out.external_control = msg.external_control;
+            out.ready = msg.ready;
+            out.override_active = msg.override_active;
+            out.override_other = msg.override_other;
+            out.fault = msg.fault;
+            out.bad_crc = msg.bad_crc;
+            if (msg_gear_rpt_2_.valid(stamp)) {
+              const auto &msg2 = msg_gear_rpt_2_.msg();
+              out.degraded = msg2.degraded;
+              out.cmd_src.value = (uint8_t)msg2.cmd_src;
+            } else {
+              out.cmd_src.value = (uint8_t)CmdSrc::User;
+            }
+            pub_gear_rpt_->publish(out);
+            if (msg.fault) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear fault");
+            } else if (fault_prev) {
+              RCLCPP_INFO(get_logger(), "Gear fault cleared");
+            }
+            if (modeSyncNone(stamp)) {
+              if (publishDbwEnabled()) {
+                if (enabled(stamp)) {
+                  RCLCPP_INFO(get_logger(), "DBW system enabled.");
+                } else {
+                  if (msg.fault) {
+                    RCLCPP_ERROR(get_logger(), "DBW system disabled. Gear fault.");
+                  } else if (msg.override_active) {
+                    RCLCPP_WARN(get_logger(), "DBW system disabled. Override on gear shifter.");
+                  } else if (msg.override_other) {
+                    RCLCPP_WARN(get_logger(), "DBW system disabled. Override on gear shifter (from other system)");
                   } else {
-                    if (msg.fault) {
-                      RCLCPP_ERROR(get_logger(), "DBW system disabled. Gear fault.");
-                    } else if (msg.override_active) {
-                      RCLCPP_WARN(get_logger(), "DBW system disabled. Override on gear shifter.");
-                    } else if (msg.override_other) {
-                      RCLCPP_WARN(get_logger(), "DBW system disabled. Override on gear shifter (from other system)");
-                    } else {
-                      RCLCPP_WARN(get_logger(), "DBW system disabled. Unknown cause in gear report.");
-                    }
+                    RCLCPP_WARN(get_logger(), "DBW system disabled. Unknown cause in gear report.");
                   }
                 }
               }
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring gear report 1 with repeated rolling counter value");
             }
-          } else {
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring gear report 1 with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring gear report 1 with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring gear report 1 with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_monitor_rpt_1_.ID:
-        if (msg_can->dlc == sizeof(msg_monitor_rpt_1_)) {
-          bool fault_prev = msg_monitor_rpt_1_.fault;
-          memcpy(&msg_monitor_rpt_1_, msg_can->data.data(), sizeof(msg_monitor_rpt_1_));
-          const auto &msg = msg_monitor_rpt_1_;
-          if (msg.validCrc()) {
-            if (msg_monitor_rpt_1_rc_.valid(msg, msg_can->header.stamp)) {
-              ds_dbw_msgs::msg::MonitorReport out;
-              out.header.stamp = msg_can->header.stamp;
-              out.fault = msg.fault;
-              out.shutoff = msg.shutoff;
-              out.shutoff_on_motion = msg.shutoff_on_motion;
-              out.stationary = msg.stationary;
-              out.fault_test =   (uint8_t)msg.fault_test;
-              out.fault_system = (uint8_t)msg.fault_system;
-              out.fault_steer =  (uint8_t)msg.fault_steer;
-              out.fault_brake =  (uint8_t)msg.fault_brake;
-              out.fault_thrtl =  (uint8_t)msg.fault_thrtl;
-              out.fault_gear =   (uint8_t)msg.fault_gear;
-              out.fault_ulc =    (uint8_t)msg.fault_ulc;
-              out.fault_vehicle_velocity = (uint8_t)msg.fault_vehicle_velocity;
-              out.steer_cmd_match_oem = msg.steer_cmd_match_oem;
-              out.steer_cmd_match_dbw = msg.steer_cmd_match_dbw;
-              out.brake_cmd_match_oem = msg.brake_cmd_match_oem;
-              out.brake_cmd_match_dbw = msg.brake_cmd_match_dbw;
-              out.thrtl_cmd_match_oem = msg.thrtl_cmd_match_oem;
-              out.thrtl_cmd_match_dbw = msg.thrtl_cmd_match_dbw;
-              out.gear_cmd_match_oem = msg.gear_cmd_match_oem;
-              out.gear_cmd_match_dbw = msg.gear_cmd_match_dbw;
-              if (true) { ///@TODO: msg_monitor_rpt_2_.valid()
-                out.fault_steer_feedback = (uint8_t)msg_monitor_rpt_2_.fault_steer_feedback;
-                out.fault_steer_input =    (uint8_t)msg_monitor_rpt_2_.fault_steer_input;
-                out.fault_steer_param =    (uint8_t)msg_monitor_rpt_2_.fault_steer_param;
-                out.fault_steer_limit =    (uint8_t)msg_monitor_rpt_2_.fault_steer_limit;
-                out.fault_steer_override = (uint8_t)msg_monitor_rpt_2_.fault_steer_override;
-                out.fault_steer_cmd =      (uint8_t)msg_monitor_rpt_2_.fault_steer_cmd;
-                out.fault_steer_cmd_rate = (uint8_t)msg_monitor_rpt_2_.fault_steer_cmd_rate;
-                out.fault_steer_cmd_en =   (uint8_t)msg_monitor_rpt_2_.fault_steer_cmd_en;
-                out.fault_steer_cmd_sys =  (uint8_t)msg_monitor_rpt_2_.fault_steer_cmd_sys;
-                out.fault_steer_cmd_ovr =  (uint8_t)msg_monitor_rpt_2_.fault_steer_cmd_ovr;
-                out.fault_brake_feedback = (uint8_t)msg_monitor_rpt_2_.fault_brake_feedback;
-                out.fault_brake_input =    (uint8_t)msg_monitor_rpt_2_.fault_brake_input;
-                out.fault_brake_param =    (uint8_t)msg_monitor_rpt_2_.fault_brake_param;
-                out.fault_brake_limit =    (uint8_t)msg_monitor_rpt_2_.fault_brake_limit;
-                out.fault_brake_override = (uint8_t)msg_monitor_rpt_2_.fault_brake_override;
-                out.fault_brake_cmd =      (uint8_t)msg_monitor_rpt_2_.fault_brake_cmd;
-                out.fault_brake_cmd_ulc =  (uint8_t)msg_monitor_rpt_2_.fault_brake_cmd_ulc;
-                out.fault_brake_cmd_en =   (uint8_t)msg_monitor_rpt_2_.fault_brake_cmd_en;
-                out.fault_brake_cmd_sys =  (uint8_t)msg_monitor_rpt_2_.fault_brake_cmd_sys;
-                out.fault_brake_cmd_ovr =  (uint8_t)msg_monitor_rpt_2_.fault_brake_cmd_ovr;
-              }
-              if (true) { ///@TODO: msg_monitor_rpt_2_.valid()
-                out.fault_thrtl_feedback = (uint8_t)msg_monitor_rpt_3_.fault_thrtl_feedback;
-                out.fault_thrtl_input =    (uint8_t)msg_monitor_rpt_3_.fault_thrtl_input;
-                out.fault_thrtl_param =    (uint8_t)msg_monitor_rpt_3_.fault_thrtl_param;
-                out.fault_thrtl_limit =    (uint8_t)msg_monitor_rpt_3_.fault_thrtl_limit;
-                out.fault_thrtl_override = (uint8_t)msg_monitor_rpt_3_.fault_thrtl_override;
-                out.fault_thrtl_cmd =      (uint8_t)msg_monitor_rpt_3_.fault_thrtl_cmd;
-                out.fault_thrtl_cmd_ulc =  (uint8_t)msg_monitor_rpt_3_.fault_thrtl_cmd_ulc;
-                out.fault_thrtl_cmd_en =   (uint8_t)msg_monitor_rpt_3_.fault_thrtl_cmd_en;
-                out.fault_thrtl_cmd_sys =  (uint8_t)msg_monitor_rpt_3_.fault_thrtl_cmd_sys;
-                out.fault_thrtl_cmd_ovr =  (uint8_t)msg_monitor_rpt_3_.fault_thrtl_cmd_ovr;
-                out.fault_gear_feedback =  (uint8_t)msg_monitor_rpt_3_.fault_gear_feedback;
-                out.fault_gear_input =     (uint8_t)msg_monitor_rpt_3_.fault_gear_input;
-                out.fault_gear_param =     (uint8_t)msg_monitor_rpt_3_.fault_gear_param;
-                out.fault_gear_override =  (uint8_t)msg_monitor_rpt_3_.fault_gear_override;
-                out.fault_gear_cmd =       (uint8_t)msg_monitor_rpt_3_.fault_gear_cmd;
-                out.fault_gear_cmd_ulc =   (uint8_t)msg_monitor_rpt_3_.fault_gear_cmd_ulc;
-                out.fault_system_param =   (uint8_t)msg_monitor_rpt_3_.fault_system_param;
-              }
-              pub_monitor_rpt_->publish(out);
-              if (msg.fault) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault");
-              } else if (fault_prev) {
-                RCLCPP_INFO(get_logger(), "Monitor fault cleared");
-              }
-              if (msg.shutoff) {
-                RCLCPP_ERROR_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor shutoff");
-              } else if (msg.shutoff_on_motion) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor shutoff if vehicle starts moving");
-              }
-              constexpr MsgMonitorReport1::Fault MonitorFault = MsgMonitorReport1::Fault::Fault;
-              if (msg.fault_test == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Test"); }
-              if (msg.fault_system == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault related to system enable/disable"); }
-              if (msg.fault_steer == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault related to steer control"); }
-              if (msg.fault_brake == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault related to brake control"); }
-              if (msg.fault_thrtl == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault related to throttle control"); }
-              if (msg.fault_gear == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault related to gear control"); }
-              if (msg.fault_ulc == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault related to the ULC"); }
-              if (msg.fault_vehicle_velocity == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Vehicle velocity measurement mismatch with OEM"); }
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring monitor report 1 with repeated rolling counter value");
+      case MsgMonitorReport1::ID:
+        if (msg_can->dlc == sizeof(MsgMonitorReport1)) {
+          auto &recv = msg_monitor_rpt_1_;
+          bool fault_prev = recv.valid(stamp) && recv.msg().fault;
+          if (recv.receive(*(MsgMonitorReport1*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            ds_dbw_msgs::msg::MonitorReport out;
+            out.header.stamp = msg_can->header.stamp;
+            out.fault = msg.fault;
+            out.shutoff = msg.shutoff;
+            out.shutoff_on_motion = msg.shutoff_on_motion;
+            out.stationary = msg.stationary;
+            out.fault_test =   (uint8_t)msg.fault_test;
+            out.fault_system = (uint8_t)msg.fault_system;
+            out.fault_steer =  (uint8_t)msg.fault_steer;
+            out.fault_brake =  (uint8_t)msg.fault_brake;
+            out.fault_thrtl =  (uint8_t)msg.fault_thrtl;
+            out.fault_gear =   (uint8_t)msg.fault_gear;
+            out.fault_ulc =    (uint8_t)msg.fault_ulc;
+            out.fault_vehicle_velocity = (uint8_t)msg.fault_vehicle_velocity;
+            out.steer_cmd_match_oem = msg.steer_cmd_match_oem;
+            out.steer_cmd_match_dbw = msg.steer_cmd_match_dbw;
+            out.brake_cmd_match_oem = msg.brake_cmd_match_oem;
+            out.brake_cmd_match_dbw = msg.brake_cmd_match_dbw;
+            out.thrtl_cmd_match_oem = msg.thrtl_cmd_match_oem;
+            out.thrtl_cmd_match_dbw = msg.thrtl_cmd_match_dbw;
+            out.gear_cmd_match_oem = msg.gear_cmd_match_oem;
+            out.gear_cmd_match_dbw = msg.gear_cmd_match_dbw;
+            if (msg_monitor_rpt_2_.valid(stamp)) {
+              const auto &msg2 = msg_monitor_rpt_2_.msg();
+              out.fault_steer_feedback = (uint8_t)msg2.fault_steer_feedback;
+              out.fault_steer_input =    (uint8_t)msg2.fault_steer_input;
+              out.fault_steer_param =    (uint8_t)msg2.fault_steer_param;
+              out.fault_steer_limit =    (uint8_t)msg2.fault_steer_limit;
+              out.fault_steer_override = (uint8_t)msg2.fault_steer_override;
+              out.fault_steer_cmd =      (uint8_t)msg2.fault_steer_cmd;
+              out.fault_steer_cmd_rate = (uint8_t)msg2.fault_steer_cmd_rate;
+              out.fault_steer_cmd_en =   (uint8_t)msg2.fault_steer_cmd_en;
+              out.fault_steer_cmd_sys =  (uint8_t)msg2.fault_steer_cmd_sys;
+              out.fault_steer_cmd_ovr =  (uint8_t)msg2.fault_steer_cmd_ovr;
+              out.fault_brake_feedback = (uint8_t)msg2.fault_brake_feedback;
+              out.fault_brake_input =    (uint8_t)msg2.fault_brake_input;
+              out.fault_brake_param =    (uint8_t)msg2.fault_brake_param;
+              out.fault_brake_limit =    (uint8_t)msg2.fault_brake_limit;
+              out.fault_brake_override = (uint8_t)msg2.fault_brake_override;
+              out.fault_brake_cmd =      (uint8_t)msg2.fault_brake_cmd;
+              out.fault_brake_cmd_ulc =  (uint8_t)msg2.fault_brake_cmd_ulc;
+              out.fault_brake_cmd_en =   (uint8_t)msg2.fault_brake_cmd_en;
+              out.fault_brake_cmd_sys =  (uint8_t)msg2.fault_brake_cmd_sys;
+              out.fault_brake_cmd_ovr =  (uint8_t)msg2.fault_brake_cmd_ovr;
             }
-          } else {
+            if (msg_monitor_rpt_3_.valid(stamp)) {
+              const auto &msg3 = msg_monitor_rpt_3_.msg();
+              out.fault_thrtl_feedback = (uint8_t)msg3.fault_thrtl_feedback;
+              out.fault_thrtl_input =    (uint8_t)msg3.fault_thrtl_input;
+              out.fault_thrtl_param =    (uint8_t)msg3.fault_thrtl_param;
+              out.fault_thrtl_limit =    (uint8_t)msg3.fault_thrtl_limit;
+              out.fault_thrtl_override = (uint8_t)msg3.fault_thrtl_override;
+              out.fault_thrtl_cmd =      (uint8_t)msg3.fault_thrtl_cmd;
+              out.fault_thrtl_cmd_ulc =  (uint8_t)msg3.fault_thrtl_cmd_ulc;
+              out.fault_thrtl_cmd_en =   (uint8_t)msg3.fault_thrtl_cmd_en;
+              out.fault_thrtl_cmd_sys =  (uint8_t)msg3.fault_thrtl_cmd_sys;
+              out.fault_thrtl_cmd_ovr =  (uint8_t)msg3.fault_thrtl_cmd_ovr;
+              out.fault_gear_feedback =  (uint8_t)msg3.fault_gear_feedback;
+              out.fault_gear_input =     (uint8_t)msg3.fault_gear_input;
+              out.fault_gear_param =     (uint8_t)msg3.fault_gear_param;
+              out.fault_gear_override =  (uint8_t)msg3.fault_gear_override;
+              out.fault_gear_cmd =       (uint8_t)msg3.fault_gear_cmd;
+              out.fault_gear_cmd_ulc =   (uint8_t)msg3.fault_gear_cmd_ulc;
+              out.fault_system_param =   (uint8_t)msg3.fault_system_param;
+            }
+            pub_monitor_rpt_->publish(out);
+            if (msg.fault) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault");
+            } else if (fault_prev) {
+              RCLCPP_INFO(get_logger(), "Monitor fault cleared");
+            }
+            if (msg.shutoff) {
+              RCLCPP_ERROR_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor shutoff");
+            } else if (msg.shutoff_on_motion) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor shutoff if vehicle starts moving");
+            }
+            constexpr MsgMonitorReport1::Fault MonitorFault = MsgMonitorReport1::Fault::Fault;
+            if (msg.fault_test == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Test"); }
+            if (msg.fault_system == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault related to system enable/disable"); }
+            if (msg.fault_steer == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault related to steer control"); }
+            if (msg.fault_brake == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault related to brake control"); }
+            if (msg.fault_thrtl == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault related to throttle control"); }
+            if (msg.fault_gear == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault related to gear control"); }
+            if (msg.fault_ulc == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault related to the ULC"); }
+            if (msg.fault_vehicle_velocity == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Vehicle velocity measurement mismatch with OEM"); }
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring monitor report 1 with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring monitor report 1 with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring monitor report 1 with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_monitor_rpt_2_.ID:
-        if (msg_can->dlc == sizeof(msg_monitor_rpt_2_)) {
-          memcpy(&msg_monitor_rpt_2_, msg_can->data.data(), sizeof(msg_monitor_rpt_2_));
-          const auto &msg = msg_monitor_rpt_2_;
-          if (msg.validCrc()) {
-            if (msg_monitor_rpt_2_rc_.valid(msg, msg_can->header.stamp)) {
-              constexpr MsgMonitorReport1::Fault MonitorFault = MsgMonitorReport1::Fault::Fault;
-              if (msg.fault_steer_feedback == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering wheel angle measurement mismatch with OEM"); }
-              if (msg.fault_steer_input == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering column torque measurement mismatch with OEM"); }
-              if (msg.fault_steer_param == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering parameter mismatch with DBW"); }
-              if (msg.fault_steer_limit == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering limit calculation mismatch with DBW"); }
-              if (msg.fault_steer_override == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering override calculation mismatch with DBW"); }
-              if (msg.fault_steer_cmd == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering actuator command mismatch with OEM and DBW"); }
-              if (msg.fault_steer_cmd_rate == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering actuator command rate faster than DBW and limit"); }
-              if (msg.fault_steer_cmd_en == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering actuator command without matching command enable"); }
-              if (msg.fault_steer_cmd_sys == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering actuator command with system disabled"); }
-              if (msg.fault_steer_cmd_ovr == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering actuator command with override"); }
-              if (msg.fault_brake_feedback == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake actuator output torque/pressure measurement mismatch with OEM"); }
-              if (msg.fault_brake_input == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake pedal input torque/pressure measurement mismatch with OEM"); }
-              if (msg.fault_brake_param == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake parameter mismatch with DBW"); }
-              if (msg.fault_brake_limit == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake limit calculation mismatch with DBW"); }
-              if (msg.fault_brake_override == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake override calculation mismatch with DBW"); }
-              if (msg.fault_brake_cmd == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake actuator command mismatch with OEM and DBW"); }
-              if (msg.fault_brake_cmd_ulc == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake command generated by ULC command without matching ULC command"); }
-              if (msg.fault_brake_cmd_en == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake actuator command without matching command enable"); }
-              if (msg.fault_brake_cmd_sys == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake actuator command with system disabled"); }
-              if (msg.fault_brake_cmd_ovr == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake actuator command with override"); }
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring monitor report 2 with repeated rolling counter value");
-            }
-          } else {
+      case MsgMonitorReport2::ID:
+        if (msg_can->dlc == sizeof(MsgMonitorReport2)) {
+          auto &recv = msg_monitor_rpt_2_;
+          if (recv.receive(*(MsgMonitorReport2*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            constexpr MsgMonitorReport1::Fault MonitorFault = MsgMonitorReport1::Fault::Fault;
+            if (msg.fault_steer_feedback == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering wheel angle measurement mismatch with OEM"); }
+            if (msg.fault_steer_input == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering column torque measurement mismatch with OEM"); }
+            if (msg.fault_steer_param == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering parameter mismatch with DBW"); }
+            if (msg.fault_steer_limit == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering limit calculation mismatch with DBW"); }
+            if (msg.fault_steer_override == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering override calculation mismatch with DBW"); }
+            if (msg.fault_steer_cmd == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering actuator command mismatch with OEM and DBW"); }
+            if (msg.fault_steer_cmd_rate == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering actuator command rate faster than DBW and limit"); }
+            if (msg.fault_steer_cmd_en == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering actuator command without matching command enable"); }
+            if (msg.fault_steer_cmd_sys == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering actuator command with system disabled"); }
+            if (msg.fault_steer_cmd_ovr == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Steering actuator command with override"); }
+            if (msg.fault_brake_feedback == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake actuator output torque/pressure measurement mismatch with OEM"); }
+            if (msg.fault_brake_input == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake pedal input torque/pressure measurement mismatch with OEM"); }
+            if (msg.fault_brake_param == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake parameter mismatch with DBW"); }
+            if (msg.fault_brake_limit == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake limit calculation mismatch with DBW"); }
+            if (msg.fault_brake_override == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake override calculation mismatch with DBW"); }
+            if (msg.fault_brake_cmd == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake actuator command mismatch with OEM and DBW"); }
+            if (msg.fault_brake_cmd_ulc == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake command generated by ULC command without matching ULC command"); }
+            if (msg.fault_brake_cmd_en == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake actuator command without matching command enable"); }
+            if (msg.fault_brake_cmd_sys == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake actuator command with system disabled"); }
+            if (msg.fault_brake_cmd_ovr == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Brake actuator command with override"); }
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring monitor report 2 with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring monitor report 2 with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring monitor report 2 with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_monitor_rpt_3_.ID:
-        if (msg_can->dlc == sizeof(msg_monitor_rpt_3_)) {
-          memcpy(&msg_monitor_rpt_3_, msg_can->data.data(), sizeof(msg_monitor_rpt_3_));
-          const auto &msg = msg_monitor_rpt_3_;
-          if (msg.validCrc()) {
-            if (msg_monitor_rpt_3_rc_.valid(msg, msg_can->header.stamp)) {
-              constexpr MsgMonitorReport1::Fault MonitorFault = MsgMonitorReport1::Fault::Fault;
-              if (msg.fault_thrtl_feedback == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Accelerator pedal output measurement mismatch with OEM"); }
-              if (msg.fault_thrtl_input == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Accelerator pedal input measurement mismatch with OEM"); }
-              if (msg.fault_thrtl_param == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Throttle parameter mismatch with DBW"); }
-              if (msg.fault_thrtl_limit == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Throttle limit calculation mismatch with DBW"); }
-              if (msg.fault_thrtl_override == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Throttle override calculation mismatch with DBW"); }
-              if (msg.fault_thrtl_cmd == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Throttle actuator command mismatch with OEM and DBW"); }
-              if (msg.fault_thrtl_cmd_ulc == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Throttle command generated by ULC command without matching ULC command"); }
-              if (msg.fault_thrtl_cmd_en == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Throttle actuator command without matching command enable"); }
-              if (msg.fault_thrtl_cmd_sys == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Throttle actuator command with system disabled"); }
-              if (msg.fault_thrtl_cmd_ovr == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Throttle actuator command with override"); }
-              if (msg.fault_gear_feedback == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Transmission gear measurement mismatch with OEM"); }
-              if (msg.fault_gear_input == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Gear input selection measurement mismatch with OEM"); }
-              if (msg.fault_gear_param == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Gear parameter mismatch with DBW"); }
-              if (msg.fault_gear_override == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Gear override calculation mismatch with DBW"); }
-              if (msg.fault_gear_cmd == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Gear actuator command mismatch with OEM and DBW"); }
-              if (msg.fault_gear_cmd_ulc == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Gear command generated by ULC command without matching ULC command"); }
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring monitor report 3 with repeated rolling counter value");
-            }
-          } else {
+      case MsgMonitorReport3::ID:
+        if (msg_can->dlc == sizeof(MsgMonitorReport3)) {
+          auto &recv = msg_monitor_rpt_3_;
+          if (recv.receive(*(MsgMonitorReport3*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            constexpr MsgMonitorReport1::Fault MonitorFault = MsgMonitorReport1::Fault::Fault;
+            if (msg.fault_thrtl_feedback == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Accelerator pedal output measurement mismatch with OEM"); }
+            if (msg.fault_thrtl_input == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Accelerator pedal input measurement mismatch with OEM"); }
+            if (msg.fault_thrtl_param == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Throttle parameter mismatch with DBW"); }
+            if (msg.fault_thrtl_limit == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Throttle limit calculation mismatch with DBW"); }
+            if (msg.fault_thrtl_override == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Throttle override calculation mismatch with DBW"); }
+            if (msg.fault_thrtl_cmd == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Throttle actuator command mismatch with OEM and DBW"); }
+            if (msg.fault_thrtl_cmd_ulc == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Throttle command generated by ULC command without matching ULC command"); }
+            if (msg.fault_thrtl_cmd_en == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Throttle actuator command without matching command enable"); }
+            if (msg.fault_thrtl_cmd_sys == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Throttle actuator command with system disabled"); }
+            if (msg.fault_thrtl_cmd_ovr == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Throttle actuator command with override"); }
+            if (msg.fault_gear_feedback == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Transmission gear measurement mismatch with OEM"); }
+            if (msg.fault_gear_input == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Gear input selection measurement mismatch with OEM"); }
+            if (msg.fault_gear_param == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Gear parameter mismatch with DBW"); }
+            if (msg.fault_gear_override == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Gear override calculation mismatch with DBW"); }
+            if (msg.fault_gear_cmd == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Gear actuator command mismatch with OEM and DBW"); }
+            if (msg.fault_gear_cmd_ulc == MonitorFault) { RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Monitor fault: Gear command generated by ULC command without matching ULC command"); }
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring monitor report 3 with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring monitor report 3 with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring monitor report 3 with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_monitor_thrtl_.ID:
-        if (msg_can->dlc == sizeof(msg_monitor_thrtl_)) {
-          memcpy(&msg_monitor_thrtl_, msg_can->data.data(), sizeof(msg_monitor_thrtl_));
-          const auto &msg = msg_monitor_thrtl_;
-          if (msg.validCrc()) {
-            if (msg_monitor_thrtl_rc_.valid(msg, msg_can->header.stamp)) {
-              ds_dbw_msgs::msg::MonitorThrottle out;
-              out.header.stamp = msg_can->header.stamp;
-              out.pedal_pc = msg.getPercent();
-              out.pedal_qf.value = (uint8_t)msg.pedal_qf;
-              pub_monitor_thrtl_->publish(out);
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring monitor thrtl with repeated rolling counter value");
-            }
-          } else {
+      case MsgMonitorThrtl::ID:
+        if (msg_can->dlc == sizeof(MsgMonitorThrtl)) {
+          auto &recv = msg_monitor_thrtl_;
+          if (recv.receive(*(MsgMonitorThrtl*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            ds_dbw_msgs::msg::MonitorThrottle out;
+            out.header.stamp = msg_can->header.stamp;
+            out.pedal_pc = msg.getPercent();
+            out.pedal_qf.value = (uint8_t)msg.pedal_qf;
+            pub_monitor_thrtl_->publish(out);
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring monitor thrtl with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring monitor thrtl with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring monitor thrtl with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_system_rpt_.ID:
-        if (msg_can->dlc >= sizeof(msg_system_rpt_)) {
-          auto system_sync_mode_prev = msg_system_rpt_.system_sync_mode;
-          memcpy(&msg_system_rpt_, msg_can->data.data(), sizeof(msg_system_rpt_));
-          const auto &msg = msg_system_rpt_;
-          if (msg.validCrc()) {
-            if (msg_system_rpt_rc_.valid(msg, msg_can->header.stamp)) {
-              warnBadCrcRc(msg.bad_crc, msg.bad_rc, "System");
-              ds_dbw_msgs::msg::SystemReport out;
-              out.header.stamp = msg_can->header.stamp;
-              out.inhibit = msg.inhibit;
-              out.validate_cmd_crc_rc = msg.validate_cmd_crc_rc;
-              out.system_sync_mode.value = (uint8_t)msg.system_sync_mode;
-              out.state.value = (uint8_t)msg.state;
-              out.reason_disengage = (uint8_t)msg.reason_disengage;
-              out.reason_not_ready = (uint8_t)msg.reason_not_ready;
-              out.reason_disengage_str = MsgSystemReport::reasonToString(msg.reason_disengage);
-              out.reason_not_ready_str = MsgSystemReport::reasonToString(msg.reason_not_ready);
-              out.btn_enable = msg.btn_enable;
-              out.btn_disable = msg.btn_disable;
-              out.lockout = msg.lockout;
-              out.override = msg.override;
-              out.ready = msg.ready;
-              out.enabled = msg.enabled;
-              out.fault = msg.fault;
-              out.bad_crc = msg.bad_crc;
-              out.bad_rc = msg.bad_rc;
-              pub_system_rpt_->publish(out);
-              if (system_sync_mode_prev != msg.system_sync_mode || !system_sync_mode_printed_) {
-                system_sync_mode_printed_ = true;
-                RCLCPP_INFO(get_logger(), "DBW system sync mode: %s", systemSyncModeToString(msg.system_sync_mode));
-              }
-              if (!modeSyncNone()) {
-                if (publishDbwEnabled()) {
-                  if (enabled()) {
-                    RCLCPP_INFO(get_logger(), "DBW system enabled");
-                  } else {
-                    RCLCPP_WARN(get_logger(), "DBW system disabled with reason: %s", out.reason_disengage_str.c_str());
-                  }
-                }
-                if (msg.btn_enable) {
-                  // Queue clear for steer/brake/throttle
-                  msg_steer_cmd_clear_ = true;
-                  msg_brake_cmd_clear_ = true;
-                  msg_thrtl_cmd_clear_ = true;
-                  msg_ulc_cmd_clear_ = true;
-                }
-              } else if (buttons_) {
-                if (msg.btn_enable) {
-                  enableSystem();
-                } else if (msg.btn_disable) {
-                  disableSystem();
+      case MsgSystemReport::ID:
+        if (msg_can->dlc >= sizeof(MsgSystemReport)) {
+          auto &recv = msg_system_rpt_;
+          auto system_sync_mode_prev = recv.msg().system_sync_mode;
+          if (recv.receive(*(MsgSystemReport*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            warnBadCrcRc(msg.bad_crc, msg.bad_rc, "System");
+            ds_dbw_msgs::msg::SystemReport out;
+            out.header.stamp = msg_can->header.stamp;
+            out.inhibit = msg.inhibit;
+            out.validate_cmd_crc_rc = msg.validate_cmd_crc_rc;
+            out.system_sync_mode.value = (uint8_t)msg.system_sync_mode;
+            out.state.value = (uint8_t)msg.state;
+            out.reason_disengage = (uint8_t)msg.reason_disengage;
+            out.reason_not_ready = (uint8_t)msg.reason_not_ready;
+            out.reason_disengage_str = MsgSystemReport::reasonToString(msg.reason_disengage);
+            out.reason_not_ready_str = MsgSystemReport::reasonToString(msg.reason_not_ready);
+            out.btn_enable = msg.btn_enable;
+            out.btn_disable = msg.btn_disable;
+            out.lockout = msg.lockout;
+            out.override = msg.override;
+            out.ready = msg.ready;
+            out.enabled = msg.enabled;
+            out.fault = msg.fault;
+            out.bad_crc = msg.bad_crc;
+            out.bad_rc = msg.bad_rc;
+            pub_system_rpt_->publish(out);
+            if (system_sync_mode_prev != msg.system_sync_mode || !system_sync_mode_printed_) {
+              system_sync_mode_printed_ = true;
+              RCLCPP_INFO(get_logger(), "DBW system sync mode: %s", systemSyncModeToString(msg.system_sync_mode));
+            }
+            if (!modeSyncNone(stamp)) {
+              if (publishDbwEnabled()) {
+                if (enabled(stamp)) {
+                  RCLCPP_INFO(get_logger(), "DBW system enabled");
+                } else {
+                  RCLCPP_WARN(get_logger(), "DBW system disabled with reason: %s", out.reason_disengage_str.c_str());
                 }
               }
-              if (!msg.validate_cmd_crc_rc) {
-                if (!validate_cmd_crc_rc_warned_) {
-                  validate_cmd_crc_rc_warned_ = true;
-                  RCLCPP_WARN(get_logger(), "Drive-By-Wire command message CRC and rolling counter validation disabled");
-                }
-              } else {
-                validate_cmd_crc_rc_warned_ = false;
+              if (msg.btn_enable) {
+                // Queue clear for steer/brake/throttle
+                msg_steer_cmd_clear_ = true;
+                msg_brake_cmd_clear_ = true;
+                msg_thrtl_cmd_clear_ = true;
+                msg_ulc_cmd_clear_ = true;
+              }
+            } else if (buttons_) {
+              if (msg.btn_enable) {
+                enableSystem();
+              } else if (msg.btn_disable) {
+                disableSystem();
+              }
+            }
+            if (!msg.validate_cmd_crc_rc) {
+              if (!validate_cmd_crc_rc_warned_) {
+                validate_cmd_crc_rc_warned_ = true;
+                RCLCPP_WARN(get_logger(), "Drive-By-Wire command message CRC and rolling counter validation disabled");
               }
             } else {
-              RCLCPP_WARN(get_logger(), "Ignoring system report with repeated rolling counter value");
+              validate_cmd_crc_rc_warned_ = false;
             }
-          } else {
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring system report with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring system report with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring system report with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_veh_vel_.ID:
-        if (msg_can->dlc == sizeof(msg_veh_vel_)) {
-          memcpy(&msg_veh_vel_, msg_can->data.data(), sizeof(msg_veh_vel_));
-          const auto &msg = msg_veh_vel_;
-          if (msg.validCrc()) {
-            if (msg_veh_vel_rc_.valid(msg, msg_can->header.stamp)) {
-              ds_dbw_msgs::msg::VehicleVelocity out;
-              out.header.stamp = msg_can->header.stamp;
-              out.vehicle_velocity_brake      = msg.velocityBrkKph()  / 3.6f; // kph to m/s
-              out.vehicle_velocity_propulsion = msg.velocityPrplKph() / 3.6f; // kph to m/s
-              out.dir_src = (uint8_t)msg.dir_src;
-              pub_veh_vel_->publish(out);
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring vehicle velocity report with repeated rolling counter value");
-            }
-          } else {
-            RCLCPP_WARN(get_logger(), "Ignoring vehicle velocity report with invalid CRC");
+      case MsgVehicleVelocity::ID:
+        if (msg_can->dlc == sizeof(MsgVehicleVelocity)) {
+          auto &recv = msg_veh_vel_;
+          if (recv.receive(*(MsgVehicleVelocity*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            ds_dbw_msgs::msg::VehicleVelocity out;
+            out.header.stamp = msg_can->header.stamp;
+            out.vehicle_velocity_brake      = msg.velocityBrkKph()  / 3.6f; // kph to m/s
+            out.vehicle_velocity_propulsion = msg.velocityPrplKph() / 3.6f; // kph to m/s
+            out.dir_src = (uint8_t)msg.dir_src;
+            pub_veh_vel_->publish(out);
+          } else if (!recv.validCrc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring vehicle velocity with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring vehicle velocity with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring vehicle velocity report with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_thrtl_info_.ID:
-        if (msg_can->dlc == sizeof(msg_thrtl_info_)) {
-          memcpy(&msg_thrtl_info_, msg_can->data.data(), sizeof(msg_thrtl_info_));
-          const auto &msg = msg_thrtl_info_;
-          if (msg.validCrc()) {
-            if (msg_thrtl_info_rc_.valid(msg, msg_can->header.stamp)) {
-              ds_dbw_msgs::msg::ThrottleInfo out;
-              out.header.stamp = msg_can->header.stamp;
-              out.accel_pedal_pc = msg.accelPedalPercent();
-              out.accel_pedal_qf.value = (uint8_t)msg.accel_pedal_qf;
-              out.one_pedal.value = (uint8_t)msg.one_pedal_drive;
-              out.engine_rpm = msg.engineRpm();
-              out.drive_mode.value = (uint8_t)msg.drive_mode;
-              out.gear_num.value = (uint8_t)msg.gear_num;
-              pub_thrtl_info_->publish(out);
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring throttle info with repeated rolling counter value");
-            }
-          } else {
+      case MsgThrtlInfo::ID:
+        if (msg_can->dlc == sizeof(MsgThrtlInfo)) {
+          auto &recv = msg_thrtl_info_;
+          if (recv.receive(*(MsgThrtlInfo*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            ds_dbw_msgs::msg::ThrottleInfo out;
+            out.header.stamp = msg_can->header.stamp;
+            out.accel_pedal_pc = msg.accelPedalPercent();
+            out.accel_pedal_qf.value = (uint8_t)msg.accel_pedal_qf;
+            out.one_pedal.value = (uint8_t)msg.one_pedal_drive;
+            out.engine_rpm = msg.engineRpm();
+            out.drive_mode.value = (uint8_t)msg.drive_mode;
+            out.gear_num.value = (uint8_t)msg.gear_num;
+            pub_thrtl_info_->publish(out);
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring throttle info with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring throttle info with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring throttle info with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_brake_info_.ID:
-        if (msg_can->dlc == sizeof(msg_brake_info_)) {
-          memcpy(&msg_brake_info_, msg_can->data.data(), sizeof(msg_brake_info_));
-          const auto &msg = msg_brake_info_;
-          if (msg.validCrc()) {
-            if (msg_brake_info_rc_.valid(msg, msg_can->header.stamp)) {
-              ds_dbw_msgs::msg::BrakeInfo out;
-              out.header.stamp = msg_can->header.stamp;
-              out.brake_torque_pedal = msg.brakeTorquePedalNm();
-              out.brake_torque_request = msg.brakeTorqueRequestNm();
-              out.brake_torque_actual = msg.brakeTorqueActualNm();
-              out.brake_pedal_qf.value = (uint8_t)msg.brake_pedal_qf;
-              out.brake_vacuum = msg.brakeVacuumBar();
-              out.abs_active = msg.abs_active;
-              out.abs_enabled = msg.abs_enabled;
-              out.esc_active = msg.esc_active;
-              out.esc_enabled = msg.esc_enabled;
-              out.trac_active = msg.trac_active;
-              out.trac_enabled = msg.trac_enabled;
-              pub_brake_info_->publish(out);
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring brake info with repeated rolling counter value");
-            }
-          } else {
+      case MsgBrakeInfo::ID:
+        if (msg_can->dlc == sizeof(MsgBrakeInfo)) {
+          auto &recv = msg_brake_info_;
+          if (recv.receive(*(MsgBrakeInfo*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            ds_dbw_msgs::msg::BrakeInfo out;
+            out.header.stamp = msg_can->header.stamp;
+            out.brake_torque_pedal = msg.brakeTorquePedalNm();
+            out.brake_torque_request = msg.brakeTorqueRequestNm();
+            out.brake_torque_actual = msg.brakeTorqueActualNm();
+            out.brake_pedal_qf.value = (uint8_t)msg.brake_pedal_qf;
+            out.brake_vacuum = msg.brakeVacuumBar();
+            out.abs_active = msg.abs_active;
+            out.abs_enabled = msg.abs_enabled;
+            out.esc_active = msg.esc_active;
+            out.esc_enabled = msg.esc_enabled;
+            out.trac_active = msg.trac_active;
+            out.trac_enabled = msg.trac_enabled;
+            pub_brake_info_->publish(out);
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring brake info with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring brake info with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring brake info with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_steer_offset_.ID:
-        if (msg_can->dlc == sizeof(msg_steer_offset_)) {
-          memcpy(&msg_steer_offset_, msg_can->data.data(), sizeof(msg_steer_offset_));
-          const auto &msg = msg_steer_offset_;
-          if (msg.validCrc()) {
-            if (msg_steer_offset_rc_.valid(msg, msg_can->header.stamp)) {
-              ds_dbw_msgs::msg::SteeringOffset out;
-              out.header.stamp = msg_can->header.stamp;
-              out.steering_wheel_angle = msg.angleDeg();
-              out.steering_wheel_angle_raw = msg.angleRawDeg();
-              out.steering_wheel_angle_offset = msg.angleOffsetDeg();
-              out.offset_type = (uint8_t)msg.offset_type;
-              pub_steer_offset_->publish(out);
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring steer offset with repeated rolling counter value");
-            }
-          } else {
+      case MsgSteerOffset::ID:
+        if (msg_can->dlc == sizeof(MsgSteerOffset)) {
+          auto &recv = msg_steer_offset_;
+          if (recv.receive(*(MsgSteerOffset*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            ds_dbw_msgs::msg::SteeringOffset out;
+            out.header.stamp = msg_can->header.stamp;
+            out.steering_wheel_angle = msg.angleDeg();
+            out.steering_wheel_angle_raw = msg.angleRawDeg();
+            out.steering_wheel_angle_offset = msg.angleOffsetDeg();
+            out.offset_type = (uint8_t)msg.offset_type;
+            pub_steer_offset_->publish(out);
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring steer offset with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring steer offset with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring steer offset with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_ulc_rpt_.ID:
-        if (msg_can->dlc == sizeof(msg_ulc_rpt_)) {
-          memcpy(&msg_ulc_rpt_, msg_can->data.data(), sizeof(msg_ulc_rpt_));
-          const auto &msg = msg_ulc_rpt_;
-          if (msg.validCrc()) {
-            if (msg_ulc_rpt_rc_.valid(msg, msg_can->header.stamp)) {
-              warnBadCrcRc(msg.bad_crc, msg.bad_rc, "ULC");
-              ds_dbw_msgs::msg::UlcReport out;
-              out.header.stamp = msg_can->header.stamp;
-              out.cmd_type = (uint8_t)msg.cmd_type;
-              out.vel_ref = msg.velocityRefMps();
-              out.vel_meas = msg.velocityMeasMps();
-              out.accel_ref = msg.accelRefMps();
-              out.accel_meas = msg.accelMeasMps();
-              out.coast_decel = msg.coast_decel != MsgUlcCmd::CoastDecel::UseBrakes;
-              out.ready = msg.ready;
-              out.enabled = msg.enabled;
-              out.override_active = msg.override_active;
-              out.override_latched = msg.override_latched;
-              out.preempted = msg.preempted;
-              out.timeout = msg.timeout;
-              out.bad_crc = msg.bad_crc;
-              out.bad_rc = msg.bad_rc;
-              pub_ulc_->publish(out);
-              if (msg.preempted && !msg.timeout) {
-                if (!ulc_preempt_warned_) {
-                  RCLCPP_WARN(get_logger(), "ULC preempted by user brake or throttle commands");
-                  ulc_preempt_warned_ = true;
-                }
-              } else {
-                ulc_preempt_warned_ = false;
+      case MsgUlcReport::ID:
+        if (msg_can->dlc == sizeof(MsgUlcReport)) {
+          auto &recv = msg_ulc_rpt_;
+          if (recv.receive(*(MsgUlcReport*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            warnBadCrcRc(msg.bad_crc, msg.bad_rc, "ULC");
+            ds_dbw_msgs::msg::UlcReport out;
+            out.header.stamp = msg_can->header.stamp;
+            out.cmd_type = (uint8_t)msg.cmd_type;
+            out.vel_ref = msg.velocityRefMps();
+            out.vel_meas = msg.velocityMeasMps();
+            out.accel_ref = msg.accelRefMps();
+            out.accel_meas = msg.accelMeasMps();
+            out.coast_decel = msg.coast_decel != MsgUlcCmd::CoastDecel::UseBrakes;
+            out.ready = msg.ready;
+            out.enabled = msg.enabled;
+            out.override_active = msg.override_active;
+            out.override_latched = msg.override_latched;
+            out.preempted = msg.preempted;
+            out.timeout = msg.timeout;
+            out.bad_crc = msg.bad_crc;
+            out.bad_rc = msg.bad_rc;
+            pub_ulc_->publish(out);
+            if (msg.preempted && !msg.timeout) {
+              if (!ulc_preempt_warned_) {
+                RCLCPP_WARN(get_logger(), "ULC preempted by user brake or throttle commands");
+                ulc_preempt_warned_ = true;
               }
             } else {
-              RCLCPP_WARN(get_logger(), "Ignoring ULC report with repeated rolling counter value");
+              ulc_preempt_warned_ = false;
             }
-          } else {
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring ULC report with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring ULC report with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring ULC report with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_accel_.ID:
-        if (msg_can->dlc == sizeof(msg_accel_)) {
-          memcpy(&msg_accel_, msg_can->data.data(), sizeof(msg_accel_));
-          const auto &msg = msg_accel_;
-          if (msg.validCrc()) {
-            if (msg_accel_rc_.valid(msg, msg_can->header.stamp)) {
-              sync_imu_.processMsg(msg_can);
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring accel report with repeated rolling counter value");
-            }
-          } else {
+      case MsgAccel::ID:
+        if (msg_can->dlc == sizeof(MsgAccel)) {
+          auto &recv = msg_accel_;
+          if (recv.receive(*(MsgAccel*)msg_can->data.data(), stamp)) {
+            sync_imu_.processMsg(msg_can);
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring accel report with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring accel report with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring accel report with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_gyro_.ID:
-        if (msg_can->dlc == sizeof(msg_gyro_)) {
-          memcpy(&msg_gyro_, msg_can->data.data(), sizeof(msg_gyro_));
-          const auto &msg = msg_gyro_;
-          if (msg.validCrc()) {
-            if (msg_gyro_rc_.valid(msg, msg_can->header.stamp)) {
-              sync_imu_.processMsg(msg_can);
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring gyro report with repeated rolling counter value");
-            }
-          } else {
+      case MsgGyro::ID:
+        if (msg_can->dlc == sizeof(MsgGyro)) {
+          auto &recv = msg_gyro_;
+          if (recv.receive(*(MsgGyro*)msg_can->data.data(), stamp)) {
+            sync_imu_.processMsg(msg_can);
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring gyro report with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring gyro report with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring gyro report with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_wheel_speed_.ID:
-        if (msg_can->dlc == sizeof(msg_wheel_speed_)) {
-          memcpy(&msg_wheel_speed_, msg_can->data.data(), sizeof(msg_wheel_speed_));
-          const auto &msg = msg_wheel_speed_;
+      case MsgWheelSpeed::ID:
+        if (msg_can->dlc == sizeof(MsgWheelSpeed)) {
+          auto &recv = msg_wheel_speed_;
+          recv.receive(*(MsgWheelSpeed*)msg_can->data.data(), stamp);
+          const auto &msg = recv.msg();
           ds_dbw_msgs::msg::WheelSpeeds out;
           out.header.stamp = msg_can->header.stamp;
           out.front_left  = msg.frontLeftRadS();
@@ -1054,10 +1021,11 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
         }
         break;
 
-      case msg_wheel_position_.ID:
-        if (msg_can->dlc == sizeof(msg_wheel_position_)) {
-          memcpy(&msg_wheel_position_, msg_can->data.data(), sizeof(msg_wheel_position_));
-          const auto &msg = msg_wheel_position_;
+      case MsgWheelPosition::ID:
+        if (msg_can->dlc == sizeof(MsgWheelPosition)) {
+          auto &recv = msg_wheel_position_;
+          recv.receive(*(MsgWheelPosition*)msg_can->data.data(), stamp);
+          const auto &msg = recv.msg();
           ds_dbw_msgs::msg::WheelPositions out;
           out.header.stamp = msg_can->header.stamp;
           out.front_left  = msg.front_left;
@@ -1070,660 +1038,704 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
         }
         break;
 
-      case msg_turn_signal_rpt_.ID:
-        if (msg_can->dlc == sizeof(msg_turn_signal_rpt_)) {
-          bool fault_prev = msg_turn_signal_rpt_.fault;
-          bool degraded_prev = msg_turn_signal_rpt_.degraded;
-          memcpy(&msg_turn_signal_rpt_, msg_can->data.data(), sizeof(msg_turn_signal_rpt_));
-          const auto &msg = msg_turn_signal_rpt_;
-          if (msg.validCrc()) {
-            if (msg_turn_signal_rpt_rc_.valid(msg, msg_can->header.stamp)) {
-              static_assert(ds_dbw_msgs::msg::TurnSignal::NONE   == (uint8_t)TurnSignal::None);
-              static_assert(ds_dbw_msgs::msg::TurnSignal::LEFT   == (uint8_t)TurnSignal::Left);
-              static_assert(ds_dbw_msgs::msg::TurnSignal::RIGHT  == (uint8_t)TurnSignal::Right);
-              static_assert(ds_dbw_msgs::msg::TurnSignal::HAZARD == (uint8_t)TurnSignal::Hazard);
-              const auto &msg = msg_turn_signal_rpt_;
-              ds_dbw_msgs::msg::TurnSignalReport out;
-              out.header.stamp = msg_can->header.stamp;
-              out.input.value = (uint8_t)msg.input;
-              out.cmd.value = (uint8_t)msg.cmd;
-              out.output.value = (uint8_t)msg.output;
-              out.feedback.value = (uint8_t)msg.feedback;
-              out.ready = msg.ready;
-              out.override_active = msg.override_active;
-              out.override_other = msg.override_other;
-              out.timeout = msg.timeout;
-              out.bad_crc = msg.bad_crc;
-              out.bad_rc = msg.bad_rc;
-              out.degraded = msg.degraded;
-              out.degraded_cmd_type = msg.degraded_cmd_type;
-              out.degraded_comms_dbw_steer = msg.degraded_comms_dbw_steer;
-              out.degraded_comms_dbw_brake = msg.degraded_comms_dbw_brake;
-              out.degraded_comms_dbw_thrtl = msg.degraded_comms_dbw_thrtl;
-              out.degraded_comms_vehicle = msg.degraded_comms_vehicle;
-              out.degraded_control_performance = msg.degraded_control_performance;
-              out.fault = msg.fault;
-              out.fault_comms_vehicle = msg.fault_comms_vehicle;
-              pub_turn_signal_->publish(out);
-              if (msg.fault) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal fault");
-              } else if (fault_prev) {
-                RCLCPP_INFO(get_logger(), "Turn signal fault cleared");
-              }
-              if (msg.degraded) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded");
-              } else if (degraded_prev) {
-                RCLCPP_INFO(get_logger(), "Turn signal degraded state cleared");
-              }
-              if (msg.degraded_comms_dbw_steer) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded: Lost comms with other Drive-By-Wire steer module");
-              }
-              if (msg.degraded_comms_dbw_brake) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded: Lost comms with other Drive-By-Wire brake module");
-              }
-              if (msg.degraded_comms_dbw_thrtl) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded: Lost comms with other Drive-By-Wire throttle module");
-              }
-              if (msg.degraded_comms_vehicle) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded: Lost comms with vehicle module(s)");
-              }
-              if (msg.degraded_control_performance) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded: Insufficient control performance");
-              }
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring turn signal report with repeated rolling counter value");
+      case MsgTurnSignalReport::ID:
+        if (msg_can->dlc == sizeof(MsgTurnSignalReport)) {
+          auto &recv = msg_turn_signal_rpt_;
+          bool fault_prev = recv.valid(stamp) && recv.msg().fault;
+          bool degraded_prev = recv.valid(stamp) && recv.msg().degraded;
+          if (recv.receive(*(MsgTurnSignalReport*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            static_assert(ds_dbw_msgs::msg::TurnSignal::NONE   == (uint8_t)TurnSignal::None);
+            static_assert(ds_dbw_msgs::msg::TurnSignal::LEFT   == (uint8_t)TurnSignal::Left);
+            static_assert(ds_dbw_msgs::msg::TurnSignal::RIGHT  == (uint8_t)TurnSignal::Right);
+            static_assert(ds_dbw_msgs::msg::TurnSignal::HAZARD == (uint8_t)TurnSignal::Hazard);
+            ds_dbw_msgs::msg::TurnSignalReport out;
+            out.header.stamp = msg_can->header.stamp;
+            out.input.value = (uint8_t)msg.input;
+            out.cmd.value = (uint8_t)msg.cmd;
+            out.output.value = (uint8_t)msg.output;
+            out.feedback.value = (uint8_t)msg.feedback;
+            out.ready = msg.ready;
+            out.override_active = msg.override_active;
+            out.override_other = msg.override_other;
+            out.timeout = msg.timeout;
+            out.bad_crc = msg.bad_crc;
+            out.bad_rc = msg.bad_rc;
+            out.degraded = msg.degraded;
+            out.degraded_cmd_type = msg.degraded_cmd_type;
+            out.degraded_comms_dbw_steer = msg.degraded_comms_dbw_steer;
+            out.degraded_comms_dbw_brake = msg.degraded_comms_dbw_brake;
+            out.degraded_comms_dbw_thrtl = msg.degraded_comms_dbw_thrtl;
+            out.degraded_comms_vehicle = msg.degraded_comms_vehicle;
+            out.degraded_control_performance = msg.degraded_control_performance;
+            out.fault = msg.fault;
+            out.fault_comms_vehicle = msg.fault_comms_vehicle;
+            pub_turn_signal_->publish(out);
+            if (msg.fault) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal fault");
+            } else if (fault_prev) {
+              RCLCPP_INFO(get_logger(), "Turn signal fault cleared");
             }
-          } else {
+            if (msg.degraded) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded");
+            } else if (degraded_prev) {
+              RCLCPP_INFO(get_logger(), "Turn signal degraded state cleared");
+            }
+            if (msg.degraded_comms_dbw_steer) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded: Lost comms with other Drive-By-Wire steer module");
+            }
+            if (msg.degraded_comms_dbw_brake) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded: Lost comms with other Drive-By-Wire brake module");
+            }
+            if (msg.degraded_comms_dbw_thrtl) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded: Lost comms with other Drive-By-Wire throttle module");
+            }
+            if (msg.degraded_comms_vehicle) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded: Lost comms with vehicle module(s)");
+            }
+            if (msg.degraded_control_performance) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Turn signal degraded: Insufficient control performance");
+            }
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring turn signal report with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring turn signal report with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring turn signal report with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_misc_rpt_1_.ID:
-        if (msg_can->dlc == sizeof(msg_misc_rpt_1_)) {
-          memcpy(&msg_misc_rpt_1_, msg_can->data.data(), sizeof(msg_misc_rpt_1_));
-          const auto &msg = msg_misc_rpt_1_;
-          if (msg.validCrc()) {
-            if (msg_misc_rpt_1_rc_.valid(msg, msg_can->header.stamp)) {
-              sync_misc_.processMsg(msg_can);
-              if (!msg_misc_rpt_2_valid_) { ///@TODO: Implement proper timeouts
-                // Handle case of missing 2nd message
-                can_msgs::msg::Frame msg_can_2;
-                msg_can_2.id = MsgMiscReport2::ID;
-                msg_can_2.dlc = sizeof(MsgMiscReport2);
-                std::vector<can_msgs::msg::Frame::ConstSharedPtr> msgs;
-                msgs.push_back(msg_can);
-                msgs.push_back(std::make_shared<can_msgs::msg::Frame>(msg_can_2));
-                recvCanMisc(msgs);
-              }
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring misc report 1 with repeated rolling counter value");
+      case MsgMiscReport1::ID:
+        if (msg_can->dlc == sizeof(MsgMiscReport1)) {
+          auto &recv = msg_misc_rpt_1_;
+          if (recv.receive(*(MsgMiscReport1*)msg_can->data.data(), stamp)) {
+            sync_misc_.processMsg(msg_can);
+            if (!msg_misc_rpt_2_.valid(stamp)) {
+              // Handle case of missing 2nd message
+              can_msgs::msg::Frame msg_can_2;
+              msg_can_2.id = MsgMiscReport2::ID;
+              msg_can_2.dlc = sizeof(MsgMiscReport2);
+              std::vector<can_msgs::msg::Frame::ConstSharedPtr> msgs;
+              msgs.push_back(msg_can);
+              msgs.push_back(std::make_shared<can_msgs::msg::Frame>(msg_can_2));
+              recvCanMisc(msgs);
             }
-          } else {
-            RCLCPP_WARN(get_logger(), "Ignoring misc report 1 report with invalid CRC");
+          } else if (!recv.validCrc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring misc report 1 with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring misc report 1 with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring misc report 1 report with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_misc_rpt_2_.ID:
-        if (msg_can->dlc == sizeof(msg_misc_rpt_2_)) {
-          memcpy(&msg_misc_rpt_2_, msg_can->data.data(), sizeof(msg_misc_rpt_2_));
-          const auto &msg = msg_misc_rpt_2_;
-          if (msg.validCrc()) {
-            if (msg_misc_rpt_2_rc_.valid(msg, msg_can->header.stamp)) {
-              sync_misc_.processMsg(msg_can);
-              msg_misc_rpt_2_valid_ = true; ///@TODO: Remove after implementing proper timeouts
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring misc report 2 with repeated rolling counter value");
-            }
-          } else {
-            RCLCPP_WARN(get_logger(), "Ignoring misc report 2 report with invalid CRC");
+      case MsgMiscReport2::ID:
+        if (msg_can->dlc == sizeof(MsgMiscReport2)) {
+          auto &recv = msg_misc_rpt_2_;
+          if (recv.receive(*(MsgMiscReport2*)msg_can->data.data(), stamp)) {
+            sync_misc_.processMsg(msg_can);
+          } else if (!recv.validCrc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring misc report 2 with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring misc report 2 with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring misc report 2 report with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_driver_assist_.ID:
-        if (msg_can->dlc == sizeof(msg_driver_assist_)) {
-          memcpy(&msg_driver_assist_, msg_can->data.data(), sizeof(msg_driver_assist_));
-          const auto &msg = msg_driver_assist_;
-          if (msg.validCrc()) {
-            if (msg_driver_assist_rc_.valid(msg, msg_can->header.stamp)) {
-              ds_dbw_msgs::msg::DriverAssist out;
-              out.header.stamp = msg_can->header.stamp;
-              out.decel = msg.decelMps2();
-              out.decel_src.value = (uint8_t)msg.decel_src;
-              out.fcw_active = msg.fcw_active;
-              out.fcw_enabled = msg.fcw_enabled;
-              out.aeb_active = msg.aeb_active;
-              out.aeb_precharge = msg.aeb_precharge;
-              out.aeb_enabled = msg.aeb_enabled;
-              out.acc_braking = msg.acc_braking;
-              out.acc_enabled = msg.acc_enabled;
-              out.blis_l_alert = msg.blis_l_alert;
-              out.blis_l_enabled = msg.blis_l_enabled;
-              out.blis_r_alert = msg.blis_r_alert;
-              out.blis_r_enabled = msg.blis_r_enabled;
-              out.cta_l_alert = msg.cta_l_alert;
-              out.cta_l_enabled = msg.cta_l_enabled;
-              out.cta_r_alert = msg.cta_r_alert;
-              out.cta_r_enabled = msg.cta_r_enabled;
-              pub_driver_assist_->publish(out);
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring driver assist with repeated rolling counter value");
-            }
-          } else {
+      case MsgDriverAssist::ID:
+        if (msg_can->dlc == sizeof(MsgDriverAssist)) {
+          auto &recv = msg_driver_assist_;
+          if (recv.receive(*(MsgDriverAssist*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            ds_dbw_msgs::msg::DriverAssist out;
+            out.header.stamp = msg_can->header.stamp;
+            out.decel = msg.decelMps2();
+            out.decel_src.value = (uint8_t)msg.decel_src;
+            out.fcw_active = msg.fcw_active;
+            out.fcw_enabled = msg.fcw_enabled;
+            out.aeb_active = msg.aeb_active;
+            out.aeb_precharge = msg.aeb_precharge;
+            out.aeb_enabled = msg.aeb_enabled;
+            out.acc_braking = msg.acc_braking;
+            out.acc_enabled = msg.acc_enabled;
+            out.blis_l_alert = msg.blis_l_alert;
+            out.blis_l_enabled = msg.blis_l_enabled;
+            out.blis_r_alert = msg.blis_r_alert;
+            out.blis_r_enabled = msg.blis_r_enabled;
+            out.cta_l_alert = msg.cta_l_alert;
+            out.cta_l_enabled = msg.cta_l_enabled;
+            out.cta_r_alert = msg.cta_r_alert;
+            out.cta_r_enabled = msg.cta_r_enabled;
+            pub_driver_assist_->publish(out);
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring driver assist with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring driver assist with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring driver assist with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_battery_.ID:
-        if (msg_can->dlc == sizeof(msg_battery_)) {
-          memcpy(&msg_battery_, msg_can->data.data(), sizeof(msg_battery_));
-          const auto &msg = msg_battery_;
-          if (msg.validCrc()) {
-            if (msg_battery_rc_.valid(msg, msg_can->header.stamp)) {
-              ds_dbw_msgs::msg::Battery out;
-              out.header.stamp = msg_can->header.stamp;
-              out.state_of_charge = msg.socPercent();
-              out.voltage = msg.voltageVolts();
-              out.current = msg.currentAmps();
-              out.temperature = msg.temperatureDegC();
-              out.ignition.value = (uint8_t)msg.ignition;
-              pub_battery_->publish(out);
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring battery with repeated rolling counter value");
-            }
-          } else {
+      case MsgBattery::ID:
+        if (msg_can->dlc == sizeof(MsgBattery)) {
+          auto &recv = msg_battery_;
+          if (recv.receive(*(MsgBattery*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            ds_dbw_msgs::msg::Battery out;
+            out.header.stamp = msg_can->header.stamp;
+            out.state_of_charge = msg.socPercent();
+            out.voltage = msg.voltageVolts();
+            out.current = msg.currentAmps();
+            out.temperature = msg.temperatureDegC();
+            out.ignition.value = (uint8_t)msg.ignition;
+            pub_battery_->publish(out);
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring battery with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring battery with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring battery with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_battery_traction_.ID:
-        if (msg_can->dlc == sizeof(msg_battery_traction_)) {
-          memcpy(&msg_battery_traction_, msg_can->data.data(), sizeof(msg_battery_traction_));
-          const auto &msg = msg_battery_traction_;
-          if (msg.validCrc()) {
-            if (msg_battery_traction_rc_.valid(msg, msg_can->header.stamp)) {
-              ds_dbw_msgs::msg::BatteryTraction out;
-              out.header.stamp = msg_can->header.stamp;
-              out.state_of_charge = msg.socPercent();
-              out.voltage = msg.voltageVolts();
-              out.current = msg.currentAmps();
-              out.temperature = msg.temperatureDegC();
-              out.status = (uint8_t)msg.status;
-              pub_battery_traction_->publish(out);
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring battery traction with repeated rolling counter value");
-            }
-          } else {
+      case MsgBatteryTraction::ID:
+        if (msg_can->dlc == sizeof(MsgBatteryTraction)) {
+          auto &recv = msg_battery_traction_;
+          if (recv.receive(*(MsgBatteryTraction*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            ds_dbw_msgs::msg::BatteryTraction out;
+            out.header.stamp = msg_can->header.stamp;
+            out.state_of_charge = msg.socPercent();
+            out.voltage = msg.voltageVolts();
+            out.current = msg.currentAmps();
+            out.temperature = msg.temperatureDegC();
+            out.status = (uint8_t)msg.status;
+            pub_battery_traction_->publish(out);
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring battery traction with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring battery traction with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring battery traction with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_steer_rpt_2_.ID:
-        if (msg_can->dlc == sizeof(msg_steer_rpt_2_)) {
-          bool degraded_prev = msg_steer_rpt_2_.degraded;
-          memcpy(&msg_steer_rpt_2_, msg_can->data.data(), sizeof(msg_steer_rpt_2_));
-          const auto &msg = msg_steer_rpt_2_;
-          if (msg.validCrc()) {
-            if (msg_steer_rpt_2_rc_.valid(msg, msg_can->header.stamp)) {
-              ds_dbw_msgs::msg::SteeringDiagnostics out;
-              out.header.stamp = msg_can->header.stamp;
-              out.degraded = msg_steer_rpt_2_.degraded;
-              out.degraded_cmd_type = msg_steer_rpt_2_.degraded_cmd_type;
-              out.degraded_comms = msg_steer_rpt_2_.degraded_comms;
-              out.degraded_internal = msg_steer_rpt_2_.degraded_internal;
-              out.degraded_vehicle = msg_steer_rpt_2_.degraded_vehicle;
-              out.degraded_actuator = msg_steer_rpt_2_.degraded_actuator;
-              out.degraded_comms_dbw = msg_steer_rpt_3_.degraded_comms_dbw;
-              out.degraded_comms_dbw_gateway = msg_steer_rpt_3_.degraded_comms_dbw_gateway;
-              out.degraded_comms_dbw_brake = msg_steer_rpt_3_.degraded_comms_dbw_brake;
-              out.degraded_comms_dbw_thrtl = msg_steer_rpt_3_.degraded_comms_dbw_thrtl;
-              out.degraded_comms_dbw_gear = msg_steer_rpt_3_.degraded_comms_dbw_gear;
-              out.degraded_control_performance = msg_steer_rpt_3_.degraded_control_performance;
-              out.degraded_param_mismatch = msg_steer_rpt_3_.degraded_param_mismatch;
-              out.degraded_comms_vehicle = msg_steer_rpt_3_.degraded_comms_vehicle;
-              out.degraded_comms_actuator = msg_steer_rpt_3_.degraded_comms_actuator;
-              out.degraded_vehicle_speed = msg_steer_rpt_3_.degraded_vehicle_speed;
-              out.degraded_calibration = msg_steer_rpt_3_.degraded_calibration;
-              out.fault = msg_steer_rpt_1_.fault;
-              out.fault_power = msg_steer_rpt_2_.fault_power;
-              out.fault_comms = msg_steer_rpt_2_.fault_comms;
-              out.fault_internal = msg_steer_rpt_2_.fault_internal;
-              out.fault_vehicle = msg_steer_rpt_2_.fault_vehicle;
-              out.fault_actuator = msg_steer_rpt_2_.fault_actuator;
-              out.fault_comms_dbw = msg_steer_rpt_3_.fault_comms_dbw;
-              out.fault_comms_dbw_gateway = msg_steer_rpt_3_.fault_comms_dbw_gateway;
-              out.fault_comms_dbw_brake = msg_steer_rpt_3_.fault_comms_dbw_brake;
-              out.fault_comms_dbw_thrtl = msg_steer_rpt_3_.fault_comms_dbw_thrtl;
-              out.fault_comms_dbw_gear = msg_steer_rpt_3_.fault_comms_dbw_gear;
-              out.fault_comms_vehicle = msg_steer_rpt_3_.fault_comms_vehicle;
-              out.fault_comms_actuator = msg_steer_rpt_3_.fault_comms_actuator;
-              out.fault_vehicle_speed = msg_steer_rpt_3_.fault_vehicle_speed;
-              out.fault_angle_sensor = msg_steer_rpt_3_.fault_angle_sensor;
-              out.fault_torque_sensor_1 = msg_steer_rpt_3_.fault_torque_sensor_1;
-              out.fault_torque_sensor_2 = msg_steer_rpt_3_.fault_torque_sensor_2;
-              out.fault_torque_sensor_mismatch = msg_steer_rpt_3_.fault_torque_sensor_mismatch;
-              out.fault_actuator_torque_sensor = msg_steer_rpt_3_.fault_actuator_torque_sensor;
-              out.fault_actuator_config = msg_steer_rpt_3_.fault_actuator_config;
-              out.fault_actuator_assist = msg_steer_rpt_3_.fault_actuator_assist;
-              out.fault_control_performance = msg_steer_rpt_3_.fault_control_performance;
-              out.fault_param_mismatch = msg_steer_rpt_3_.fault_param_mismatch;
-              out.fault_param_limits = msg_steer_rpt_3_.fault_param_limits;
-              out.fault_calibration = msg_steer_rpt_3_.fault_calibration;
-              pub_steer_diag_->publish(out);
-              if (msg_steer_rpt_2_.cmd_src == CmdSrc::Remote && !remote_control_printed_) {
-                remote_control_printed_ = true;
-                RCLCPP_INFO(get_logger(), "Remote control activated");
-              }
-              if (msg_steer_rpt_2_.cmd_src != CmdSrc::Remote
-               && msg_brake_rpt_2_.cmd_src != CmdSrc::Remote
-               && msg_thrtl_rpt_2_.cmd_src != CmdSrc::Remote && remote_control_printed_) {
-                remote_control_printed_ = false;
-                RCLCPP_INFO(get_logger(), "Remote control deactivated");
-              }
-              if (msg.degraded) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering degraded");
-              } else if (degraded_prev) {
-                RCLCPP_INFO(get_logger(), "Steering degraded state cleared");
-              }
-              if (msg.degraded_cmd_type) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering degraded: Unsupported cmd_type");
-              }
-              if (msg.degraded_comms) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering degraded: Lost comms");
-              }
-              if (msg.degraded_internal) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering degraded: Internal");
-              }
-              if (msg.degraded_vehicle) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering degraded: Vehicle");
-              }
-              if (msg.degraded_actuator) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering degraded: Actuator");
-              }
-              if (msg.fault_power) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering fault: Drive-By-Wire power voltage");
-              }
-              if (msg.fault_comms) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering fault: Lost comms");
-              }
-              if (msg.fault_internal) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering fault: Internal fault");
-              }
-              if (msg.fault_vehicle) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering fault: Fault in vehicle");
-              }
-              if (msg.fault_actuator) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering fault: Fault in actuator");
-              }
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring steer report 2 with repeated rolling counter value");
+      case MsgEyeTracker::ID:
+        if (msg_can->dlc == sizeof(MsgEyeTracker)) {
+          auto &recv = msg_eye_tracker_;
+          if (recv.receive(*(MsgEyeTracker*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            static_assert((uint8_t)MsgEyeTracker::Gaze::Other               == ds_dbw_msgs::msg::EyeTracker::GAZE_OTHER);
+            static_assert((uint8_t)MsgEyeTracker::Gaze::PassengerWindshield == ds_dbw_msgs::msg::EyeTracker::GAZE_PASSENGER_WINDSHIELD);
+            static_assert((uint8_t)MsgEyeTracker::Gaze::DriverWindshield    == ds_dbw_msgs::msg::EyeTracker::GAZE_DRIVER_WINDSHIELD);
+            static_assert((uint8_t)MsgEyeTracker::Gaze::InstrumentPanel     == ds_dbw_msgs::msg::EyeTracker::GAZE_INSTRUMENT_PANEL);
+            static_assert((uint8_t)MsgEyeTracker::Gaze::MediaTablet         == ds_dbw_msgs::msg::EyeTracker::GAZE_MEDIA_TABLET);
+            static_assert((uint8_t)MsgEyeTracker::Gaze::RearMirror          == ds_dbw_msgs::msg::EyeTracker::GAZE_REAR_MIRROR);
+            static_assert((uint8_t)MsgEyeTracker::Gaze::DriverMirror        == ds_dbw_msgs::msg::EyeTracker::GAZE_DRIVER_MIRROR);
+            static_assert((uint8_t)MsgEyeTracker::Gaze::PassengerMirror     == ds_dbw_msgs::msg::EyeTracker::GAZE_PASSENGER_MIRROR);
+            static_assert((uint8_t)MsgEyeTracker::Gaze::BelowDashboard      == ds_dbw_msgs::msg::EyeTracker::GAZE_BELOW_DASHBOARD);
+            ds_dbw_msgs::msg::EyeTracker out;
+            out.header.stamp = msg_can->header.stamp;
+            out.attention = msg.attentionPercent();
+            out.gaze = (uint8_t)msg.gaze;
+            out.eyes_present = msg.eyes_present;
+            pub_eye_tracker_->publish(out);
+          } else if (!recv.validCrc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring eye tracking with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring eye tracking with repeated rolling counter value");
+          }
+        } else {
+          RCLCPP_WARN(get_logger(), "Ignoring eye tracking with invalid size of %u", msg_can->dlc);
+        }
+        break;
+
+      case MsgSteerReport2::ID:
+        if (msg_can->dlc == sizeof(MsgSteerReport2)) {
+          auto &recv = msg_steer_rpt_2_;
+          bool degraded_prev = recv.valid(stamp) && recv.msg().degraded;
+          if (recv.receive(*(MsgSteerReport2*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            ds_dbw_msgs::msg::SteeringDiagnostics out;
+            out.header.stamp = msg_can->header.stamp;
+            if (msg_steer_rpt_1_.valid(stamp)) {
+              out.fault = msg_steer_rpt_1_.msg().fault;
             }
-          } else {
+            out.degraded = msg.degraded;
+            out.degraded_cmd_type = msg.degraded_cmd_type;
+            out.degraded_comms = msg.degraded_comms;
+            out.degraded_internal = msg.degraded_internal;
+            out.degraded_vehicle = msg.degraded_vehicle;
+            out.degraded_actuator = msg.degraded_actuator;
+            out.fault_power = msg.fault_power;
+            out.fault_comms = msg.fault_comms;
+            out.fault_internal = msg.fault_internal;
+            out.fault_vehicle = msg.fault_vehicle;
+            out.fault_actuator = msg.fault_actuator;
+            if (msg_steer_rpt_3_.valid(stamp)) {
+              const auto &msg3 = msg_steer_rpt_3_.msg();
+              out.degraded_comms_dbw = msg3.degraded_comms_dbw;
+              out.degraded_comms_dbw_gateway = msg3.degraded_comms_dbw_gateway;
+              out.degraded_comms_dbw_brake = msg3.degraded_comms_dbw_brake;
+              out.degraded_comms_dbw_thrtl = msg3.degraded_comms_dbw_thrtl;
+              out.degraded_comms_dbw_gear = msg3.degraded_comms_dbw_gear;
+              out.degraded_control_performance = msg3.degraded_control_performance;
+              out.degraded_param_mismatch = msg3.degraded_param_mismatch;
+              out.degraded_comms_vehicle = msg3.degraded_comms_vehicle;
+              out.degraded_comms_actuator = msg3.degraded_comms_actuator;
+              out.degraded_vehicle_speed = msg3.degraded_vehicle_speed;
+              out.degraded_calibration = msg3.degraded_calibration;
+              out.fault_comms_dbw = msg3.fault_comms_dbw;
+              out.fault_comms_dbw_gateway = msg3.fault_comms_dbw_gateway;
+              out.fault_comms_dbw_brake = msg3.fault_comms_dbw_brake;
+              out.fault_comms_dbw_thrtl = msg3.fault_comms_dbw_thrtl;
+              out.fault_comms_dbw_gear = msg3.fault_comms_dbw_gear;
+              out.fault_comms_vehicle = msg3.fault_comms_vehicle;
+              out.fault_comms_actuator = msg3.fault_comms_actuator;
+              out.fault_vehicle_speed = msg3.fault_vehicle_speed;
+              out.fault_angle_sensor = msg3.fault_angle_sensor;
+              out.fault_torque_sensor_1 = msg3.fault_torque_sensor_1;
+              out.fault_torque_sensor_2 = msg3.fault_torque_sensor_2;
+              out.fault_torque_sensor_mismatch = msg3.fault_torque_sensor_mismatch;
+              out.fault_actuator_torque_sensor = msg3.fault_actuator_torque_sensor;
+              out.fault_actuator_config = msg3.fault_actuator_config;
+              out.fault_actuator_assist = msg3.fault_actuator_assist;
+              out.fault_control_performance = msg3.fault_control_performance;
+              out.fault_param_mismatch = msg3.fault_param_mismatch;
+              out.fault_param_limits = msg3.fault_param_limits;
+              out.fault_calibration = msg3.fault_calibration;
+            }
+            pub_steer_diag_->publish(out);
+            if (!remote_control_printed_ && msg.cmd_src == CmdSrc::Remote) {
+              remote_control_printed_ = true;
+              RCLCPP_INFO(get_logger(), "Remote control activated");
+            }
+            if (remote_control_printed_ && msg.cmd_src != CmdSrc::Remote
+             && msg_brake_rpt_2_.valid(stamp) && msg_brake_rpt_2_.msg().cmd_src != CmdSrc::Remote
+             && msg_thrtl_rpt_2_.valid(stamp) && msg_thrtl_rpt_2_.msg().cmd_src != CmdSrc::Remote) {
+              remote_control_printed_ = false;
+              RCLCPP_INFO(get_logger(), "Remote control deactivated");
+            }
+            if (msg.degraded) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering degraded");
+            } else if (degraded_prev) {
+              RCLCPP_INFO(get_logger(), "Steering degraded state cleared");
+            }
+            if (msg.degraded_cmd_type) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering degraded: Unsupported cmd_type");
+            }
+            if (msg.degraded_comms) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering degraded: Lost comms");
+            }
+            if (msg.degraded_internal) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering degraded: Internal");
+            }
+            if (msg.degraded_vehicle) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering degraded: Vehicle");
+            }
+            if (msg.degraded_actuator) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering degraded: Actuator");
+            }
+            if (msg.fault_power) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering fault: Drive-By-Wire power voltage");
+            }
+            if (msg.fault_comms) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering fault: Lost comms");
+            }
+            if (msg.fault_internal) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering fault: Internal fault");
+            }
+            if (msg.fault_vehicle) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering fault: Fault in vehicle");
+            }
+            if (msg.fault_actuator) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering fault: Fault in actuator");
+            }
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring steer report 2 with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring steer report 2 with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring steer report 2 with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_brake_rpt_2_.ID:
-        if (msg_can->dlc == sizeof(msg_brake_rpt_2_)) {
-          bool degraded_prev = msg_brake_rpt_2_.degraded;
-          bool req_park_brake_prev = msg_brake_rpt_2_.req_park_brake;
-          bool req_shift_park_prev = msg_brake_rpt_2_.req_shift_park;
-          memcpy(&msg_brake_rpt_2_, msg_can->data.data(), sizeof(msg_brake_rpt_2_));
-          const auto &msg = msg_brake_rpt_2_;
-          if (msg.validCrc()) {
-            if (msg_brake_rpt_2_rc_.valid(msg, msg_can->header.stamp)) {
-              ds_dbw_msgs::msg::BrakeDiagnostics out;
-              out.header.stamp = msg_can->header.stamp;
-              out.degraded = msg_brake_rpt_2_.degraded;
-              out.degraded_cmd_type = msg_brake_rpt_2_.degraded_cmd_type;
-              out.degraded_comms = msg_brake_rpt_2_.degraded_comms;
-              out.degraded_internal = msg_brake_rpt_2_.degraded_internal;
-              out.degraded_vehicle = msg_brake_rpt_2_.degraded_vehicle;
-              out.degraded_actuator = msg_brake_rpt_2_.degraded_actuator;
-              out.degraded_comms_dbw = msg_brake_rpt_3_.degraded_comms_dbw;
-              out.degraded_comms_dbw_gateway = msg_brake_rpt_3_.degraded_comms_dbw_gateway;
-              out.degraded_comms_dbw_steer = msg_brake_rpt_3_.degraded_comms_dbw_steer;
-              out.degraded_comms_dbw_thrtl = msg_brake_rpt_3_.degraded_comms_dbw_thrtl;
-              out.degraded_comms_dbw_gear = msg_brake_rpt_3_.degraded_comms_dbw_gear;
-              out.degraded_control_performance = msg_brake_rpt_3_.degraded_control_performance;
-              out.degraded_param_mismatch = msg_brake_rpt_3_.degraded_param_mismatch;
-              out.degraded_comms_vehicle = msg_brake_rpt_3_.degraded_comms_vehicle;
-              out.degraded_comms_actuator = msg_brake_rpt_3_.degraded_comms_actuator;
-              out.degraded_comms_actuator_1 = msg_brake_rpt_3_.degraded_comms_actuator_1;
-              out.degraded_comms_actuator_2 = msg_brake_rpt_3_.degraded_comms_actuator_2;
-              out.degraded_vehicle_speed = msg_brake_rpt_3_.degraded_vehicle_speed;
-              out.degraded_btsi_stuck_low = msg_brake_rpt_3_.degraded_btsi_stuck_low;
-              out.degraded_btsi_stuck_high = msg_brake_rpt_3_.degraded_btsi_stuck_high;
-              out.degraded_actuator_aeb_deny = msg_brake_rpt_3_.degraded_actuator_aeb_deny;
-              out.degraded_actuator_1 = msg_brake_rpt_3_.degraded_actuator_1;
-              out.degraded_actuator_2 = msg_brake_rpt_3_.degraded_actuator_2;
-              out.degraded_calibration = msg_brake_rpt_3_.degraded_calibration;
-              out.fault = msg_brake_rpt_1_.fault;
-              out.fault_power = msg_brake_rpt_2_.fault_power;
-              out.fault_comms = msg_brake_rpt_2_.fault_comms;
-              out.fault_internal = msg_brake_rpt_2_.fault_internal;
-              out.fault_vehicle = msg_brake_rpt_2_.fault_vehicle;
-              out.fault_actuator = msg_brake_rpt_2_.fault_actuator;
-              out.fault_comms_dbw = msg_brake_rpt_3_.fault_comms_dbw;
-              out.fault_comms_dbw_gateway = msg_brake_rpt_3_.fault_comms_dbw_gateway;
-              out.fault_comms_dbw_steer = msg_brake_rpt_3_.fault_comms_dbw_steer;
-              out.fault_comms_dbw_thrtl = msg_brake_rpt_3_.fault_comms_dbw_thrtl;
-              out.fault_comms_dbw_gear = msg_brake_rpt_3_.fault_comms_dbw_gear;
-              out.fault_comms_vehicle = msg_brake_rpt_3_.fault_comms_vehicle;
-              out.fault_comms_actuator = msg_brake_rpt_3_.fault_comms_actuator;
-              out.fault_comms_actuator_1 = msg_brake_rpt_3_.fault_comms_actuator_1;
-              out.fault_comms_actuator_2 = msg_brake_rpt_3_.fault_comms_actuator_2;
-              out.fault_vehicle_speed = msg_brake_rpt_3_.fault_vehicle_speed;
-              out.fault_actuator_acc_deny = msg_brake_rpt_3_.fault_actuator_acc_deny;
-              out.fault_actuator_pedal_sensor = msg_brake_rpt_3_.fault_actuator_pedal_sensor;
-              out.fault_bped_sensor_1 = msg_brake_rpt_3_.fault_bped_sensor_1;
-              out.fault_bped_sensor_2 = msg_brake_rpt_3_.fault_bped_sensor_2;
-              out.fault_bped_sensor_mismatch = msg_brake_rpt_3_.fault_bped_sensor_mismatch;
-              out.fault_actuator_1 = msg_brake_rpt_3_.fault_actuator_1;
-              out.fault_actuator_2 = msg_brake_rpt_3_.fault_actuator_2;
-              out.fault_control_performance = msg_brake_rpt_3_.fault_control_performance;
-              out.fault_param_mismatch = msg_brake_rpt_3_.fault_param_mismatch;
-              out.fault_param_limits = msg_brake_rpt_3_.fault_param_limits;
-              out.fault_calibration = msg_brake_rpt_3_.fault_calibration;
-              pub_brake_diag_->publish(out);
-              if (msg_brake_rpt_2_.cmd_src == CmdSrc::Remote && !remote_control_printed_) {
-                remote_control_printed_ = true;
-                RCLCPP_INFO(get_logger(), "Remote control activated");
-              }
-              if (msg_steer_rpt_2_.cmd_src != CmdSrc::Remote
-               && msg_brake_rpt_2_.cmd_src != CmdSrc::Remote
-               && msg_thrtl_rpt_2_.cmd_src != CmdSrc::Remote && remote_control_printed_) {
-                remote_control_printed_ = false;
-                RCLCPP_INFO(get_logger(), "Remote control deactivated");
-              }
-              if (msg.req_park_brake && !req_park_brake_prev) {
-                switch (msg_brake_rpt_2_.cmd_src) {
-                  case CmdSrc::Button:    RCLCPP_WARN(get_logger(), "External brake active, applying parking brake"); break;
-                  case CmdSrc::CommsLoss: RCLCPP_WARN(get_logger(), "Comms lost, applying parking brake"); break;
-                  default:                RCLCPP_WARN(get_logger(), "Brake hold time low, applying parking brake"); break;
-                }
-              }
-              if (msg.req_shift_park && !req_shift_park_prev) {
-                switch (msg_brake_rpt_2_.cmd_src) {
-                  case CmdSrc::Button:    RCLCPP_WARN(get_logger(), "External brake active, shifting to park"); break;
-                  case CmdSrc::CommsLoss: RCLCPP_WARN(get_logger(), "Comms lost, shifting to park"); break;
-                  default:                RCLCPP_WARN(get_logger(), "rake hold time depleted, shifting to park"); break;
-                }
-              }
-              if (msg.degraded) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded");
-              } else if (degraded_prev) {
-                RCLCPP_INFO(get_logger(), "Brake degraded state cleared");
-              }
-              if (msg.degraded_cmd_type) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded: Unsupported cmd_type");
-              }
-              if (msg.degraded_comms) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded: Lost comms");
-              }
-              if (msg.degraded_internal) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded: Internal");
-              }
-              if (msg.degraded_vehicle) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded: Vehicle");
-              }
-              if (msg.degraded_actuator) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded: Actuator");
-              }
-              if (msg.fault_power) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake fault: Drive-By-Wire power voltage");
-              }
-              if (msg.fault_comms) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake fault: Lost comms");
-              }
-              if (msg.fault_internal) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake fault: Internal fault");
-              }
-              if (msg.fault_vehicle) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake fault: Fault in vehicle");
-              }
-              if (msg.fault_actuator) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake fault: Fault in actuator");
-              }
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring brake report 2 with repeated rolling counter value");
+      case MsgBrakeReport2::ID:
+        if (msg_can->dlc == sizeof(MsgBrakeReport2)) {
+          auto &recv = msg_brake_rpt_2_;
+          bool degraded_prev = recv.valid(stamp) && recv.msg().degraded;
+          bool req_park_brake_prev = recv.valid(stamp) && recv.msg().req_park_brake;
+          bool req_shift_park_prev = recv.valid(stamp) && recv.msg().req_shift_park;
+          if (recv.receive(*(MsgBrakeReport2*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            ds_dbw_msgs::msg::BrakeDiagnostics out;
+            out.header.stamp = msg_can->header.stamp;
+            if (msg_brake_rpt_1_.valid(stamp)) {
+              out.fault = msg_brake_rpt_1_.msg().fault;
             }
-          } else {
+            out.degraded = msg.degraded;
+            out.degraded_cmd_type = msg.degraded_cmd_type;
+            out.degraded_comms = msg.degraded_comms;
+            out.degraded_internal = msg.degraded_internal;
+            out.degraded_vehicle = msg.degraded_vehicle;
+            out.degraded_actuator = msg.degraded_actuator;
+            out.fault_power = msg.fault_power;
+            out.fault_comms = msg.fault_comms;
+            out.fault_internal = msg.fault_internal;
+            out.fault_vehicle = msg.fault_vehicle;
+            out.fault_actuator = msg.fault_actuator;
+            if (msg_brake_rpt_3_.valid(stamp)) {
+              const auto &msg3 = msg_brake_rpt_3_.msg();
+              out.degraded_comms_dbw = msg3.degraded_comms_dbw;
+              out.degraded_comms_dbw_gateway = msg3.degraded_comms_dbw_gateway;
+              out.degraded_comms_dbw_steer = msg3.degraded_comms_dbw_steer;
+              out.degraded_comms_dbw_thrtl = msg3.degraded_comms_dbw_thrtl;
+              out.degraded_comms_dbw_gear = msg3.degraded_comms_dbw_gear;
+              out.degraded_control_performance = msg3.degraded_control_performance;
+              out.degraded_param_mismatch = msg3.degraded_param_mismatch;
+              out.degraded_comms_vehicle = msg3.degraded_comms_vehicle;
+              out.degraded_comms_actuator = msg3.degraded_comms_actuator;
+              out.degraded_comms_actuator_1 = msg3.degraded_comms_actuator_1;
+              out.degraded_comms_actuator_2 = msg3.degraded_comms_actuator_2;
+              out.degraded_vehicle_speed = msg3.degraded_vehicle_speed;
+              out.degraded_bped_feedback = msg3.degraded_bped_feedback;
+              out.degraded_btsi_stuck_low = msg3.degraded_btsi_stuck_low;
+              out.degraded_btsi_stuck_high = msg3.degraded_btsi_stuck_high;
+              out.degraded_actuator_aeb_deny = msg3.degraded_actuator_aeb_deny;
+              out.degraded_actuator_1 = msg3.degraded_actuator_1;
+              out.degraded_actuator_2 = msg3.degraded_actuator_2;
+              out.degraded_actuator_warm = msg3.degraded_actuator_warm;
+              out.degraded_calibration = msg3.degraded_calibration;
+              out.fault_comms_dbw = msg3.fault_comms_dbw;
+              out.fault_comms_dbw_gateway = msg3.fault_comms_dbw_gateway;
+              out.fault_comms_dbw_steer = msg3.fault_comms_dbw_steer;
+              out.fault_comms_dbw_thrtl = msg3.fault_comms_dbw_thrtl;
+              out.fault_comms_dbw_gear = msg3.fault_comms_dbw_gear;
+              out.fault_comms_vehicle = msg3.fault_comms_vehicle;
+              out.fault_comms_actuator = msg3.fault_comms_actuator;
+              out.fault_comms_actuator_1 = msg3.fault_comms_actuator_1;
+              out.fault_comms_actuator_2 = msg3.fault_comms_actuator_2;
+              out.fault_vehicle_speed = msg3.fault_vehicle_speed;
+              out.fault_actuator_acc_deny = msg3.fault_actuator_acc_deny;
+              out.fault_actuator_pedal_sensor = msg3.fault_actuator_pedal_sensor;
+              out.fault_bped_sensor_1 = msg3.fault_bped_sensor_1;
+              out.fault_bped_sensor_2 = msg3.fault_bped_sensor_2;
+              out.fault_bped_sensor_mismatch = msg3.fault_bped_sensor_mismatch;
+              out.fault_actuator_1 = msg3.fault_actuator_1;
+              out.fault_actuator_2 = msg3.fault_actuator_2;
+              out.fault_control_performance = msg3.fault_control_performance;
+              out.fault_param_mismatch = msg3.fault_param_mismatch;
+              out.fault_param_limits = msg3.fault_param_limits;
+              out.fault_calibration = msg3.fault_calibration;
+            }
+            pub_brake_diag_->publish(out);
+            if (!remote_control_printed_ && msg.cmd_src == CmdSrc::Remote) {
+              remote_control_printed_ = true;
+              RCLCPP_INFO(get_logger(), "Remote control activated");
+            }
+            if (remote_control_printed_ && msg.cmd_src != CmdSrc::Remote
+             && msg_steer_rpt_2_.valid(stamp) && msg_steer_rpt_2_.msg().cmd_src != CmdSrc::Remote
+             && msg_thrtl_rpt_2_.valid(stamp) && msg_thrtl_rpt_2_.msg().cmd_src != CmdSrc::Remote) {
+              remote_control_printed_ = false;
+              RCLCPP_INFO(get_logger(), "Remote control deactivated");
+            }
+            if (!external_braking_printed_ && msg.cmd_src == CmdSrc::Button && msg.external_button && msg_brake_rpt_1_.valid(stamp) && msg_brake_rpt_1_.msg().cmdNonZero()) {
+              external_braking_printed_ = true;
+              RCLCPP_INFO(get_logger(), "External braking activated");
+            }
+            if (external_braking_printed_ && msg.cmd_src != CmdSrc::Button && !msg.external_button) {
+              external_braking_printed_ = false;
+              RCLCPP_INFO(get_logger(), "External braking deactivated");
+            }
+            if (!comms_loss_braking_printed_ && msg.cmd_src == CmdSrc::CommsLoss && msg_brake_rpt_1_.valid(stamp) && msg_brake_rpt_1_.msg().cmdNonZero()) {
+              comms_loss_braking_printed_ = true;
+              RCLCPP_INFO(get_logger(), "Comms loss braking activated");
+            }
+            if (comms_loss_braking_printed_ && msg.cmd_src != CmdSrc::CommsLoss) {
+              comms_loss_braking_printed_ = false;
+              RCLCPP_INFO(get_logger(), "Comms loss braking deactivated");
+            }
+            if (msg.req_park_brake && !req_park_brake_prev) {
+              switch (msg.cmd_src) {
+                case CmdSrc::Button:    RCLCPP_WARN(get_logger(), "External brake active, applying parking brake"); break;
+                case CmdSrc::CommsLoss: RCLCPP_WARN(get_logger(), "Comms lost, applying parking brake"); break;
+                default:                RCLCPP_WARN(get_logger(), "Brake hold time low, applying parking brake"); break;
+              }
+            }
+            if (msg.req_shift_park && !req_shift_park_prev) {
+              switch (msg.cmd_src) {
+                case CmdSrc::Button:    RCLCPP_WARN(get_logger(), "External brake active, shifting to park"); break;
+                case CmdSrc::CommsLoss: RCLCPP_WARN(get_logger(), "Comms lost, shifting to park"); break;
+                default:                RCLCPP_WARN(get_logger(), "Brake hold time depleted, shifting to park"); break;
+              }
+            }
+            if (msg.degraded) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded");
+            } else if (degraded_prev) {
+              RCLCPP_INFO(get_logger(), "Brake degraded state cleared");
+            }
+            if (msg.degraded_cmd_type) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded: Unsupported cmd_type");
+            }
+            if (msg.degraded_comms) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded: Lost comms");
+            }
+            if (msg.degraded_internal) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded: Internal");
+            }
+            if (msg.degraded_vehicle) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded: Vehicle");
+            }
+            if (msg.degraded_actuator) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded: Actuator");
+            }
+            if (msg.fault_power) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake fault: Drive-By-Wire power voltage");
+            }
+            if (msg.fault_comms) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake fault: Lost comms");
+            }
+            if (msg.fault_internal) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake fault: Internal fault");
+            }
+            if (msg.fault_vehicle) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake fault: Fault in vehicle");
+            }
+            if (msg.fault_actuator) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake fault: Fault in actuator");
+            }
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring brake report 2 with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring brake report 2 with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring brake report 2 with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_thrtl_rpt_2_.ID:
-        if (msg_can->dlc == sizeof(msg_thrtl_rpt_2_)) {
-          bool degraded_prev = msg_thrtl_rpt_2_.degraded;
-          memcpy(&msg_thrtl_rpt_2_, msg_can->data.data(), sizeof(msg_thrtl_rpt_2_));
-          const auto &msg = msg_thrtl_rpt_2_;
-          if (msg.validCrc()) {
-            if (msg_thrtl_rpt_2_rc_.valid(msg, msg_can->header.stamp)) {
-              ds_dbw_msgs::msg::ThrottleDiagnostics out;
-              out.header.stamp = msg_can->header.stamp;
-              out.degraded = msg_thrtl_rpt_2_.degraded;
-              out.degraded_cmd_type = msg_thrtl_rpt_2_.degraded_cmd_type;
-              out.degraded_comms = msg_thrtl_rpt_2_.degraded_comms;
-              out.degraded_internal = msg_thrtl_rpt_2_.degraded_internal;
-              out.degraded_vehicle = msg_thrtl_rpt_2_.degraded_vehicle;
-              out.degraded_sensor = msg_thrtl_rpt_2_.degraded_sensor;
-              out.degraded_comms_dbw = msg_thrtl_rpt_3_.degraded_comms_dbw;
-              out.degraded_comms_dbw_gateway = msg_thrtl_rpt_3_.degraded_comms_dbw_gateway;
-              out.degraded_comms_dbw_steer = msg_thrtl_rpt_3_.degraded_comms_dbw_steer;
-              out.degraded_comms_dbw_brake = msg_thrtl_rpt_3_.degraded_comms_dbw_brake;
-              out.degraded_comms_dbw_gear = msg_thrtl_rpt_3_.degraded_comms_dbw_gear;
-              out.degraded_control_performance = msg_thrtl_rpt_3_.degraded_control_performance;
-              out.degraded_param_mismatch = msg_thrtl_rpt_3_.degraded_param_mismatch;
-              out.degraded_vehicle_speed = msg_thrtl_rpt_3_.degraded_vehicle_speed;
-              out.degraded_aped_feedback = msg_thrtl_rpt_3_.degraded_aped_feedback;
-              out.degraded_actuator_pedal_sensor = msg_thrtl_rpt_3_.degraded_actuator_pedal_sensor;
-              out.degraded_calibration = msg_thrtl_rpt_3_.degraded_calibration;
-              out.fault = msg_thrtl_rpt_1_.fault;
-              out.fault_power = msg_thrtl_rpt_2_.fault_power;
-              out.fault_comms = msg_thrtl_rpt_2_.fault_comms;
-              out.fault_internal = msg_thrtl_rpt_2_.fault_internal;
-              out.fault_vehicle = msg_thrtl_rpt_2_.fault_vehicle;
-              out.fault_sensor = msg_thrtl_rpt_2_.fault_sensor;
-              out.fault_comms_dbw = msg_thrtl_rpt_3_.fault_comms_dbw;
-              out.fault_comms_dbw_gateway = msg_thrtl_rpt_3_.fault_comms_dbw_gateway;
-              out.fault_comms_dbw_steer = msg_thrtl_rpt_3_.fault_comms_dbw_steer;
-              out.fault_comms_dbw_brake = msg_thrtl_rpt_3_.fault_comms_dbw_brake;
-              out.fault_comms_dbw_gear = msg_thrtl_rpt_3_.fault_comms_dbw_gear;
-              out.fault_vehicle_speed = msg_thrtl_rpt_3_.fault_vehicle_speed;
-              out.fault_aped_sensor_1 = msg_thrtl_rpt_3_.fault_aped_sensor_1;
-              out.fault_aped_sensor_2 = msg_thrtl_rpt_3_.fault_aped_sensor_2;
-              out.fault_aped_sensor_mismatch = msg_thrtl_rpt_3_.fault_aped_sensor_mismatch;
-              out.fault_actuator_pedal_sensor = msg_thrtl_rpt_3_.fault_actuator_pedal_sensor;
-              out.fault_control_performance = msg_thrtl_rpt_3_.fault_control_performance;
-              out.fault_param_mismatch = msg_thrtl_rpt_3_.fault_param_mismatch;
-              out.fault_param_limits = msg_thrtl_rpt_3_.fault_param_limits;
-              out.fault_calibration = msg_thrtl_rpt_3_.fault_calibration;
-              pub_thrtl_diag_->publish(out);
-              if (msg_thrtl_rpt_2_.cmd_src == CmdSrc::Remote && !remote_control_printed_) {
-                remote_control_printed_ = true;
-                RCLCPP_INFO(get_logger(), "Remote control activated");
-              }
-              if (msg_steer_rpt_2_.cmd_src != CmdSrc::Remote
-               && msg_brake_rpt_2_.cmd_src != CmdSrc::Remote
-               && msg_thrtl_rpt_2_.cmd_src != CmdSrc::Remote && remote_control_printed_) {
-                remote_control_printed_ = false;
-                RCLCPP_INFO(get_logger(), "Remote control deactivated");
-              }
-              if (msg.degraded) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle degraded");
-              } else if (degraded_prev) {
-                RCLCPP_INFO(get_logger(), "Throttle degraded state cleared");
-              }
-              if (msg.degraded_cmd_type) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle degraded: Unsupported cmd_type");
-              }
-              if (msg.degraded_comms) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle degraded: Lost comms");
-              }
-              if (msg.degraded_internal) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle degraded: Internal");
-              }
-              if (msg.degraded_vehicle) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle degraded: Vehicle");
-              }
-              if (msg.degraded_sensor) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle degraded: Sensor");
-              }
-              if (msg.fault_power) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle fault: Drive-By-Wire power voltage");
-              }
-              if (msg.fault_comms) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle fault: Lost comms");
-              }
-              if (msg.fault_internal) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle fault: Internal fault");
-              }
-              if (msg.fault_vehicle) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle fault: Fault in vehicle");
-              }
-              if (msg.fault_sensor) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle fault: Fault in sensor");
-              }
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring throttle report 2 with repeated rolling counter value");
+      case MsgThrtlReport2::ID:
+        if (msg_can->dlc == sizeof(MsgThrtlReport2)) {
+          auto &recv = msg_thrtl_rpt_2_;
+          bool degraded_prev = recv.valid(stamp) && recv.msg().degraded;
+          if (recv.receive(*(MsgThrtlReport2*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            ds_dbw_msgs::msg::ThrottleDiagnostics out;
+            out.header.stamp = msg_can->header.stamp;
+            if (msg_thrtl_rpt_1_.valid(stamp)) {
+              out.fault = msg_thrtl_rpt_1_.msg().fault;
             }
-          } else {
+            out.degraded = msg.degraded;
+            out.degraded_cmd_type = msg.degraded_cmd_type;
+            out.degraded_comms = msg.degraded_comms;
+            out.degraded_internal = msg.degraded_internal;
+            out.degraded_vehicle = msg.degraded_vehicle;
+            out.degraded_sensor = msg.degraded_sensor;
+            out.fault_power = msg.fault_power;
+            out.fault_comms = msg.fault_comms;
+            out.fault_internal = msg.fault_internal;
+            out.fault_vehicle = msg.fault_vehicle;
+            out.fault_sensor = msg.fault_sensor;
+            if (msg_thrtl_rpt_3_.valid(stamp)) {
+              const auto &msg3 = msg_thrtl_rpt_3_.msg();
+              out.degraded_comms_dbw = msg3.degraded_comms_dbw;
+              out.degraded_comms_dbw_gateway = msg3.degraded_comms_dbw_gateway;
+              out.degraded_comms_dbw_steer = msg3.degraded_comms_dbw_steer;
+              out.degraded_comms_dbw_brake = msg3.degraded_comms_dbw_brake;
+              out.degraded_comms_dbw_gear = msg3.degraded_comms_dbw_gear;
+              out.degraded_control_performance = msg3.degraded_control_performance;
+              out.degraded_param_mismatch = msg3.degraded_param_mismatch;
+              out.degraded_vehicle_speed = msg3.degraded_vehicle_speed;
+              out.degraded_aped_feedback = msg3.degraded_aped_feedback;
+              out.degraded_actuator_pedal_sensor = msg3.degraded_actuator_pedal_sensor;
+              out.degraded_calibration = msg3.degraded_calibration;
+              out.fault_comms_dbw = msg3.fault_comms_dbw;
+              out.fault_comms_dbw_gateway = msg3.fault_comms_dbw_gateway;
+              out.fault_comms_dbw_steer = msg3.fault_comms_dbw_steer;
+              out.fault_comms_dbw_brake = msg3.fault_comms_dbw_brake;
+              out.fault_comms_dbw_gear = msg3.fault_comms_dbw_gear;
+              out.fault_vehicle_speed = msg3.fault_vehicle_speed;
+              out.fault_aped_sensor_1 = msg3.fault_aped_sensor_1;
+              out.fault_aped_sensor_2 = msg3.fault_aped_sensor_2;
+              out.fault_aped_sensor_mismatch = msg3.fault_aped_sensor_mismatch;
+              out.fault_actuator_pedal_sensor = msg3.fault_actuator_pedal_sensor;
+              out.fault_control_performance = msg3.fault_control_performance;
+              out.fault_param_mismatch = msg3.fault_param_mismatch;
+              out.fault_param_limits = msg3.fault_param_limits;
+              out.fault_calibration = msg3.fault_calibration;
+            }
+            pub_thrtl_diag_->publish(out);
+            if (!remote_control_printed_ && msg.cmd_src == CmdSrc::Remote) {
+              remote_control_printed_ = true;
+              RCLCPP_INFO(get_logger(), "Remote control activated");
+            }
+            if (remote_control_printed_ && msg.cmd_src != CmdSrc::Remote
+             && msg_steer_rpt_2_.valid(stamp) && msg_steer_rpt_2_.msg().cmd_src != CmdSrc::Remote
+             && msg_brake_rpt_2_.valid(stamp) && msg_brake_rpt_2_.msg().cmd_src != CmdSrc::Remote) {
+              remote_control_printed_ = false;
+              RCLCPP_INFO(get_logger(), "Remote control deactivated");
+            }
+            if (msg.degraded) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle degraded");
+            } else if (degraded_prev) {
+              RCLCPP_INFO(get_logger(), "Throttle degraded state cleared");
+            }
+            if (msg.degraded_cmd_type) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle degraded: Unsupported cmd_type");
+            }
+            if (msg.degraded_comms) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle degraded: Lost comms");
+            }
+            if (msg.degraded_internal) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle degraded: Internal");
+            }
+            if (msg.degraded_vehicle) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle degraded: Vehicle");
+            }
+            if (msg.degraded_sensor) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle degraded: Sensor");
+            }
+            if (msg.fault_power) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle fault: Drive-By-Wire power voltage");
+            }
+            if (msg.fault_comms) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle fault: Lost comms");
+            }
+            if (msg.fault_internal) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle fault: Internal fault");
+            }
+            if (msg.fault_vehicle) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle fault: Fault in vehicle");
+            }
+            if (msg.fault_sensor) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle fault: Fault in sensor");
+            }
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring throttle report 2 with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring throttle report 2 with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring throttle report 2 with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_gear_rpt_2_.ID:
-        if (msg_can->dlc == sizeof(msg_gear_rpt_2_)) {
-          bool degraded_prev = msg_gear_rpt_2_.degraded;
-          memcpy(&msg_gear_rpt_2_, msg_can->data.data(), sizeof(msg_gear_rpt_2_));
-          const auto &msg = msg_gear_rpt_2_;
-          if (msg.validCrc()) {
-            if (msg_gear_rpt_2_rc_.valid(msg, msg_can->header.stamp)) {
-              ds_dbw_msgs::msg::GearDiagnostics out;
-              out.header.stamp = msg_can->header.stamp;
-              out.degraded = msg_gear_rpt_2_.degraded;
-              out.degraded_cmd_type = msg_gear_rpt_2_.degraded_cmd_type;
-              out.degraded_comms = msg_gear_rpt_2_.degraded_comms;
-              out.degraded_internal = msg_gear_rpt_2_.degraded_internal;
-              out.degraded_vehicle = msg_gear_rpt_2_.degraded_vehicle;
-              out.degraded_actuator = msg_gear_rpt_2_.degraded_actuator;
-              out.degraded_comms_dbw = msg_gear_rpt_3_.degraded_comms_dbw;
-              out.degraded_comms_dbw_gateway = msg_gear_rpt_3_.degraded_comms_dbw_gateway;
-              out.degraded_comms_dbw_steer = msg_gear_rpt_3_.degraded_comms_dbw_steer;
-              out.degraded_comms_dbw_brake = msg_gear_rpt_3_.degraded_comms_dbw_brake;
-              out.degraded_comms_dbw_thrtl = msg_gear_rpt_3_.degraded_comms_dbw_thrtl;
-              out.degraded_control_performance = msg_gear_rpt_3_.degraded_control_performance;
-              out.degraded_param_mismatch = msg_gear_rpt_3_.degraded_param_mismatch;
-              out.degraded_comms_vehicle = msg_gear_rpt_3_.degraded_comms_vehicle;
-              out.degraded_comms_vehicle_1 = msg_gear_rpt_3_.degraded_comms_vehicle_1;
-              out.degraded_comms_vehicle_2 = msg_gear_rpt_3_.degraded_comms_vehicle_2;
-              out.degraded_comms_actuator = msg_gear_rpt_3_.degraded_comms_actuator;
-              out.degraded_comms_actuator_1 = msg_gear_rpt_3_.degraded_comms_actuator_1;
-              out.degraded_comms_actuator_2 = msg_gear_rpt_3_.degraded_comms_actuator_2;
-              out.degraded_vehicle_speed = msg_gear_rpt_3_.degraded_vehicle_speed;
-              out.degraded_gear_mismatch = msg_gear_rpt_3_.degraded_gear_mismatch;
-              out.degraded_power = msg_gear_rpt_3_.degraded_power;
-              out.degraded_calibration = msg_gear_rpt_3_.degraded_calibration;
-              out.fault = msg_gear_rpt_1_.fault;
-              out.fault_power = msg_gear_rpt_2_.fault_power;
-              out.fault_comms = msg_gear_rpt_2_.fault_comms;
-              out.fault_internal = msg_gear_rpt_2_.fault_internal;
-              out.fault_vehicle = msg_gear_rpt_2_.fault_vehicle;
-              out.fault_actuator = msg_gear_rpt_2_.fault_actuator;
-              out.fault_comms_dbw = msg_gear_rpt_3_.fault_comms_dbw;
-              out.fault_comms_dbw_gateway = msg_gear_rpt_3_.fault_comms_dbw_gateway;
-              out.fault_comms_dbw_steer = msg_gear_rpt_3_.fault_comms_dbw_steer;
-              out.fault_comms_dbw_brake = msg_gear_rpt_3_.fault_comms_dbw_brake;
-              out.fault_comms_dbw_thrtl = msg_gear_rpt_3_.fault_comms_dbw_thrtl;
-              out.fault_comms_vehicle = msg_gear_rpt_3_.fault_comms_vehicle;
-              out.fault_comms_vehicle_1 = msg_gear_rpt_3_.fault_comms_vehicle_1;
-              out.fault_comms_vehicle_2 = msg_gear_rpt_3_.fault_comms_vehicle_2;
-              out.fault_comms_actuator = msg_gear_rpt_3_.fault_comms_actuator;
-              out.fault_comms_actuator_1 = msg_gear_rpt_3_.fault_comms_actuator_1;
-              out.fault_comms_actuator_2 = msg_gear_rpt_3_.fault_comms_actuator_2;
-              out.fault_vehicle_speed = msg_gear_rpt_3_.fault_vehicle_speed;
-              out.fault_actuator_config = msg_gear_rpt_3_.fault_actuator_config;
-              out.fault_param_mismatch = msg_gear_rpt_3_.fault_param_mismatch;
-              out.fault_calibration = msg_gear_rpt_3_.fault_calibration;
-              pub_gear_diag_->publish(out);
-              if (msg.degraded) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear degraded");
-              } else if (degraded_prev) {
-                RCLCPP_INFO(get_logger(), "Gear degraded state cleared");
-              }
-              if (msg.degraded_cmd_type) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear degraded: Unsupported cmd_type");
-              }
-              if (msg.degraded_comms) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear degraded: Lost comms");
-              }
-              if (msg.degraded_internal) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear degraded: Internal");
-              }
-              if (msg.degraded_vehicle) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear degraded: Vehicle");
-              }
-              if (msg.degraded_actuator) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear degraded: Actuator");
-              }
-              if (msg.fault_power) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear fault: Drive-By-Wire power voltage");
-              }
-              if (msg.fault_comms) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear fault: Lost comms");
-              }
-              if (msg.fault_internal) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear fault: Internal fault");
-              }
-              if (msg.fault_vehicle) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear fault: Fault in vehicle");
-              }
-              if (msg.fault_actuator) {
-                RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear fault: Fault in actuator");
-              }
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring gear report 2 with repeated rolling counter value");
+      case MsgGearReport2::ID:
+        if (msg_can->dlc == sizeof(MsgGearReport2)) {
+          auto &recv = msg_gear_rpt_2_;
+          bool degraded_prev = recv.valid(stamp) && recv.msg().degraded;
+          if (recv.receive(*(MsgGearReport2*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            ds_dbw_msgs::msg::GearDiagnostics out;
+            out.header.stamp = msg_can->header.stamp;
+            if (msg_gear_rpt_1_.valid(stamp)) {
+              out.fault = msg_gear_rpt_1_.msg().fault;
             }
-          } else {
+            out.degraded = msg.degraded;
+            out.degraded_cmd_type = msg.degraded_cmd_type;
+            out.degraded_comms = msg.degraded_comms;
+            out.degraded_internal = msg.degraded_internal;
+            out.degraded_vehicle = msg.degraded_vehicle;
+            out.degraded_actuator = msg.degraded_actuator;
+            out.fault_power = msg.fault_power;
+            out.fault_comms = msg.fault_comms;
+            out.fault_internal = msg.fault_internal;
+            out.fault_vehicle = msg.fault_vehicle;
+            out.fault_actuator = msg.fault_actuator;
+            if (msg_gear_rpt_3_.valid(stamp)) {
+              const auto &msg3 = msg_gear_rpt_3_.msg();
+              out.degraded_comms_dbw = msg3.degraded_comms_dbw;
+              out.degraded_comms_dbw_gateway = msg3.degraded_comms_dbw_gateway;
+              out.degraded_comms_dbw_steer = msg3.degraded_comms_dbw_steer;
+              out.degraded_comms_dbw_brake = msg3.degraded_comms_dbw_brake;
+              out.degraded_comms_dbw_thrtl = msg3.degraded_comms_dbw_thrtl;
+              out.degraded_control_performance = msg3.degraded_control_performance;
+              out.degraded_param_mismatch = msg3.degraded_param_mismatch;
+              out.degraded_comms_vehicle = msg3.degraded_comms_vehicle;
+              out.degraded_comms_vehicle_1 = msg3.degraded_comms_vehicle_1;
+              out.degraded_comms_vehicle_2 = msg3.degraded_comms_vehicle_2;
+              out.degraded_comms_actuator = msg3.degraded_comms_actuator;
+              out.degraded_comms_actuator_1 = msg3.degraded_comms_actuator_1;
+              out.degraded_comms_actuator_2 = msg3.degraded_comms_actuator_2;
+              out.degraded_vehicle_speed = msg3.degraded_vehicle_speed;
+              out.degraded_gear_mismatch = msg3.degraded_gear_mismatch;
+              out.degraded_power = msg3.degraded_power;
+              out.degraded_calibration = msg3.degraded_calibration;
+              out.fault_comms_dbw = msg3.fault_comms_dbw;
+              out.fault_comms_dbw_gateway = msg3.fault_comms_dbw_gateway;
+              out.fault_comms_dbw_steer = msg3.fault_comms_dbw_steer;
+              out.fault_comms_dbw_brake = msg3.fault_comms_dbw_brake;
+              out.fault_comms_dbw_thrtl = msg3.fault_comms_dbw_thrtl;
+              out.fault_comms_vehicle = msg3.fault_comms_vehicle;
+              out.fault_comms_vehicle_1 = msg3.fault_comms_vehicle_1;
+              out.fault_comms_vehicle_2 = msg3.fault_comms_vehicle_2;
+              out.fault_comms_actuator = msg3.fault_comms_actuator;
+              out.fault_comms_actuator_1 = msg3.fault_comms_actuator_1;
+              out.fault_comms_actuator_2 = msg3.fault_comms_actuator_2;
+              out.fault_vehicle_speed = msg3.fault_vehicle_speed;
+              out.fault_actuator_config = msg3.fault_actuator_config;
+              out.fault_param_mismatch = msg3.fault_param_mismatch;
+              out.fault_calibration = msg3.fault_calibration;
+            }
+            pub_gear_diag_->publish(out);
+            if (msg.degraded) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear degraded");
+            } else if (degraded_prev) {
+              RCLCPP_INFO(get_logger(), "Gear degraded state cleared");
+            }
+            if (msg.degraded_cmd_type) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear degraded: Unsupported cmd_type");
+            }
+            if (msg.degraded_comms) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear degraded: Lost comms");
+            }
+            if (msg.degraded_internal) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear degraded: Internal");
+            }
+            if (msg.degraded_vehicle) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear degraded: Vehicle");
+            }
+            if (msg.degraded_actuator) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear degraded: Actuator");
+            }
+            if (msg.fault_power) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear fault: Drive-By-Wire power voltage");
+            }
+            if (msg.fault_comms) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear fault: Lost comms");
+            }
+            if (msg.fault_internal) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear fault: Internal fault");
+            }
+            if (msg.fault_vehicle) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear fault: Fault in vehicle");
+            }
+            if (msg.fault_actuator) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear fault: Fault in actuator");
+            }
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring gear report 2 with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring gear report 2 with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring gear report 2 with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_steer_rpt_3_.ID:
-        if (msg_can->dlc == sizeof(msg_steer_rpt_3_)) {
-          memcpy(&msg_steer_rpt_3_, msg_can->data.data(), sizeof(msg_steer_rpt_3_));
-          const auto &msg = msg_steer_rpt_3_;
-          if (msg.validCrc()) {
+      case MsgSteerReport3::ID:
+        if (msg_can->dlc == sizeof(MsgSteerReport3)) {
+          auto &recv = msg_steer_rpt_3_;
+          if (recv.receive(*(MsgSteerReport3*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
             if (msg.degraded_comms_dbw) {
               RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Steering degraded: Lost comms with other Drive-By-Wire module(s)");
             }
@@ -1814,13 +1826,12 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
             }
             if (msg.fault_calibration) {
               const char *txt = "Steering calibration fault";
-              if (firmware_.get(Platform::FORD_CD4,  Module::Gateway).valid()
-               || firmware_.get(Platform::FORD_P5,   Module::Gateway).valid()
-               || firmware_.get(Platform::FORD_T6,   Module::Gateway).valid()
-               || firmware_.get(Platform::FORD_U6,   Module::Gateway).valid()
-               || firmware_.get(Platform::FORD_CD5,  Module::Gateway).valid()
-               || firmware_.get(Platform::FORD_GE1,  Module::Gateway).valid()
-               || firmware_.get(Platform::FORD_P702, Module::Gateway).valid()) {
+              if (firmware_.get(Platform::FORD_CD4,   Module::Gateway).valid()
+               || firmware_.get(Platform::FORD_U6,    Module::Gateway).valid()
+               || firmware_.get(Platform::FORD_CD5,   Module::Gateway).valid()
+               || firmware_.get(Platform::FORD_GE1,   Module::Gateway).valid()
+               || firmware_.get(Platform::FORD_P702,  Module::Gateway).valid()
+               || firmware_.get(Platform::FORD_P702R, Module::Gateway).valid()) {
                 txt = "Steering calibration fault. Drive at least 25 mph for at least 10 seconds in a straight line.";
               } else if (firmware_.get(Platform::FCA_RU,  Module::Gateway).valid()
                       || firmware_.get(Platform::FCA_WK2, Module::Gateway).valid()) {
@@ -1841,11 +1852,11 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
         }
         break;
 
-      case msg_brake_rpt_3_.ID:
-        if (msg_can->dlc == sizeof(msg_brake_rpt_3_)) {
-          memcpy(&msg_brake_rpt_3_, msg_can->data.data(), sizeof(msg_brake_rpt_3_));
-          const auto &msg = msg_brake_rpt_3_;
-          if (msg.validCrc()) {
+      case MsgBrakeReport3::ID:
+        if (msg_can->dlc == sizeof(MsgBrakeReport3)) {
+          auto &recv = msg_brake_rpt_3_;
+          if (recv.receive(*(MsgBrakeReport3*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
             if (msg.degraded_comms_dbw) {
               RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded: Lost comms with other Drive-By-Wire module(s)");
             }
@@ -1882,6 +1893,9 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
             if (msg.degraded_vehicle_speed) {
               RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded: Vehicle speed");
             }
+            if (msg.degraded_bped_feedback) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded: Lost brake pedal feedback");
+            }
             if (msg.degraded_btsi_stuck_low) {
               RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded: BTSI stuck low");
             }
@@ -1896,6 +1910,9 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
             }
             if (msg.degraded_actuator_2) {
               RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded: Actuator 2");
+            }
+            if (msg.degraded_actuator_warm) {
+              RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded: Actuator warm");
             }
             if (msg.degraded_calibration) {
               RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Brake degraded: Calibration");
@@ -1971,11 +1988,11 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
         }
         break;
 
-      case msg_thrtl_rpt_3_.ID:
-        if (msg_can->dlc == sizeof(msg_thrtl_rpt_3_)) {
-          memcpy(&msg_thrtl_rpt_3_, msg_can->data.data(), sizeof(msg_thrtl_rpt_3_));
-          const auto &msg = msg_thrtl_rpt_3_;
-          if (msg.validCrc()) {
+      case MsgThrtlReport3::ID:
+        if (msg_can->dlc == sizeof(MsgThrtlReport3)) {
+          auto &recv = msg_thrtl_rpt_3_;
+          if (recv.receive(*(MsgThrtlReport3*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
             if (msg.degraded_comms_dbw) {
               RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Throttle degraded: Lost comms with other Drive-By-Wire module(s)");
             }
@@ -2059,11 +2076,11 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
         }
         break;
 
-      case msg_gear_rpt_3_.ID:
-        if (msg_can->dlc == sizeof(msg_gear_rpt_3_)) {
-          memcpy(&msg_gear_rpt_3_, msg_can->data.data(), sizeof(msg_gear_rpt_3_));
-          const auto &msg = msg_gear_rpt_3_;
-          if (msg.validCrc()) {
+      case MsgGearReport3::ID:
+        if (msg_can->dlc == sizeof(MsgGearReport3)) {
+          auto &recv = msg_gear_rpt_3_;
+          if (recv.receive(*(MsgGearReport3*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
             if (msg.degraded_comms_dbw) {
               RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 10e3, "Gear degraded: Lost comms with other Drive-By-Wire module(s)");
             }
@@ -2169,15 +2186,16 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
         }
         break;
 
-      case msg_tire_pressure_.ID:
-        if (msg_can->dlc == sizeof(msg_tire_pressure_)) {
-          memcpy(&msg_tire_pressure_, msg_can->data.data(), sizeof(msg_tire_pressure_));
-          const auto &msg = msg_tire_pressure_;
+      case MsgTirePressure::ID:
+        if (msg_can->dlc == sizeof(MsgTirePressure)) {
+          auto &recv = msg_tire_pressure_;
+          recv.receive(*(MsgTirePressure*)msg_can->data.data(), stamp);
+          const auto &msg = recv.msg();
           ds_dbw_msgs::msg::TirePressures out;
           out.header.stamp = msg_can->header.stamp;
           out.front_left  = msg.frontLeftKPa();
           out.front_right = msg.frontRightKPa();
-          out.rear_left   = msg.rearRightKPa();
+          out.rear_left   = msg.rearLeftKPa();
           out.rear_right  = msg.rearRightKPa();
           out.spare  = msg.spareKPa();
           pub_tire_pressures_->publish(out);
@@ -2186,42 +2204,70 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
         }
         break;
 
-      case msg_fuel_level_.ID:
-        if (msg_can->dlc == sizeof(msg_fuel_level_)) {
-          memcpy(&msg_fuel_level_, msg_can->data.data(), sizeof(msg_fuel_level_));
-          const auto &msg = msg_fuel_level_;
-          if (msg.validCrc()) {
-            if (msg_fuel_level_rc_.valid(msg, msg_can->header.stamp)) {
-              ds_dbw_msgs::msg::FuelLevel out;
-              out.header.stamp = msg_can->header.stamp;
-              out.fuel_level = msg.fuelLevelPercent();
-              out.fuel_range = msg.fuelRangeKm();
-              out.odometer = msg.odometerKm();
-              pub_fuel_level_->publish(out);
-            } else {
-              RCLCPP_WARN(get_logger(), "Ignoring fuel level with repeated rolling counter value");
-            }
-          } else {
+      case MsgFuelLevel::ID:
+        if (msg_can->dlc == sizeof(MsgFuelLevel)) {
+          auto &recv = msg_fuel_level_;
+          if (recv.receive(*(MsgFuelLevel*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            ds_dbw_msgs::msg::FuelLevel out;
+            out.header.stamp = msg_can->header.stamp;
+            out.fuel_level = msg.fuelLevelPercent();
+            out.fuel_range = msg.fuelRangeKm();
+            out.odometer = msg.odometerKm();
+            pub_fuel_level_->publish(out);
+          } else if (!recv.validCrc()) {
             RCLCPP_WARN(get_logger(), "Ignoring fuel level with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring fuel level with repeated rolling counter value");
           }
         } else {
           RCLCPP_WARN(get_logger(), "Ignoring fuel level with invalid size of %u", msg_can->dlc);
         }
         break;
 
-      case msg_gps_lat_long_.ID:
-        if (msg_can->dlc == sizeof(msg_gps_lat_long_)) {
-          memcpy(&msg_gps_lat_long_, msg_can->data.data(), sizeof(msg_gps_lat_long_));
-          const auto &msg = msg_gps_lat_long_;
-          if (msg.validCrc()) {
+      case MsgTrafficSignInfo::ID:
+        if (msg_can->dlc == sizeof(MsgTrafficSignInfo)) {
+          auto &recv = msg_traffic_sign_info_;
+          if (recv.receive(*(MsgTrafficSignInfo*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
+            static_assert((uint8_t)MsgTrafficSignInfo::Status::Unknown == ds_dbw_msgs::msg::TrafficSignInfo::STATUS_UNKNOWN);
+            static_assert((uint8_t)MsgTrafficSignInfo::Status::Off == ds_dbw_msgs::msg::TrafficSignInfo::STATUS_OFF);
+            static_assert((uint8_t)MsgTrafficSignInfo::Status::Active == ds_dbw_msgs::msg::TrafficSignInfo::STATUS_ACTIVE);
+            static_assert((uint8_t)MsgTrafficSignInfo::Status::Error == ds_dbw_msgs::msg::TrafficSignInfo::STATUS_ERROR);
+            static_assert((uint8_t)MsgTrafficSignInfo::Unit::Unknown == ds_dbw_msgs::msg::TrafficSignInfo::UNIT_UNKNOWN);
+            static_assert((uint8_t)MsgTrafficSignInfo::Unit::Kph == ds_dbw_msgs::msg::TrafficSignInfo::UNIT_KPH);
+            static_assert((uint8_t)MsgTrafficSignInfo::Unit::Mph == ds_dbw_msgs::msg::TrafficSignInfo::UNIT_MPH);
+            ds_dbw_msgs::msg::TrafficSignInfo out;
+            out.header.stamp = msg_can->header.stamp;
+            out.status = (uint8_t)msg.status;
+            out.camera_used = msg.camera_used;
+            out.navigation_used = msg.navigation_used;
+            out.speed_units = (uint8_t)msg.speed_units;
+            out.speed_limit = msg.speedLimit();
+            pub_traffic_sign_info_->publish(out);
+          } else if (!recv.validCrc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring traffic sign info with invalid CRC");
+          } else if (!recv.validRc()) {
+            RCLCPP_WARN(get_logger(), "Ignoring traffic sign info with repeated rolling counter value");
+          }
+        } else {
+          RCLCPP_WARN(get_logger(), "Ignoring traffic sign info with invalid size of %u", msg_can->dlc);
+        }
+        break;
+
+      case MsgGpsLatLong::ID:
+        if (msg_can->dlc == sizeof(MsgGpsLatLong)) {
+          auto &recv = msg_gps_lat_long_;
+          if (recv.receive(*(MsgGpsLatLong*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
             using NavSatStatus = sensor_msgs::msg::NavSatStatus;
             sensor_msgs::msg::NavSatFix out;
             out.header.stamp = msg_can->header.stamp;
             out.status.status = msg.latitudeValid() && msg.longitudeValid() ? NavSatStatus::STATUS_FIX : NavSatStatus::STATUS_NO_FIX;
             out.latitude = msg.latitudeDeg();
             out.longitude = msg.longitudeDeg();
-            if (true) { // msg_gps_altitude_.valid()
-              out.altitude = msg_gps_altitude_.altitudeM();
+            if (msg_gps_altitude_.valid(stamp)) {
+              out.altitude = msg_gps_altitude_.msg().altitudeM();
             } else {
               out.altitude = NAN;
             }
@@ -2234,13 +2280,13 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
         }
         break;
 
-      case msg_gps_altitude_.ID:
-        if (msg_can->dlc == sizeof(msg_gps_altitude_)) {
-          memcpy(&msg_gps_altitude_, msg_can->data.data(), sizeof(msg_gps_altitude_));
-          const auto &msg = msg_gps_altitude_;
-          if (msg.validCrc()) {
+      case MsgGpsAltitude::ID:
+        if (msg_can->dlc == sizeof(MsgGpsAltitude)) {
+          auto &recv = msg_gps_altitude_;
+          if (recv.receive(*(MsgGpsAltitude*)msg_can->data.data(), stamp)) {
             // Used with MsgGpsLatLong
             #if 0
+            const auto &msg = recv.msg();
             RCLCPP_INFO(get_logger(), "GPS altitude: %0.2f m, heading: %6.2f deg, speed: %5.2f kph, satellites: %u",
                 msg.altitudeM(), msg.headingDeg(), msg.speedKph(), msg.num_sats);
             #endif
@@ -2252,19 +2298,19 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
         }
         break;
 
-      case msg_gps_time_.ID:
-        if (msg_can->dlc == sizeof(msg_gps_time_)) {
-          memcpy(&msg_gps_time_, msg_can->data.data(), sizeof(msg_gps_time_));
-          const auto &msg = msg_gps_time_;
-          if (msg.validCrc()) {
+      case MsgGpsTime::ID:
+        if (msg_can->dlc == sizeof(MsgGpsTime)) {
+          auto &recv = msg_gps_time_;
+          if (recv.receive(*(MsgGpsTime*)msg_can->data.data(), stamp)) {
+            const auto &msg = recv.msg();
             if (msg.valid) {
               struct tm datetime;
-              datetime.tm_year = msg_gps_time_.utc_year_2000 + (2000 - 1900);
-              datetime.tm_mon = msg_gps_time_.utc_month;
-              datetime.tm_mday = msg_gps_time_.utc_day + 1;
-              datetime.tm_hour = msg_gps_time_.utc_hours;
-              datetime.tm_min = msg_gps_time_.utc_minutes;
-              datetime.tm_sec = msg_gps_time_.utc_seconds;
+              datetime.tm_year = msg.utc_year_2000 + (2000 - 1900);
+              datetime.tm_mon = msg.utc_month;
+              datetime.tm_mday = msg.utc_day + 1;
+              datetime.tm_hour = msg.utc_hours;
+              datetime.tm_min = msg.utc_minutes;
+              datetime.tm_sec = msg.utc_seconds;
               datetime.tm_isdst = -1;
               sensor_msgs::msg::TimeReference out;
               out.header.stamp = msg_can->header.stamp;
@@ -2273,12 +2319,12 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
               out.source = "Vehicle GPS";
               pub_gps_time_->publish(out);
               RCLCPP_INFO_ONCE(get_logger(), "GPS UTC date/time %04u/%02u/%02u %02u:%02u:%02u",
-                  msg_gps_time_.utc_year_2000 + 2000u,
-                  msg_gps_time_.utc_month + 1,
-                  msg_gps_time_.utc_day + 1,
-                  msg_gps_time_.utc_hours,
-                  msg_gps_time_.utc_minutes,
-                  msg_gps_time_.utc_seconds);
+                  msg.utc_year_2000 + 2000u,
+                  msg.utc_month + 1,
+                  msg.utc_day + 1,
+                  msg.utc_hours,
+                  msg.utc_minutes,
+                  msg.utc_seconds);
             }
           } else {
             RCLCPP_WARN(get_logger(), "Ignoring GPS time with invalid CRC");
@@ -2290,8 +2336,9 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
 
       case MsgSteerParamHash::ID:
         if (msg_can->dlc >= sizeof(MsgSteerParamHash)) {
-          MsgSteerParamHash msg;
-          memcpy(&msg, msg_can->data.data(), sizeof(msg));
+          auto &recv = msg_steer_param_hash_;
+          recv.receive(*(MsgSteerParamHash*)msg_can->data.data(), stamp);
+          const auto &msg = recv.msg();
           if (param_hash_.steer != msg.hash) {
             param_hash_.steer = msg.hash;
             RCLCPP_INFO(get_logger(), "Steer param hash: %08X", msg.hash);
@@ -2300,8 +2347,9 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
         break;
       case MsgBrakeParamHash::ID:
         if (msg_can->dlc >= sizeof(MsgBrakeParamHash)) {
-          MsgBrakeParamHash msg;
-          memcpy(&msg, msg_can->data.data(), sizeof(msg));
+          auto &recv = msg_brake_param_hash_;
+          recv.receive(*(MsgBrakeParamHash*)msg_can->data.data(), stamp);
+          const auto &msg = recv.msg();
           if (param_hash_.brake != msg.hash) {
             param_hash_.brake = msg.hash;
             RCLCPP_INFO(get_logger(), "Brake param hash: %08X", msg.hash);
@@ -2310,8 +2358,9 @@ void DbwNode::recvCAN(const can_msgs::msg::Frame::ConstSharedPtr msg_can) {
         break;
       case MsgThrtlParamHash::ID:
         if (msg_can->dlc >= sizeof(MsgThrtlParamHash)) {
-          MsgThrtlParamHash msg;
-          memcpy(&msg, msg_can->data.data(), sizeof(msg));
+          auto &recv = msg_thrtl_param_hash_;
+          recv.receive(*(MsgThrtlParamHash*)msg_can->data.data(), stamp);
+          const auto &msg = recv.msg();
           if (param_hash_.thrtl != msg.hash) {
             param_hash_.thrtl = msg.hash;
             RCLCPP_INFO(get_logger(), "Throttle param hash: %08X", msg.hash);
@@ -2652,7 +2701,6 @@ void DbwNode::recvCanMisc(const std::vector<can_msgs::msg::Frame::ConstSharedPtr
   const MsgMiscReport2 &msg2 = *reinterpret_cast<const MsgMiscReport2 *>(msgs[1]->data.data());
   ds_dbw_msgs::msg::MiscReport out;
   out.header.stamp = msgs[0]->header.stamp;
-  out.turn_signal.value = (uint8_t)msg1.turn_signal;
   out.parking_brake.value = (uint8_t)msg1.parking_brake;
   out.passenger_detect = msg1.pasngr_detect;
   out.passenger_airbag = msg1.pasngr_airbag;
@@ -2718,6 +2766,7 @@ void DbwNode::recvSteeringCmd(const ds_dbw_msgs::msg::SteeringCmd::ConstSharedPt
   static_assert(ds_dbw_msgs::msg::SteeringCmd::CMD_YAW_RATE  == (uint8_t)MsgSteerCmd::CmdType::YawRate);
   static_assert(ds_dbw_msgs::msg::SteeringCmd::CMD_PERCENT   == (uint8_t)MsgSteerCmd::CmdType::Percent);
   static_assert(ds_dbw_msgs::msg::SteeringCmd::CMD_CALIBRATE == (uint8_t)MsgSteerCmd::CmdType::Calibrate);
+  auto stamp = ros_clock_.now();
   if (std::isnan(msg->cmd) && msg->cmd_type != ds_dbw_msgs::msg::SteeringCmd::CMD_NONE) {
     RCLCPP_WARN(get_logger(), "NaN steering command");
   }
@@ -2754,12 +2803,14 @@ void DbwNode::recvSteeringCmd(const ds_dbw_msgs::msg::SteeringCmd::ConstSharedPt
       msg_steer_cmd_.setCmdAngleDeg(msg->cmd);
       break;
   }
-  if (modeSyncNone()) {
-    msg_steer_cmd_.enable = msg->enable && enabled();
-    msg_steer_cmd_.clear = msg->clear || (enable_ && msg_steer_rpt_1_.override_latched);
+  bool override_latched = msg_steer_rpt_1_.valid(stamp)
+                       && msg_steer_rpt_1_.msg().override_latched;
+  if (modeSyncNone(stamp)) {
+    msg_steer_cmd_.enable = msg->enable && enabled(stamp);
+    msg_steer_cmd_.clear = msg->clear || (enable_ && override_latched);
   } else {
     msg_steer_cmd_.enable = msg->enable;
-    msg_steer_cmd_.clear = msg->clear || (msg_steer_cmd_clear_ && msg_steer_rpt_1_.override_latched);
+    msg_steer_cmd_.clear = msg->clear || (msg_steer_cmd_clear_ && override_latched);
   }
   msg_steer_cmd_.ignore = msg->ignore;
   msg_steer_cmd_.rc++;
@@ -2778,6 +2829,7 @@ void DbwNode::recvBrakeCmd(const ds_dbw_msgs::msg::BrakeCmd::ConstSharedPtr msg)
   static_assert(ds_dbw_msgs::msg::BrakeCmd::CMD_ACCEL_AEB == (uint8_t)MsgBrakeCmd::CmdType::AccelAeb);
   static_assert(ds_dbw_msgs::msg::BrakeCmd::CMD_PEDAL_RAW == (uint8_t)MsgBrakeCmd::CmdType::PedalRaw);
   static_assert(ds_dbw_msgs::msg::BrakeCmd::CMD_PERCENT   == (uint8_t)MsgBrakeCmd::CmdType::Percent);
+  auto stamp = ros_clock_.now();
   if (std::isnan(msg->cmd) && msg->cmd_type != ds_dbw_msgs::msg::BrakeCmd::CMD_NONE) {
     RCLCPP_WARN(get_logger(), "NaN brake command");
   }
@@ -2818,12 +2870,14 @@ void DbwNode::recvBrakeCmd(const ds_dbw_msgs::msg::BrakeCmd::ConstSharedPtr msg)
       msg_brake_cmd_.setCmdPercent(msg->cmd, msg->rate_inc, msg->rate_dec);
       break;
   }
-  if (modeSyncNone()) {
-    msg_brake_cmd_.enable = msg->enable && enabled();
-    msg_brake_cmd_.clear = msg->clear || (enable_ && msg_brake_rpt_1_.override_latched);
+  bool override_latched = msg_brake_rpt_1_.valid(stamp)
+                       && msg_brake_rpt_1_.msg().override_latched;
+  if (modeSyncNone(stamp)) {
+    msg_brake_cmd_.enable = msg->enable && enabled(stamp);
+    msg_brake_cmd_.clear = msg->clear || (enable_ && override_latched);
   } else {
     msg_brake_cmd_.enable = msg->enable;
-    msg_brake_cmd_.clear = msg->clear || (msg_brake_cmd_clear_ && msg_brake_rpt_1_.override_latched);
+    msg_brake_cmd_.clear = msg->clear || (msg_brake_cmd_clear_ && override_latched);
   }
   msg_brake_cmd_.ignore = msg->ignore;
   msg_brake_cmd_.rc++;
@@ -2837,6 +2891,7 @@ void DbwNode::recvThrottleCmd(const ds_dbw_msgs::msg::ThrottleCmd::ConstSharedPt
   static_assert(ds_dbw_msgs::msg::ThrottleCmd::CMD_NONE      == (uint8_t)MsgThrtlCmd::CmdType::None);
   static_assert(ds_dbw_msgs::msg::ThrottleCmd::CMD_PEDAL_RAW == (uint8_t)MsgThrtlCmd::CmdType::PedalRaw);
   static_assert(ds_dbw_msgs::msg::ThrottleCmd::CMD_PERCENT   == (uint8_t)MsgThrtlCmd::CmdType::Percent);
+  auto stamp = ros_clock_.now();
   if (std::isnan(msg->cmd) && msg->cmd_type != ds_dbw_msgs::msg::ThrottleCmd::CMD_NONE) {
     RCLCPP_WARN(get_logger(), "NaN throttle command");
   }
@@ -2857,12 +2912,14 @@ void DbwNode::recvThrottleCmd(const ds_dbw_msgs::msg::ThrottleCmd::ConstSharedPt
       msg_thrtl_cmd_.setCmdPercent(msg->cmd, msg->rate_inc, msg->rate_dec);
       break;
   }
-  if (modeSyncNone()) {
-    msg_thrtl_cmd_.enable = msg->enable && enabled();
-    msg_thrtl_cmd_.clear = msg->clear || (enable_ && msg_thrtl_rpt_1_.override_latched);
+  bool override_latched = msg_thrtl_rpt_1_.valid(stamp)
+                       && msg_thrtl_rpt_1_.msg().override_latched;
+  if (modeSyncNone(stamp)) {
+    msg_thrtl_cmd_.enable = msg->enable && enabled(stamp);
+    msg_thrtl_cmd_.clear = msg->clear || (enable_ && override_latched);
   } else {
     msg_thrtl_cmd_.enable = msg->enable;
-    msg_thrtl_cmd_.clear = msg->clear || (msg_thrtl_cmd_clear_ && msg_thrtl_rpt_1_.override_latched);
+    msg_thrtl_cmd_.clear = msg->clear || (msg_thrtl_cmd_clear_ && override_latched);
   }
   msg_thrtl_cmd_.ignore = msg->ignore;
   msg_thrtl_cmd_.rc++;
@@ -2879,9 +2936,12 @@ void DbwNode::recvGearCmd(const ds_dbw_msgs::msg::GearCmd::ConstSharedPtr msg) {
   static_assert(ds_dbw_msgs::msg::Gear::NEUTRAL   == (uint8_t)Gear::Neutral);
   static_assert(ds_dbw_msgs::msg::Gear::DRIVE     == (uint8_t)Gear::Drive);
   static_assert(ds_dbw_msgs::msg::Gear::LOW       == (uint8_t)Gear::Low);
+  static_assert(ds_dbw_msgs::msg::Gear::MANUAL    == (uint8_t)Gear::Manual);
+  static_assert(ds_dbw_msgs::msg::Gear::SPORT     == (uint8_t)Gear::Sport);
   static_assert(ds_dbw_msgs::msg::Gear::CALIBRATE == (uint8_t)Gear::Calibrate);
+  auto stamp = ros_clock_.now();
   msg_gear_cmd_.reset();
-  if (!modeSyncNone() || enabled()) {
+  if (!modeSyncNone(stamp) || enabled(stamp)) {
     switch (msg->cmd.value) {
       default:
         RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 1e3, "Unknown gear command: %u", msg->cmd.value);
@@ -2892,6 +2952,8 @@ void DbwNode::recvGearCmd(const ds_dbw_msgs::msg::GearCmd::ConstSharedPtr msg) {
       case ds_dbw_msgs::msg::Gear::NEUTRAL:   msg_gear_cmd_.cmd = Gear::Neutral;   break;
       case ds_dbw_msgs::msg::Gear::DRIVE:     msg_gear_cmd_.cmd = Gear::Drive;     break;
       case ds_dbw_msgs::msg::Gear::LOW:       msg_gear_cmd_.cmd = Gear::Low;       break;
+      case ds_dbw_msgs::msg::Gear::MANUAL:    msg_gear_cmd_.cmd = Gear::Manual;    break;
+      case ds_dbw_msgs::msg::Gear::SPORT:     msg_gear_cmd_.cmd = Gear::Sport;     break;
       case ds_dbw_msgs::msg::Gear::CALIBRATE: msg_gear_cmd_.cmd = Gear::Calibrate; break;
     }
   } else if (msg->cmd.value == ds_dbw_msgs::msg::Gear::CALIBRATE) {
@@ -2902,8 +2964,9 @@ void DbwNode::recvGearCmd(const ds_dbw_msgs::msg::GearCmd::ConstSharedPtr msg) {
 }
 
 void DbwNode::recvTurnSignalCmd(const ds_dbw_msgs::msg::TurnSignalCmd::ConstSharedPtr msg) {
+  auto stamp = ros_clock_.now();
   msg_turn_signal_cmd_.reset();
-  if (!modeSyncNone() || enabled()) {
+  if (!modeSyncNone(stamp) || enabled(stamp)) {
     switch (msg->cmd.value) {
       default:
         RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 1e3, "Unknown turn signal command: %u", msg->cmd.value);
@@ -2920,16 +2983,9 @@ void DbwNode::recvTurnSignalCmd(const ds_dbw_msgs::msg::TurnSignalCmd::ConstShar
 }
 
 void DbwNode::recvMiscCmd(const ds_dbw_msgs::msg::MiscCmd::ConstSharedPtr msg) {
+  auto stamp = ros_clock_.now();
   msg_misc_cmd_.reset();
-  if (!modeSyncNone() || enabled()) {
-    switch (msg->turn_signal.value) {
-      default:
-        RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 1e3, "Unknown turn signal command: %u", msg->turn_signal.value);
-        [[fallthrough]];
-      case ds_dbw_msgs::msg::TurnSignal::NONE:  msg_misc_cmd_.turn_signal_cmd = TurnSignal::None;  break;
-      case ds_dbw_msgs::msg::TurnSignal::LEFT:  msg_misc_cmd_.turn_signal_cmd = TurnSignal::Left;  break;
-      case ds_dbw_msgs::msg::TurnSignal::RIGHT: msg_misc_cmd_.turn_signal_cmd = TurnSignal::Right; break;
-    }
+  if (!modeSyncNone(stamp) || enabled(stamp)) {
     switch (msg->parking_brake.value) {
       default:
         RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 1e3, "Unknown parking brake command: %u", msg->parking_brake.value);
@@ -2967,6 +3023,7 @@ void DbwNode::recvUlcCmd(const ds_dbw_msgs::msg::UlcCmd::ConstSharedPtr msg) {
   static_assert(ds_dbw_msgs::msg::UlcCmd::CMD_NONE     == (uint8_t)MsgUlcCmd::CmdType::None);
   static_assert(ds_dbw_msgs::msg::UlcCmd::CMD_VELOCITY == (uint8_t)MsgUlcCmd::CmdType::Velocity);
   static_assert(ds_dbw_msgs::msg::UlcCmd::CMD_ACCEL    == (uint8_t)MsgUlcCmd::CmdType::Accel);
+  auto stamp = ros_clock_.now();
   msg_ulc_cmd_.reset();
   switch (msg->cmd_type) {
     default:
@@ -2987,12 +3044,14 @@ void DbwNode::recvUlcCmd(const ds_dbw_msgs::msg::UlcCmd::ConstSharedPtr msg) {
   msg_ulc_cmd_.enable_shift = msg->enable_shift;
   msg_ulc_cmd_.enable_shift_park = msg->enable_shift_park;
   msg_ulc_cmd_.coast_decel = msg->coast_decel ? MsgUlcCmd::CoastDecel::NoBrakes : MsgUlcCmd::CoastDecel::UseBrakes;
-  if (modeSyncNone()) {
-    msg_ulc_cmd_.enable = msg->enable && enabled();
-    msg_ulc_cmd_.clear = msg->clear || (enable_ && msg_ulc_rpt_.override_latched);
+  bool override_latched = msg_ulc_rpt_.valid(stamp)
+                       && msg_ulc_rpt_.msg().override_latched;
+  if (modeSyncNone(stamp)) {
+    msg_ulc_cmd_.enable = msg->enable && enabled(stamp);
+    msg_ulc_cmd_.clear = msg->clear || (enable_ && override_latched);
   } else {
     msg_ulc_cmd_.enable = msg->enable;
-    msg_ulc_cmd_.clear = msg->clear || (msg_ulc_cmd_clear_ && msg_ulc_rpt_.override_latched);
+    msg_ulc_cmd_.clear = msg->clear || (msg_ulc_cmd_clear_ && override_latched);
   }
   msg_ulc_cmd_.rc++;
   msg_ulc_cmd_.setCrc();
@@ -3000,7 +3059,6 @@ void DbwNode::recvUlcCmd(const ds_dbw_msgs::msg::UlcCmd::ConstSharedPtr msg) {
   pub_can_->publish(FrameFromDbw(msg_ulc_cmd_));
 
   // Transmit config on change and repeat at slow rate
-  auto stamp = ros_clock_.now();
   bool timeout = timeoutMs(stamp, msg_ulc_cfg_stamp_, msg_ulc_cfg_.PERIOD_MS);
   auto msg_ulc_cfg = msg_ulc_cfg_;
   msg_ulc_cfg.reset();
@@ -3058,12 +3116,17 @@ void DbwNode::recvSteeringCalibrate(const std_msgs::msg::Empty::ConstSharedPtr) 
 }
 
 bool DbwNode::publishDbwEnabled(bool force) {
-  bool en = enabled();
+  auto stamp = ros_clock_.now();
+  bool valid = msg_system_rpt_.valid(stamp)
+            || msg_steer_rpt_1_.valid(stamp)
+            || msg_brake_rpt_1_.valid(stamp)
+            || msg_thrtl_rpt_1_.valid(stamp);
+  bool en = enabled(stamp);
   bool change = prev_enable_ != en;
   if (prev_enable_ && !en) {
     enable_ = false;
   }
-  if (change || force) {
+  if (valid && (change || force)) {
     std_msgs::msg::Bool msg;
     msg.data = en;
     pub_sys_enable_->publish(msg);
@@ -3078,24 +3141,25 @@ void DbwNode::timerCallback() {
     RCLCPP_WARN(get_logger(), "DBW system enable status changed unexpectedly");
   }
 
-  if (modeSyncNone()) {
+  auto stamp = ros_clock_.now();
+  if (modeSyncNone(stamp)) {
     // Request latched overrides to be cleared
     if (enable_) {
-      if (msg_steer_rpt_1_.override_latched) {
+      if (msg_steer_rpt_1_.valid(stamp) && msg_steer_rpt_1_.msg().override_latched) {
         msg_steer_cmd_.reset();
         msg_steer_cmd_.clear = true;
         msg_steer_cmd_.rc++;
         msg_steer_cmd_.setCrc();
         pub_can_->publish(FrameFromDbw(msg_steer_cmd_));
       }
-      if (msg_brake_rpt_1_.override_latched) {
+      if (msg_brake_rpt_1_.valid(stamp) && msg_brake_rpt_1_.msg().override_latched) {
         msg_brake_cmd_.reset();
         msg_brake_cmd_.clear = true;
         msg_brake_cmd_.rc++;
         msg_brake_cmd_.setCrc();
         pub_can_->publish(FrameFromDbw(msg_brake_cmd_));
       }
-      if (msg_thrtl_rpt_1_.override_latched) {
+      if (msg_thrtl_rpt_1_.valid(stamp) && msg_thrtl_rpt_1_.msg().override_latched) {
         msg_thrtl_cmd_.reset();
         msg_thrtl_cmd_.clear = true;
         msg_thrtl_cmd_.rc++;
@@ -3119,14 +3183,15 @@ void DbwNode::timerCallback() {
 
 void DbwNode::enableSystem() {
   if (!enable_) {
-    if (fault()) {
-      if (msg_steer_rpt_1_.fault) {
+    auto stamp = ros_clock_.now();
+    if (fault(stamp)) {
+      if (msg_steer_rpt_1_.valid(stamp) && msg_steer_rpt_1_.msg().fault) {
         RCLCPP_WARN(get_logger(), "DBW system not enabled. Steering fault.");
       }
-      if (msg_brake_rpt_1_.fault) {
+      if (msg_brake_rpt_1_.valid(stamp) && msg_brake_rpt_1_.msg().fault) {
         RCLCPP_WARN(get_logger(), "DBW system not enabled. Braking fault.");
       }
-      if (msg_thrtl_rpt_1_.fault) {
+      if (msg_thrtl_rpt_1_.valid(stamp) && msg_thrtl_rpt_1_.msg().fault) {
         RCLCPP_WARN(get_logger(), "DBW system not enabled. Throttle fault.");
       }
     } else {
@@ -3170,6 +3235,7 @@ void DbwNode::warnRejectGear(uint8_t reject) {
   static_assert((uint8_t)MsgGearReport1::Reject::Vehicle         == ds_dbw_msgs::msg::GearReject::VEHICLE);
   if (gear_reject_ != reject) {
     gear_reject_ = reject;
+    auto stamp = ros_clock_.now();
     switch (reject) {
       case ds_dbw_msgs::msg::GearReject::SHIFT_IN_PROGRESS:
         RCLCPP_WARN(get_logger(), "Gear shift rejected: Shift in progress");
@@ -3178,10 +3244,14 @@ void DbwNode::warnRejectGear(uint8_t reject) {
         RCLCPP_WARN(get_logger(), "Gear shift rejected: Override on brake, throttle, or steering");
         break;
       case ds_dbw_msgs::msg::GearReject::BRAKE_HOLD:
-        switch (msg_brake_rpt_2_.cmd_src) {
-          case CmdSrc::Button:    RCLCPP_WARN(get_logger(), "Gear shift rejected: External brake shift-to-park active, stay in park"); break;
-          case CmdSrc::CommsLoss: RCLCPP_WARN(get_logger(), "Gear shift rejected: Comms loss shift-to-park active, stay in park"); break;
-          default:                RCLCPP_WARN(get_logger(), "Gear shift rejected: Brake hold time depleted, stay in park"); break;
+        if (msg_brake_rpt_2_.valid(stamp)) {
+          switch (msg_brake_rpt_2_.msg().cmd_src) {
+            case CmdSrc::Button:    RCLCPP_WARN(get_logger(), "Gear shift rejected: External brake shift-to-park active, stay in park"); break;
+            case CmdSrc::CommsLoss: RCLCPP_WARN(get_logger(), "Gear shift rejected: Comms loss shift-to-park active, stay in park"); break;
+            default:                RCLCPP_WARN(get_logger(), "Gear shift rejected: Brake hold time depleted, stay in park"); break;
+          }
+        } else {
+          RCLCPP_WARN(get_logger(), "Gear shift rejected: Unknown reason, stay in park");
         }
         break;
       case ds_dbw_msgs::msg::GearReject::VEHICLE_SPEED:
