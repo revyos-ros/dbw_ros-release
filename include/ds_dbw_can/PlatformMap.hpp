@@ -40,6 +40,7 @@
 
 // Standard libraries
 #include <map>
+#include <vector>
 
 namespace ds_dbw_can {
 
