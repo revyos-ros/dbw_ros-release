@@ -1,11 +1,14 @@
 /*********************************************************************
- * C++ unit test for dbw_common/ModuleVersion.h
+ * C++ unit test for ds_dbw_can/ModuleVersion.hpp
  *********************************************************************/
-
-#include <gtest/gtest.h>
 
 // File under test
 #include <ds_dbw_can/ModuleVersion.hpp>
+
+// Google testing suite
+#include <gtest/gtest.h>
+
+// Shorter names
 using namespace ds_dbw_can;
 
 // Test empty constructor
