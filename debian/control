@@ -1,0 +1,13 @@
+Source: ros-jazzy-ds-dbw
+Section: misc
+Priority: optional
+Maintainer: Kevin Hallenbeck <khallenbeck@dataspeedinc.com>
+Build-Depends: debhelper (>= 9.0.0), ros-jazzy-ament-cmake, ros-jazzy-ros-workspace
+Homepage: http://dataspeedinc.com
+Standards-Version: 3.9.2
+
+Package: ros-jazzy-ds-dbw
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-jazzy-ds-dbw-can, ros-jazzy-ds-dbw-joystick-demo, ros-jazzy-ds-dbw-msgs, ros-jazzy-ros-workspace
+Description: Interface to the Dataspeed Inc.
+ Drive-By-Wire kits
