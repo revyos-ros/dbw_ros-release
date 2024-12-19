@@ -67,7 +67,9 @@ private:
   rclcpp::Publisher<ds_dbw_msgs::msg::ThrottleCmd>::SharedPtr pub_thrtl_;
   rclcpp::Publisher<ds_dbw_msgs::msg::GearCmd>::SharedPtr pub_gear_;
   rclcpp::Publisher<ds_dbw_msgs::msg::TurnSignalCmd>::SharedPtr pub_turn_signal_;
+  #if 0
   rclcpp::Publisher<ds_dbw_msgs::msg::MiscCmd>::SharedPtr pub_misc_;
+  #endif
   rclcpp::Publisher<std_msgs::msg::Empty>::SharedPtr pub_enable_;
   rclcpp::Publisher<std_msgs::msg::Empty>::SharedPtr pub_disable_;
 
