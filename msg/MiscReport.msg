@@ -1,8 +1,5 @@
 std_msgs/Header header
 
-# Turn Signal enumeration
-TurnSignal turn_signal
-
 # Parking brake
 PrkBrkStat parking_brake
 

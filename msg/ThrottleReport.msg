@@ -7,6 +7,7 @@ float32 percent_cmd     # Percent (0-100)
 float32 percent_output  # Percent (0-100)
 
 #
+bool yield_request # Request brakes to yield to throttle
 bool limiting_value
 bool limiting_rate
 bool external_control
