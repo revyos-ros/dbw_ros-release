@@ -16,6 +16,7 @@ float32 percent_output  # Percent (0-100)
 
 #
 bool btsi_cmd
+bool yield_request # Request throttle to yield to brakes
 bool limiting_value
 bool limiting_rate
 bool external_control
