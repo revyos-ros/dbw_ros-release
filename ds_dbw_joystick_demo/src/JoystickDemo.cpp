@@ -169,7 +169,9 @@ JoystickDemo::JoystickDemo(const rclcpp::NodeOptions &options) : rclcpp::Node("j
   }
   if (misc_) {
     pub_turn_signal_ = create_publisher<TurnSignalCmd>("turn_signal/cmd", 1);
+    #if 0
     pub_misc_ = create_publisher<MiscCmd>("misc/cmd", 1);
+    #endif
   }
   if (enable_) {
     pub_enable_ = create_publisher<std_msgs::msg::Empty>("enable", 1);
@@ -331,12 +333,13 @@ void JoystickDemo::cmdCallback() {
     msg_turn_signal.cmd.value = data_.turn_signal_cmd;
     pub_turn_signal_->publish(msg_turn_signal);
 
+    #if 0
     MiscCmd msg_misc;
-    msg_misc.turn_signal.value = data_.turn_signal_cmd;
     // msg_misc.parking_brake.value = 0;
     // msg_misc.door.select = data_.door_select;
     // msg_misc.door.action = data_.door_action;
     pub_misc_->publish(msg_misc);
+    #endif
   }
 }
 
