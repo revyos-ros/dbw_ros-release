@@ -45,13 +45,12 @@ namespace ds_dbw_can {
 // Vehicle platform enumeration
 enum class Platform : uint8_t {
   FORD_CD4       = 0x00, // Lincoln MKZ, Ford Fusion/Mondeo
-  FORD_P5        = 0x01, // Ford F150 (2015-2020)
-  FORD_T6        = 0x03, // Ford Ranger
   FORD_U6        = 0x04, // Lincoln Aviator
   FORD_CD5       = 0x05, // Ford Edge, Lincoln Nautilus
   FORD_GE1       = 0x06, // Ford Mustang Mach-E
   FORD_P702      = 0x07, // Ford F150 (2021+)
   FORD_V3        = 0x08, // Ford E-Transit
+  FORD_P702R     = 0x09, // Ford F150 Raptor (2024+)
   FCA_RU         = 0x10, // Chrysler Pacifica
   FCA_WK2        = 0x11, // Jeep Grand Cherokee
   POLARIS_GEM    = 0x80, // Polaris GEM
@@ -76,13 +75,12 @@ enum class Module : uint16_t {
 constexpr static const char* platformToString(Platform x) {
   switch (x) {
     case Platform::FORD_CD4:       return "FORD_CD4";
-    case Platform::FORD_P5:        return "FORD_P5";
-    case Platform::FORD_T6:        return "FORD_T6";
     case Platform::FORD_U6:        return "FORD_U6";
     case Platform::FORD_CD5:       return "FORD_CD5";
     case Platform::FORD_GE1:       return "FORD_GE1";
     case Platform::FORD_P702:      return "FORD_P702";
     case Platform::FORD_V3:        return "FORD_V3";
+    case Platform::FORD_P702R:     return "FORD_P702R";
     case Platform::FCA_RU:         return "FCA_RU";
     case Platform::FCA_WK2:        return "FCA_WK2";
     case Platform::POLARIS_GEM:    return "POLARIS_GEM";

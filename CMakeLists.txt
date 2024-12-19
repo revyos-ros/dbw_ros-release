@@ -71,6 +71,14 @@ install(DIRECTORY launch
 
 if(BUILD_TESTING)
   find_package(ament_cmake_gtest REQUIRED)
+
+  ament_add_gtest(${PROJECT_NAME}_test_can_msg_recv "tests/test_can_msg_recv.cpp")
+  target_include_directories(${PROJECT_NAME}_test_can_msg_recv PUBLIC "include")
+  ament_target_dependencies(${PROJECT_NAME}_test_can_msg_recv
+    rclcpp
+    std_msgs
+  )
+
   ament_add_gtest(${PROJECT_NAME}_test_module_version "tests/test_module_version.cpp")
   target_include_directories(${PROJECT_NAME}_test_module_version PUBLIC "include")
 

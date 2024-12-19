@@ -1,13 +1,15 @@
 /*********************************************************************
- * C++ unit test for dbw_common/PV.h
+ * C++ unit test for ds_dbw_can/PlatformVersion.hpp
  *********************************************************************/
-
-#include <gtest/gtest.h>
 
 // File under test
 #include <ds_dbw_can/PlatformVersion.hpp>
-using namespace ds_dbw_can;
 
+// Google testing suite
+#include <gtest/gtest.h>
+
+// Shorter names
+using namespace ds_dbw_can;
 using PV = PlatformVersion;
 using MV = ModuleVersion;
 
@@ -81,13 +83,12 @@ TEST(PlatformVersion, operators) {
 // Test platformToString()
 TEST(PlatformVersion, platformToString) {
   EXPECT_STREQ("FORD_CD4",       platformToString(Platform::FORD_CD4));
-  EXPECT_STREQ("FORD_P5",        platformToString(Platform::FORD_P5));
-  EXPECT_STREQ("FORD_T6",        platformToString(Platform::FORD_T6));
   EXPECT_STREQ("FORD_U6",        platformToString(Platform::FORD_U6));
   EXPECT_STREQ("FORD_CD5",       platformToString(Platform::FORD_CD5));
   EXPECT_STREQ("FORD_GE1",       platformToString(Platform::FORD_GE1));
   EXPECT_STREQ("FORD_P702",      platformToString(Platform::FORD_P702));
   EXPECT_STREQ("FORD_V3",        platformToString(Platform::FORD_V3));
+  EXPECT_STREQ("FORD_P702R",     platformToString(Platform::FORD_P702R));
   EXPECT_STREQ("FCA_RU",         platformToString(Platform::FCA_RU));
   EXPECT_STREQ("FCA_WK2",        platformToString(Platform::FCA_WK2));
   EXPECT_STREQ("POLARIS_GEM",    platformToString(Platform::POLARIS_GEM));
