@@ -55,7 +55,7 @@ class ThrottleSweep(Node):
     # Parameters
     self.i = -1
     self.start = 15.0
-    self.end = 80.0
+    self.end = 85.0
     self.resolution = 0.2
     self.duration = 1.0
     self.get_logger().info('Recording throttle pedal data every ' + str(self.duration) + ' seconds from ' + str(self.start) + ' to ' + str(self.end) + ' with ' + str(self.resolution) + ' increments.')
