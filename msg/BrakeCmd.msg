@@ -15,6 +15,12 @@ bool clear
 # Ignore future overrides
 bool ignore
 
+# Prechage AEB (only for platforms using ACC/AEB for braking)
+uint8 precharge_aeb
+uint8 PRECHARGE_NONE=0
+uint8 PRECHARGE_LEVEL_1=1
+uint8 PRECHARGE_LEVEL_2=2
+
 # Command types
 uint8 CMD_NONE=0        # Command  Rate-limit  Range     Note
 uint8 CMD_PRESSURE=1    # bar      bar/s       0 to max  Pressure in bar
