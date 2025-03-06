@@ -22,6 +22,7 @@ bool degraded_vehicle
 bool degraded_vehicle_speed
 bool degraded_actuator
 bool degraded_gear_mismatch
+bool degraded_stuck_in_neutral
 bool degraded_power
 bool degraded_calibration
 
