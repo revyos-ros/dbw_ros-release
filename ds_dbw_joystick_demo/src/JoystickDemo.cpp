@@ -271,6 +271,7 @@ void JoystickDemo::cmdCallback() {
     msg.cmd = data_.brake_joy * (brake_max_ - brake_min_) + brake_min_;
     msg.rate_inc = brake_inc_;
     msg.rate_dec = brake_dec_;
+    msg.precharge_aeb = data_.brake_precharge;
     pub_brake_->publish(msg);
   }
 
@@ -379,6 +380,13 @@ void JoystickDemo::recvJoy(const sensor_msgs::msg::Joy::ConstSharedPtr msg) {
   // Brake
   if (data_.joy_brake_valid) {
     data_.brake_joy = 0.5 - 0.5 * msg->axes[AXIS_BRAKE];
+  }
+  if (msg->axes[AXIS_BRAKE_PRECHARGE] < -0.5) {
+    data_.brake_precharge = ds_dbw_msgs::msg::BrakeCmd::PRECHARGE_LEVEL_2;
+  } else if (msg->axes[AXIS_BRAKE_PRECHARGE] > 0.5) {
+    data_.brake_precharge = ds_dbw_msgs::msg::BrakeCmd::PRECHARGE_LEVEL_1;
+  } else {
+    data_.brake_precharge = ds_dbw_msgs::msg::BrakeCmd::PRECHARGE_NONE;
   }
 
   // Gear

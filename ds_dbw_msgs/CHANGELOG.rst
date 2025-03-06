@@ -2,6 +2,17 @@
 Changelog for package ds_dbw_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.3.2 (2025-02-18)
+------------------
+* Add drive mode command and report messages
+* Add AEB precharge control to brake command and joystick demo
+* Add date/time to EcuInfo message
+* Add PropulsionInfo message
+* Add RBA, CTA, and auto brake hold statuses to DriverAssist message
+* Add signals to apply brakes for gear calibration
+* Add gear stuck in neutral diagnostics
+* Contributors: Gabriel Oetjens, Kevin Hallenbeck
+
 2.3.1 (2024-12-18)
 ------------------
 
