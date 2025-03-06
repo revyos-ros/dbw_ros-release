@@ -183,6 +183,7 @@ private:
     uint8_t turn_signal_cmd = 0;
     uint8_t door_select = 0;
     uint8_t door_action = 0;
+    uint8_t brake_precharge = 0;
     bool steering_mult = false;
     bool steering_cal = false;
     bool joy_throttle_valid = false;
@@ -211,6 +212,7 @@ private:
     AXIS_STEER_1 = 0,
     AXIS_STEER_2 = 3,
     AXIS_TURN_SIG = 6,
+    AXIS_BRAKE_PRECHARGE = 7,
     AXIS_DOOR_SELECT = 6,
     AXIS_DOOR_ACTION = 7,
     AXIS_COUNT_D = 6,
