@@ -9,8 +9,10 @@ find_package(geometry_msgs REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/fields/AmbientLight.msg"
+  "msg/fields/AwdMode.msg"
   "msg/fields/CmdSrc.msg"
   "msg/fields/DecelSrc.msg"
+  "msg/fields/DiffLock.msg"
   "msg/fields/DriveMode.msg"
   "msg/fields/Gear.msg"
   "msg/fields/GearNum.msg"
@@ -32,6 +34,8 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/BrakeDiagnostics.msg"
   "msg/BrakeInfo.msg"
   "msg/BrakeReport.msg"
+  "msg/DriveModeCmd.msg"
+  "msg/DriveModeReport.msg"
   "msg/DriverAssist.msg"
   "msg/EcuInfo.msg"
   "msg/EyeTracker.msg"
@@ -44,6 +48,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/MonitorCmd.msg"
   "msg/MonitorReport.msg"
   "msg/MonitorThrottle.msg"
+  "msg/PropulsionInfo.msg"
   "msg/SteeringCmd.msg"
   "msg/SteeringDiagnostics.msg"
   "msg/SteeringOffset.msg"
