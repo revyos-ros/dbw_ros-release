@@ -2,12 +2,13 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <array>
 
 namespace j1850 {
 
 static constexpr uint8_t CRC_SEED = 0xFF;
 
-static constexpr uint8_t CRC_TABLE[] = {
+static constexpr std::array<uint8_t, 256> CRC_TABLE = {
     0x00, 0x1d, 0x3a, 0x27, 0x74, 0x69, 0x4e, 0x53,
     0xe8, 0xf5, 0xd2, 0xcf, 0x9c, 0x81, 0xa6, 0xbb,
     0xcd, 0xd0, 0xf7, 0xea, 0xb9, 0xa4, 0x83, 0x9e,
@@ -46,26 +47,21 @@ static constexpr uint8_t crc8_byte(uint8_t data, uint8_t crc = CRC_SEED) {
     return CRC_TABLE[crc ^ data];
 }
 
-[[maybe_unused]]
-static constexpr uint8_t crc8(const uint8_t *data, size_t len) {
+static constexpr uint8_t crc8(const uint8_t *data, size_t size) {
     uint8_t crc = CRC_SEED;
-    for (size_t i = 0; i < len; i++) {
+    for (size_t i = 0; i < size; i++) {
         crc = crc8_byte(data[i], crc);
     }
     return ~crc;
 }
 
 [[maybe_unused]]
-static uint8_t crc8(const void *ptr, size_t len) {
-    const uint8_t *data = (uint8_t *)ptr;
-    uint8_t crc = CRC_SEED;
-    for (size_t i = 0; i < len; i++) {
-        crc = crc8_byte(data[i], crc);
-    }
-    return ~crc;
+static uint8_t crc8(const void *ptr, size_t size) {
+    // Forward to constexpr implementation
+    return crc8((const uint8_t *)ptr, size);
 }
 
-static constexpr uint8_t crc8_can_msg(uint32_t id, bool extended, const uint8_t *data, size_t len) {
+static constexpr uint8_t crc8_can_msg(uint32_t id, bool extended, const uint8_t *data, size_t size) {
     uint8_t crc = CRC_SEED;
     if (extended) {
         crc = crc8_byte(id >> 24, crc);
@@ -73,7 +69,7 @@ static constexpr uint8_t crc8_can_msg(uint32_t id, bool extended, const uint8_t 
     }
     crc = crc8_byte(id >> 8, crc);
     crc = crc8_byte(id >> 0, crc);
-    for (size_t i = 0; i < len; i++) {
+    for (size_t i = 0; i < size; i++) {
         crc = crc8_byte(data[i], crc);
     }
     return ~crc;
@@ -95,6 +91,10 @@ static_assert(0x74 == crc8(TEST, 10));
 static_assert(0xA3 == crc8(TEST, 62));
 static_assert(0xBE == crc8_can_msg(0, false, nullptr, 0));
 static_assert(0x59 == crc8_can_msg(0, true,  nullptr, 0));
+#if 0
+template <auto val> static constexpr bool static_print() { int unused = 0; return true; }
+static_assert(static_print<crc8(TEST, 62)>());
+#endif
 
 } // namespace j1850
 
@@ -114,7 +114,7 @@ void print_SAE_J1850_table() {
         }
         crc_table[i] = crc;
     }
-    printf("static constexpr uint8_t CRC_TABLE[] = {");
+    printf("static constexpr std::array<uint8_t, 256> CRC_TABLE = {");
     for(i = 0; i < sizeof(crc_table); i++){
       printf("%s0x%02x,", i % 8 == 0 ? "\n    " : " ", crc_table[i]);
     }

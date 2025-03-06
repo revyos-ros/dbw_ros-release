@@ -21,3 +21,6 @@ bool control_licensed
 string log_filename # XXXXXX.dbw
 bool log_filesystem_present
 bool log_fault
+
+# Date/time
+builtin_interfaces/Time datetime
