@@ -2,6 +2,11 @@
 Changelog for package ds_dbw_joystick_demo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.3.2 (2025-02-18)
+------------------
+* Add AEB precharge control to brake command and joystick demo
+* Contributors: Kevin Hallenbeck
+
 2.3.1 (2024-12-18)
 ------------------
 
