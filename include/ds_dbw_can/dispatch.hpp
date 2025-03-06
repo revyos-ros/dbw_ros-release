@@ -83,6 +83,7 @@ enum class CmdSrc : uint8_t {
     Button = 3,
     CommsLoss = 4,
     Lockout = 5,
+    Calibration = 6,
 };
 enum class Gear : uint8_t {
     None = 0,
@@ -101,6 +102,37 @@ enum class TurnSignal : uint8_t {
     Right = 2,
     Hazard = 3,
 };
+enum class DriveMode : uint8_t {
+    Unknown = 0,
+    Normal = 1, // Standard
+    Economy = 2,
+    Comfort = 3,
+    Sport = 4,
+    TowHaul = 5,
+    Snow = 6,
+    Sand = 7,
+    Mud = 8,
+    Rock = 9,
+    Baja = 10,
+    Track = 11, // Race
+};
+enum class AwdMode : uint8_t { // All Wheel Drive (AWD) mode
+    Unknown = 0,
+    TwoHigh = 1,  // 2H
+    FourAuto = 2, // 4A
+    FourHigh = 3, // 4H
+    FourLow = 4,  // 4L
+};
+enum class DiffLock : uint8_t {
+    Unknown = 0,
+    Unlocked = 1,
+    Locked = 2,
+};
+// enum class FirmSuspension : uint8_t {
+//     None = 0,
+//     Off = 1,
+//     On = 2,
+// };
 enum class Quality : uint8_t {
     Ok = 0,
     Partial = 1,
@@ -544,6 +576,11 @@ struct MsgBrakeCmd {
         Percent = 14,   // 0.01 %       10 %/s
         Calibrate = 15,
     };
+    enum class Precharge : uint8_t {
+        None = 0,
+        Level1 = 1,
+        Level2 = 2,
+    };
     uint16_t cmd; // Interpretation changes with cmd_type
     CmdType cmd_type :4;
     uint8_t enable :1;
@@ -553,7 +590,8 @@ struct MsgBrakeCmd {
     uint8_t rate_inc; // See cmd_type, 0 for default, 255 for no limit
     uint8_t rate_dec; // See cmd_type, 0 for default, 255 for no limit
     uint8_t :8;
-    uint8_t :4;
+    uint8_t :2;
+    Precharge precharge_aeb :2; // Only for platforms using ACC/AEB for brake control
     uint8_t rc :4;
     uint8_t crc;
     void reset() {
@@ -1784,7 +1822,8 @@ struct MsgGearReport2 {
     uint8_t :8;
     uint8_t :8;
     uint8_t :8;
-    uint8_t :3;
+    uint8_t :2;
+    uint8_t req_brake_cal :1;
     CmdSrc cmd_src :3;
     uint8_t rc :2;
     uint8_t crc;
@@ -1828,7 +1867,8 @@ struct MsgGearReport3 {
     uint8_t :1;
     uint8_t degraded_vehicle_speed :1;
     uint8_t degraded_gear_mismatch :1;
-    uint8_t :4;
+    uint8_t degraded_stuck_in_neutral :1;
+    uint8_t :3;
     uint8_t degraded_power :1;
     uint8_t degraded_calibration :1;
     uint8_t fault_comms_dbw :1;
@@ -2513,20 +2553,7 @@ struct MsgThrtlInfo {
         On = 2,
         Fault = 3,
     };
-    enum class DriveMode : uint8_t {
-        Unknown = 0,
-        Normal = 1,
-        Economy = 2,
-        Comfort = 3,
-        Sport = 4,
-        TowHaul = 5,
-        Snow = 6,
-        Sand = 7,
-        Mud = 8,
-        Rock = 9,
-        Baja = 10,
-        Track = 11,
-    };
+    using DriveMode = ds_dbw_can::DriveMode;
     enum class GearNumber : uint8_t {
         Unknown =   0, // Unknown
         Drive01 =   1, //  1st (Drive)
@@ -2742,6 +2769,129 @@ private:
     }
 };
 static_assert(8 == sizeof(MsgBrakeInfo));
+
+struct MsgPropulsionInfo {
+    static constexpr uint32_t ID = 0x10B;
+    static constexpr size_t PERIOD_MIN = 8;
+    static constexpr size_t PERIOD_MS  = 20;
+    static constexpr size_t PERIOD_MAX = 30;
+    static constexpr size_t TIMEOUT_MS = 200;
+    enum class Oem : uint8_t {
+        Unknown = 0,
+        Ford = 1,
+        Polaris = 2,
+    };
+    union {
+        struct {
+            int16_t propulsion_torque_request; // 4 Nm
+            int16_t propulsion_torque_actual;  // 4 Nm
+            uint16_t :16;
+        } ford;
+        struct {
+            int16_t engine_torque_request; // 0.25 Nm
+            int16_t engine_torque_actual;  // 0.25 Nm
+            uint16_t trans_ratio :12; // 0.01
+            uint16_t :4;
+        } polaris;
+    };
+    Oem oem :3;
+    uint8_t :3;
+    uint8_t rc :2;
+    uint8_t crc;
+    void reset() {
+        uint8_t save = rc;
+        memset(this, 0x00, sizeof(*this));
+        rc = save;
+    }
+    void setFordSignals(int32_t request_nm, int32_t actual_nm) {
+        oem = Oem::Ford;
+        if (request_nm != INT32_MIN) {
+            ford.propulsion_torque_request = std::clamp<int32_t>(request_nm / 4, -INT16_MAX, INT16_MAX);
+        } else {
+            ford.propulsion_torque_request = INT16_MIN;
+        }
+        if (actual_nm != INT32_MIN) {
+            ford.propulsion_torque_actual = std::clamp<int32_t>(actual_nm / 4, -INT16_MAX, INT16_MAX);
+        } else {
+            ford.propulsion_torque_actual = INT16_MIN;
+        }
+    }
+    void setPolarisSignals(float request_nm, float actual_nm, float ratio) {
+        oem = Oem::Polaris;
+        if (std::isfinite(request_nm)) {
+            polaris.engine_torque_request = std::clamp<float>(request_nm * 4, -INT16_MAX, INT16_MAX);
+        } else {
+            polaris.engine_torque_request = INT16_MIN;
+        }
+        if (std::isfinite(actual_nm)) {
+            polaris.engine_torque_actual = std::clamp<float>(actual_nm * 4, -INT16_MAX, INT16_MAX);
+        } else {
+            polaris.engine_torque_actual = INT16_MIN;
+        }
+        if (std::isfinite(ratio)) {
+            polaris.trans_ratio = std::clamp<float>(ratio * 100, 0, (UINT16_MAX >> 4) - 1);
+        } else {
+            polaris.trans_ratio = UINT16_MAX >> 4;
+        }
+    }
+    bool propulsionTorqueRequestValid() const {
+        return oem == Oem::Ford && ford.propulsion_torque_request != INT16_MIN;
+    }
+    float propulsionTorqueRequest() const {
+        if (propulsionTorqueRequestValid()) {
+            return ford.propulsion_torque_request * 4.0f;
+        }
+        return NAN;
+    }
+    bool propulsionTorqueActualValid() const {
+        return oem == Oem::Ford && ford.propulsion_torque_actual != INT16_MIN;
+    }
+    float propulsionTorqueActual() const {
+        if (propulsionTorqueActualValid()) {
+            return ford.propulsion_torque_actual * 4.0f;
+        }
+        return NAN;
+    }
+    bool engineTorqueRequestValid() const {
+        return oem == Oem::Polaris && polaris.engine_torque_request != INT16_MIN;
+    }
+    float engineTorqueRequest() const {
+        if (engineTorqueRequestValid()) {
+            return polaris.engine_torque_request * 0.25f;
+        }
+        return NAN;
+    }
+    bool engineTorqueActualValid() const {
+        return oem == Oem::Polaris && polaris.engine_torque_actual != INT16_MIN;
+    }
+    float engineTorqueActual() const {
+        if (engineTorqueActualValid()) {
+            return polaris.engine_torque_actual * 0.25f;
+        }
+        return NAN;
+    }
+    bool transmissionRatioValid() const {
+        return oem == Oem::Polaris && polaris.trans_ratio != UINT16_MAX >> 4;
+    }
+    float transmissionRatio() const {
+        if (transmissionRatioValid()) {
+            return polaris.trans_ratio * 0.01f;
+        }
+        return NAN;
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validRc(uint8_t rc) const {
+        return rc != this->rc;
+    }
+};
+static_assert(8 == sizeof(MsgPropulsionInfo));
 
 struct MsgSteerOffset {
     static constexpr uint32_t ID = 0x10C;
@@ -3599,6 +3749,130 @@ struct MsgMiscReport2 {
 };
 static_assert(8 == sizeof(MsgMiscReport2));
 
+struct MsgDriveModeCmd {
+    static constexpr uint32_t ID = 0x2C6;
+    static constexpr size_t PERIOD_MS = 50;
+    static constexpr size_t TIMEOUT_MS = 250;
+    DriveMode drive_mode_cmd : 4;
+    DriveMode suspension_mode_cmd :4;
+    AwdMode awd_mode_cmd :3;
+    uint8_t :1;
+    DiffLock rear_diff_cmd :2;
+    DiffLock front_diff_cmd :2;
+    uint8_t :8;
+    uint8_t crc;
+    void reset() {
+        memset(this, 0x00, sizeof(*this));
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+};
+static_assert(4 == sizeof(MsgDriveModeCmd));
+
+struct MsgDriveModeReport1 {
+    static constexpr uint32_t ID = 0x2C7;
+    static constexpr size_t PERIOD_MIN =  20;
+    static constexpr size_t PERIOD_MS  = 100;
+    static constexpr size_t PERIOD_MAX = 125;
+    static constexpr size_t TIMEOUT_MS = 400;
+    DriveMode drive_mode :4;
+    DriveMode drive_mode_cmd :4;
+    DriveMode suspension_mode :4;
+    DriveMode suspension_mode_cmd :4;
+    AwdMode awd_mode :3;
+    uint8_t :1;
+    AwdMode awd_mode_cmd :3;
+    uint8_t :1;
+    DiffLock rear_diff :2;
+    DiffLock rear_diff_cmd :2;
+    DiffLock front_diff :2;
+    DiffLock front_diff_cmd :2;
+    uint8_t :2; // suspension_firm
+    uint8_t :2; // suspension_firm_cmd
+    uint8_t :4;
+    uint8_t :5;
+    uint8_t override_active :1;
+    uint8_t override_other :1;
+    uint8_t :1; // override_latched
+    uint8_t ready :1;
+    uint8_t :1; // enabled
+    uint8_t fault :1;
+    uint8_t :1; // timeout
+    uint8_t bad_crc :1;
+    uint8_t :1; // bad_rc
+    uint8_t rc :2;
+    uint8_t crc;
+    void reset() {
+        uint8_t save = rc;
+        memset(this, 0x00, sizeof(*this));
+        rc = save;
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validRc(uint8_t rc) const {
+        return rc != this->rc;
+    }
+};
+static_assert(8 == sizeof(MsgDriveModeReport1));
+
+struct MsgDriveModeReport2 {
+    static constexpr uint32_t ID = 0x30C;
+    static constexpr size_t PERIOD_MS  = 200;
+    static constexpr size_t TIMEOUT_MS = 1000;
+    uint8_t degraded :1;
+    uint8_t degraded_cmd_type :1;
+    uint8_t degraded_comms_dbw_steer :1;
+    uint8_t degraded_comms_dbw_brake :1;
+    uint8_t degraded_comms_dbw_thrtl :1;
+    uint8_t degraded_comms_vehicle :1;
+    uint8_t degraded_control_performance :1;
+    uint8_t :1;
+    uint8_t :3;
+    uint8_t fault_comms_vehicle :1;
+    uint8_t :4;
+    uint8_t :8;
+    uint8_t :8;
+    uint8_t :8;
+    uint8_t :8;
+    uint8_t support_drive_mode_cmd :1;
+    uint8_t support_suspension_mode_cmd :1;
+    uint8_t support_awd_mode_cmd :1;
+    uint8_t support_rear_diff_cmd :1;
+    uint8_t support_front_diff_cmd :1;
+    uint8_t :1;
+    uint8_t rc :2;
+    uint8_t crc;
+    void reset() {
+        uint8_t save = rc;
+        memset(this, 0x00, sizeof(*this));
+        rc = save;
+    }
+    void setCrc() {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        crc = crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validCrc() const {
+        static_assert(crc8(ID, MSG_NULL, offsetof(typeof(*this), crc)) != 0x00);
+        return crc == crc8(ID, this, offsetof(typeof(*this), crc));
+    }
+    bool validRc(uint8_t rc) const {
+        return rc != this->rc;
+    }
+};
+static_assert(8 == sizeof(MsgDriveModeReport2));
+
 struct MsgDriverAssist {
     static constexpr uint32_t ID = 0x2C8;
     static constexpr size_t PERIOD_MIN =  10;
@@ -3606,8 +3880,10 @@ struct MsgDriverAssist {
     static constexpr size_t TIMEOUT_MS = 350;
     enum class DecelSrc : uint8_t {
         None = 0,
-        AEB = 1,
-        ACC = 2,
+        AEB = 1, // Automated Emergency Braking
+        ACC = 2, // Adaptive Cruise Control
+        RBA = 3, // Reverse Brake Assist
+        CTA = 4, // Cross Traffic Alert
     };
     uint8_t decel; // 0.05 m/s^2
     DecelSrc decel_src :3;
@@ -3628,7 +3904,12 @@ struct MsgDriverAssist {
     uint8_t cta_l_enabled :1;  // Cross Traffic Alert
     uint8_t cta_r_alert :1;    // Cross Traffic Alert
     uint8_t cta_r_enabled :1;  // Cross Traffic Alert
-    uint8_t :6;
+    uint8_t cta_l_brake :1;    // Cross Traffic Alert
+    uint8_t cta_r_brake :1;    // Cross Traffic Alert
+    uint8_t rba_enabled :1;    // Reverse Brake Assist
+    uint8_t rba_active :1;     // Reverse Brake Assist
+    uint8_t hold_enabled :1;   // Auto Brake Hold
+    uint8_t hold_active :1;    // Auto Brake Hold
     uint8_t rc :2;
     uint8_t crc;
     void reset() {
@@ -3915,7 +4196,7 @@ struct MsgEyeTracker {
             attention_pc = UINT8_MAX;
         }
     }
-    float attentionValid() const {
+    bool attentionValid() const {
         return attention_pc != UINT8_MAX;
     }
     float attentionPercent() const {
@@ -4344,6 +4625,7 @@ struct MsgEcuInfo {
         VIN1         = 0x51,
         VIN2         = 0x52,
         Logging      = 0x60,
+        DateTime     = 0x61,
     };
     Mux mux;
     union {
@@ -4381,63 +4663,98 @@ struct MsgEcuInfo {
             uint16_t trials_left;
         } license;
         struct {
-            uint8_t date0;
-            uint8_t date1;
-            uint8_t date2;
-            uint8_t date3;
-            uint8_t date4;
-            uint8_t date5;
-            uint8_t date6;
+            char date0;
+            char date1;
+            char date2;
+            char date3;
+            char date4;
+            char date5;
+            char date6;
         } ldate0;
         struct {
-            uint8_t date7;
-            uint8_t date8;
-            uint8_t date9;
+            char date7;
+            char date8;
+            char date9;
             uint8_t :8;
             uint8_t :8;
             uint8_t :8;
             uint8_t :8;
         } ldate1;
         struct {
-            uint8_t date0;
-            uint8_t date1;
-            uint8_t date2;
-            uint8_t date3;
-            uint8_t date4;
-            uint8_t date5;
-            uint8_t date6;
+            char date0;
+            char date1;
+            char date2;
+            char date3;
+            char date4;
+            char date5;
+            char date6;
         } bdate0;
         struct {
-            uint8_t date7;
-            uint8_t date8;
-            uint8_t date9;
+            char date7;
+            char date8;
+            char date9;
             uint8_t :8;
             uint8_t :8;
             uint8_t :8;
             uint8_t :8;
         } bdate1;
         struct {
-            uint8_t vin00;
-            uint8_t vin01;
-            uint8_t vin02;
-            uint8_t vin03;
-            uint8_t vin04;
-            uint8_t vin05;
-            uint8_t vin06;
+            char vin00;
+            char vin01;
+            char vin02;
+            char vin03;
+            char vin04;
+            char vin05;
+            char vin06;
         } vin0;
         struct {
-            uint8_t vin07;
-            uint8_t vin08;
-            uint8_t vin09;
-            uint8_t vin10;
-            uint8_t vin11;
-            uint8_t vin12;
-            uint8_t vin13;
+            char vin07;
+            char vin08;
+            char vin09;
+            char vin10;
+            char vin11;
+            char vin12;
+            char vin13;
+            unsigned int modelYear() const {
+                switch (vin09) {
+                    case 'A': return 2010;
+                    case 'B': return 2011;
+                    case 'C': return 2012;
+                    case 'D': return 2013;
+                    case 'E': return 2014;
+                    case 'F': return 2015;
+                    case 'G': return 2016;
+                    case 'H': return 2017;
+                    case 'J': return 2018;
+                    case 'K': return 2019;
+                    case 'L': return 2020;
+                    case 'M': return 2021;
+                    case 'N': return 2022;
+                    case 'P': return 2023;
+                    case 'R': return 2024;
+                    case 'S': return 2025;
+                    case 'T': return 2026;
+                    case 'V': return 2027;
+                    case 'W': return 2028;
+                    case 'X': return 2029;
+                    case 'Y': return 2030;
+                    case '1': return 2031;
+                    case '2': return 2032;
+                    case '3': return 2033;
+                    case '4': return 2034;
+                    case '5': return 2035;
+                    case '6': return 2036;
+                    case '7': return 2037;
+                    case '8': return 2038;
+                    case '9': return 2039;
+                    default: return 0;
+                }
+            }
         } vin1;
         struct {
-            uint8_t vin14;
-            uint8_t vin15;
-            uint8_t vin16;
+            char vin14;
+            char vin15;
+            char vin16;
             uint8_t :8;
             uint8_t :8;
             uint8_t :8;
@@ -4455,6 +4772,12 @@ struct MsgEcuInfo {
                 return filename != 0xFFFFFFu;
             }
         } logging;
+        struct {
+            uint8_t :8;
+            uint8_t :8;
+            uint8_t :8;
+            uint32_t timestamp;
+        } datetime;
     };
     void reset() {
         memset(this, 0x00, sizeof(*this));
@@ -4474,7 +4797,7 @@ struct MsgEcuInfoMonitor  : public MsgEcuInfo { static constexpr uint32_t ID = 0
 
 
 // Verify that IDs are unique and in the desired order of priorities (unit test)
-static constexpr std::array<uint32_t, 69> IDS {
+static constexpr std::array<uint32_t, 73> IDS {
     // Primary reports
     MsgSteerReport1::ID,
     MsgBrakeReport1::ID,
@@ -4486,6 +4809,7 @@ static constexpr std::array<uint32_t, 69> IDS {
     MsgVehicleVelocity::ID,
     MsgThrtlInfo::ID,
     MsgBrakeInfo::ID,
+    MsgPropulsionInfo::ID,
     MsgSteerOffset::ID,
     // Commands (remote control)
     MsgSteerCmdRmt::ID,
@@ -4519,6 +4843,8 @@ static constexpr std::array<uint32_t, 69> IDS {
     MsgTurnSignalReport::ID,
     MsgMiscReport1::ID,
     MsgMiscReport2::ID,
+    MsgDriveModeCmd::ID,
+    MsgDriveModeReport1::ID,
     MsgDriverAssist::ID,
     MsgBattery::ID,
     MsgBatteryTraction::ID,
@@ -4529,6 +4855,7 @@ static constexpr std::array<uint32_t, 69> IDS {
     MsgThrtlReport2::ID,
     MsgGearReport2::ID,
     MsgMonitorReport2::ID,
+    MsgDriveModeReport2::ID,
     MsgSteerReport3::ID,
     MsgBrakeReport3::ID,
     MsgThrtlReport3::ID,
