@@ -2,6 +2,21 @@
 Changelog for package ds_dbw_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.3.2 (2025-02-18)
+------------------
+* Bump firmware versions to match 2025/02/18 release package
+* Add drive mode command and report messages
+* Add AEB precharge control to brake command and joystick demo
+* Fix message function return type and update SAE J1850 CRC header
+* Add date/time to EcuInfo message
+* Add PropulsionInfo message
+* Add RBA, CTA, and auto brake hold statuses to DriverAssist message
+* Print model year (calculated from VIN)
+* Add signals to apply brakes for gear calibration
+* Add gear stuck in neutral diagnostics
+* Add support for Polaris RANGER XD 1500 platform
+* Contributors: Gabriel Oetjens, Kevin Hallenbeck
+
 2.3.1 (2024-12-18)
 ------------------
 * Bump firmware versions to match 2024/12/18 release package

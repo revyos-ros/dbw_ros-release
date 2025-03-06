@@ -82,19 +82,20 @@ TEST(PlatformVersion, operators) {
 
 // Test platformToString()
 TEST(PlatformVersion, platformToString) {
-  EXPECT_STREQ("FORD_CD4",       platformToString(Platform::FORD_CD4));
-  EXPECT_STREQ("FORD_U6",        platformToString(Platform::FORD_U6));
-  EXPECT_STREQ("FORD_CD5",       platformToString(Platform::FORD_CD5));
-  EXPECT_STREQ("FORD_GE1",       platformToString(Platform::FORD_GE1));
-  EXPECT_STREQ("FORD_P702",      platformToString(Platform::FORD_P702));
-  EXPECT_STREQ("FORD_V3",        platformToString(Platform::FORD_V3));
-  EXPECT_STREQ("FORD_P702R",     platformToString(Platform::FORD_P702R));
-  EXPECT_STREQ("FCA_RU",         platformToString(Platform::FCA_RU));
-  EXPECT_STREQ("FCA_WK2",        platformToString(Platform::FCA_WK2));
-  EXPECT_STREQ("POLARIS_GEM",    platformToString(Platform::POLARIS_GEM));
-  EXPECT_STREQ("POLARIS_RZRXP",  platformToString(Platform::POLARIS_RZRXP));
-  EXPECT_STREQ("POLARIS_RANGER", platformToString(Platform::POLARIS_RANGER));
-  EXPECT_STREQ("POLARIS_RZRR",   platformToString(Platform::POLARIS_RZRR));
+  EXPECT_STREQ("FORD_CD4",         platformToString(Platform::FORD_CD4));
+  EXPECT_STREQ("FORD_U6",          platformToString(Platform::FORD_U6));
+  EXPECT_STREQ("FORD_CD5",         platformToString(Platform::FORD_CD5));
+  EXPECT_STREQ("FORD_GE1",         platformToString(Platform::FORD_GE1));
+  EXPECT_STREQ("FORD_P702",        platformToString(Platform::FORD_P702));
+  EXPECT_STREQ("FORD_V3",          platformToString(Platform::FORD_V3));
+  EXPECT_STREQ("FORD_P702R",       platformToString(Platform::FORD_P702R));
+  EXPECT_STREQ("FCA_RU",           platformToString(Platform::FCA_RU));
+  EXPECT_STREQ("FCA_WK2",          platformToString(Platform::FCA_WK2));
+  EXPECT_STREQ("POLARIS_GEM",      platformToString(Platform::POLARIS_GEM));
+  EXPECT_STREQ("POLARIS_RZRXP",    platformToString(Platform::POLARIS_RZRXP));
+  EXPECT_STREQ("POLARIS_RANGERXP", platformToString(Platform::POLARIS_RANGERXP));
+  EXPECT_STREQ("POLARIS_RZRR",     platformToString(Platform::POLARIS_RZRR));
+  EXPECT_STREQ("POLARIS_RANGERXD", platformToString(Platform::POLARIS_RANGERXD));
   for (size_t i = 0x90; i <= UINT8_MAX; i++) {
     EXPECT_STREQ("UNKNOWN", platformToString((Platform)i)) << "i = " << i;
   }
