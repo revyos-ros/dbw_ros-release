@@ -28,6 +28,9 @@ bool bad_crc # CRC error on most recent command
 # Degradation of any kind
 bool degraded
 
+# Request brake apply for gear shift calibration
+bool req_brake_cal
+
 # Command source
 CmdSrc cmd_src
 

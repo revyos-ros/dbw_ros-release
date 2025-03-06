@@ -57,6 +57,7 @@
 #include <ds_dbw_msgs/msg/vehicle_velocity.hpp>
 #include <ds_dbw_msgs/msg/throttle_info.hpp>
 #include <ds_dbw_msgs/msg/brake_info.hpp>
+#include <ds_dbw_msgs/msg/propulsion_info.hpp>
 #include <ds_dbw_msgs/msg/steering_offset.hpp>
 #include <ds_dbw_msgs/msg/ulc_cmd.hpp>
 #include <ds_dbw_msgs/msg/ulc_report.hpp>
@@ -64,6 +65,8 @@
 #include <ds_dbw_msgs/msg/wheel_positions.hpp>
 #include <ds_dbw_msgs/msg/turn_signal_cmd.hpp>
 #include <ds_dbw_msgs/msg/turn_signal_report.hpp>
+#include <ds_dbw_msgs/msg/drive_mode_cmd.hpp>
+#include <ds_dbw_msgs/msg/drive_mode_report.hpp>
 #include <ds_dbw_msgs/msg/misc_cmd.hpp>
 #include <ds_dbw_msgs/msg/misc_report.hpp>
 #include <ds_dbw_msgs/msg/driver_assist.hpp>
@@ -110,6 +113,7 @@ private:
   void recvThrottleCmd(const ds_dbw_msgs::msg::ThrottleCmd::ConstSharedPtr msg);
   void recvGearCmd(const ds_dbw_msgs::msg::GearCmd::ConstSharedPtr msg);
   void recvTurnSignalCmd(const ds_dbw_msgs::msg::TurnSignalCmd::ConstSharedPtr msg);
+  void recvDriveModeCmd(const ds_dbw_msgs::msg::DriveModeCmd::ConstSharedPtr msg);
   void recvMiscCmd(const ds_dbw_msgs::msg::MiscCmd::ConstSharedPtr msg);
   void recvUlcCmd(const ds_dbw_msgs::msg::UlcCmd::ConstSharedPtr msg);
   void recvMonitorCmd(const ds_dbw_msgs::msg::MonitorCmd::ConstSharedPtr msg);
@@ -127,6 +131,7 @@ private:
   MsgUlcCmd          msg_ulc_cmd_ = {0};
   MsgUlcCfg          msg_ulc_cfg_ = {0};
   MsgTurnSignalCmd   msg_turn_signal_cmd_ = {TurnSignal::None};
+  MsgDriveModeCmd    msg_drive_mode_cmd_ = {DriveMode::Unknown};
   MsgMiscCmd         msg_misc_cmd_ = {MsgMiscCmd::PrkBrkCmd::None};
   #pragma GCC diagnostic pop
 
@@ -151,6 +156,7 @@ private:
   CanMsgRecvCrcRc<MsgVehicleVelocity>  msg_veh_vel_;
   CanMsgRecvCrcRc<MsgThrtlInfo>        msg_thrtl_info_;
   CanMsgRecvCrcRc<MsgBrakeInfo>        msg_brake_info_;
+  CanMsgRecvCrcRc<MsgPropulsionInfo>   msg_propulsion_info_;
   CanMsgRecvCrcRc<MsgSteerOffset>      msg_steer_offset_;
   CanMsgRecvCrcRc<MsgUlcReport>        msg_ulc_rpt_;
   CanMsgRecvCrcRc<MsgAccel>            msg_accel_;
@@ -158,6 +164,8 @@ private:
   CanMsgRecv     <MsgWheelSpeed>       msg_wheel_speed_;
   CanMsgRecv     <MsgWheelPosition>    msg_wheel_position_;
   CanMsgRecvCrcRc<MsgTurnSignalReport> msg_turn_signal_rpt_;
+  CanMsgRecvCrcRc<MsgDriveModeReport1> msg_drive_mode_rpt_1_;
+  CanMsgRecvCrcRc<MsgDriveModeReport2> msg_drive_mode_rpt_2_;
   CanMsgRecvCrcRc<MsgMiscReport1>      msg_misc_rpt_1_;
   CanMsgRecvCrcRc<MsgMiscReport2>      msg_misc_rpt_2_;
   CanMsgRecvCrcRc<MsgDriverAssist>     msg_driver_assist_;
@@ -236,7 +244,7 @@ private:
     if (modeSyncNone(stamp)) {
       return enable_ && !fault(stamp) && !override(stamp);
     } else {
-      return msg_system_rpt_.valid(stamp) 
+      return msg_system_rpt_.valid(stamp)
           && msg_system_rpt_.msg().state == MsgSystemReport::State::Active;
     }
   }
@@ -295,8 +303,10 @@ private:
     std::map<Module, std::string> ldate_recv;
     std::map<Module, std::string> bdate; // Build date
     std::map<Module, std::string> bdate_recv;
+    std::map<Module, uint32_t> datetime;
     std::string vin;
     std::string vin_recv;
+    unsigned int model_year = 0;
   } ecu_info_;
 
   // Firmware Versions
@@ -323,6 +333,7 @@ private:
   rclcpp::Subscription<ds_dbw_msgs::msg::GearCmd>::SharedPtr sub_gear_;
   rclcpp::Subscription<ds_dbw_msgs::msg::TurnSignalCmd>::SharedPtr sub_turn_signal_;
   rclcpp::Subscription<ds_dbw_msgs::msg::MiscCmd>::SharedPtr sub_misc_;
+  rclcpp::Subscription<ds_dbw_msgs::msg::DriveModeCmd>::SharedPtr sub_drive_mode_;
   rclcpp::Subscription<ds_dbw_msgs::msg::UlcCmd>::SharedPtr sub_ulc_;
   rclcpp::Subscription<ds_dbw_msgs::msg::MonitorCmd>::SharedPtr sub_monitor_cmd_;
   rclcpp::Subscription<std_msgs::msg::Empty>::SharedPtr sub_calibrate_steering_;
@@ -343,12 +354,14 @@ private:
   rclcpp::Publisher<ds_dbw_msgs::msg::VehicleVelocity>::SharedPtr pub_veh_vel_;
   rclcpp::Publisher<ds_dbw_msgs::msg::ThrottleInfo>::SharedPtr pub_thrtl_info_;
   rclcpp::Publisher<ds_dbw_msgs::msg::BrakeInfo>::SharedPtr pub_brake_info_;
+  rclcpp::Publisher<ds_dbw_msgs::msg::PropulsionInfo>::SharedPtr pub_propulsion_info_;
   rclcpp::Publisher<ds_dbw_msgs::msg::SteeringOffset>::SharedPtr pub_steer_offset_;
   rclcpp::Publisher<ds_dbw_msgs::msg::UlcReport>::SharedPtr pub_ulc_;
   rclcpp::Publisher<ds_dbw_msgs::msg::WheelSpeeds>::SharedPtr pub_wheel_speeds_;
   rclcpp::Publisher<ds_dbw_msgs::msg::WheelPositions>::SharedPtr pub_wheel_positions_;
   rclcpp::Publisher<ds_dbw_msgs::msg::TurnSignalReport>::SharedPtr pub_turn_signal_;
   rclcpp::Publisher<ds_dbw_msgs::msg::MiscReport>::SharedPtr pub_misc_;
+  rclcpp::Publisher<ds_dbw_msgs::msg::DriveModeReport>::SharedPtr pub_drive_mode_;
   rclcpp::Publisher<ds_dbw_msgs::msg::DriverAssist>::SharedPtr pub_driver_assist_;
   rclcpp::Publisher<ds_dbw_msgs::msg::Battery>::SharedPtr pub_battery_;
   rclcpp::Publisher<ds_dbw_msgs::msg::BatteryTraction>::SharedPtr pub_battery_traction_;
