@@ -27,6 +27,9 @@ bool bad_rc # Repeated rolling counter on most recent command
 # Degradation of any kind
 bool degraded
 
+# Actuator temperature
+float32 actuator_temp # degC
+
 # Calculated limit vs vehicle speed
 float32 limit_rate  # deg/s
 float32 limit_value # deg
