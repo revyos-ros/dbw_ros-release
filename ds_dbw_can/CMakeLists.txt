@@ -38,6 +38,15 @@ ament_target_dependencies(${PROJECT_NAME}
   dataspeed_can_msg_filters
 )
 
+ament_export_dependencies(
+  rclcpp
+  rclcpp_components
+  std_msgs
+  can_msgs
+  sensor_msgs
+  ds_dbw_msgs
+)
+
 target_include_directories(
   ${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

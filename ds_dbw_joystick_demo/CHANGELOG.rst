@@ -2,6 +2,16 @@
 Changelog for package ds_dbw_joystick_demo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.3.4 (2025-05-06)
+------------------
+
+2.3.3 (2025-03-28)
+------------------
+* Documentation updates
+* Change joystick demo sys launch arg default to true
+* Remove option to ignore system enable/disable buttons
+* Contributors: Kevin Hallenbeck
+
 2.3.2 (2025-02-18)
 ------------------
 * Add AEB precharge control to brake command and joystick demo
