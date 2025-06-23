@@ -12,10 +12,12 @@ bool degraded_comms_dbw_gear
 bool degraded_comms_vehicle
 bool degraded_comms_actuator
 bool degraded_internal
+bool degraded_stall
 bool degraded_control_performance
 bool degraded_param_mismatch
 bool degraded_vehicle
 bool degraded_actuator
+bool degraded_actuator_warm
 bool degraded_vehicle_speed
 bool degraded_calibration
 
@@ -41,6 +43,7 @@ bool fault_actuator
 bool fault_actuator_torque_sensor
 bool fault_actuator_config
 bool fault_actuator_assist
+bool fault_actuator_hot
 bool fault_control_performance
 bool fault_param_mismatch
 bool fault_param_limits

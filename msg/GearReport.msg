@@ -28,6 +28,9 @@ bool bad_crc # CRC error on most recent command
 # Degradation of any kind
 bool degraded
 
+# Actuator temperature
+float32 actuator_temp # degC
+
 # Request brake apply for gear shift calibration
 bool req_brake_cal
 

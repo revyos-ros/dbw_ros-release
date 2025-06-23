@@ -24,6 +24,7 @@ bool degraded_bped_feedback
 bool degraded_actuator
 bool degraded_actuator_1
 bool degraded_actuator_2
+bool degraded_hold_duration
 bool degraded_actuator_aeb_deny
 bool degraded_actuator_warm
 bool degraded_calibration
@@ -52,6 +53,8 @@ bool fault_bped_sensor_2
 bool fault_bped_sensor_mismatch
 bool fault_actuator_1
 bool fault_actuator_2
+bool fault_actuator_hold_duration
+bool fault_actuator_hot
 bool fault_control_performance
 bool fault_param_mismatch
 bool fault_param_limits
