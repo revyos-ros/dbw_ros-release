@@ -2,6 +2,32 @@
 Changelog for package ds_dbw_can
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.3.4 (2025-05-06)
+------------------
+* Bump firmware versions to match 2025/05/06 release package
+* Add engine/transmission/motor temperatures and over-temperature warnings to MiscReport
+* Move GearNum signal from ThrtlInfo to PropulsionInfo and split into GearNumTarget and GearNumActual
+* Add steering command type SetOffset to set steering wheel angle offset directly
+* Add propulsion torque limiting and limp home statuses (Polaris Ranger XD only)
+* Add engine throttle valve position (Polaris Ranger XD only)
+* Add Ford NGDV platform
+* Export ds_dbw_can dependencies
+* Add brake hold diagnostics
+* Contributors: Gabriel Oetjens, Kevin Hallenbeck
+
+2.3.3 (2025-03-28)
+------------------
+* Bump firmware versions to match 2025/03/28 release package
+* Add system parameter hash
+* Add remote control report (mode/state/timeout)
+* Add steering stall limit diagnostic
+* Add actuator temperature and warm/hot diagnostics
+* Add GPIO/SSR status and control
+* Documentation updates
+* Remove option to ignore system enable/disable buttons
+* Remove unused option to filter received CAN messages
+* Contributors: Gabriel Oetjens, Kevin Hallenbeck
+
 2.3.2 (2025-02-18)
 ------------------
 * Bump firmware versions to match 2025/02/18 release package

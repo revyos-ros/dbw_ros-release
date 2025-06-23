@@ -3,10 +3,17 @@ ROS2 interface to Dataspeed drive-by-wire platforms with modern DBW2 firmware. S
 
 # Launch
 
-* Joystick demo
+* Joystick demo with drive-by-wire
     * `ros2 launch ds_dbw_joystick_demo joystick_demo.launch.xml sys:=true`
+    * See [joystick_demo.launch.xml](ds_dbw_joystick_demo/launch/joystick_demo.launch.xml) for a complete list of args
+    * See [documentation](ds_dbw_joystick_demo/README.md)
 * Drive-by-wire only
     * `ros2 launch ds_dbw_can dbw.launch.xml`
+    * See [dbw.launch.xml](ds_dbw_can/launch/dbw.launch.xml) for a complete list of args
+
+# Socketcan
+Add `dataspeed_can:=false socketcan:=true socketcan_dev:=can0` to the launch commands above to use socketcan hardware instead of the Dataspeed USB CAN Tool.
+Make sure to initialize the socketcan device and set the bitrate to 500k first.
 
 # Binaries
 
