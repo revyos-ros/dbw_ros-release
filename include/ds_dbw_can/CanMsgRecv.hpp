@@ -51,6 +51,27 @@ protected:
 };
 
 template <typename T>
+class CanMsgRecvRc : public CanMsgRecv<T> {
+public:
+    using Stamp = std_msgs::msg::Header::_stamp_type;
+    bool receive(const T& msg, Stamp stamp) {
+        // Require valid rolling counter (RC)
+        // Any rolling counter value is accepted after message timeout
+        rc_valid_ = msg.validRc(rc_);
+        if (rc_valid_) {
+            CanMsgRecv<T>::receive(msg, stamp);
+            rc_ = msg.rc;
+            return true;
+        }
+        return false;
+    }
+    bool validRc() const { return rc_valid_; }
+protected:
+    bool rc_valid_ = false;
+    uint8_t rc_ = -1; // Always accept first rolling counter value
+};
+
+template <typename T>
 class CanMsgRecvCrcRc : public CanMsgRecvCrc<T> {
 public:
     using Stamp = std_msgs::msg::Header::_stamp_type;
