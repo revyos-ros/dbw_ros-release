@@ -21,6 +21,7 @@ bool degraded_param_mismatch
 bool degraded_vehicle
 bool degraded_vehicle_speed
 bool degraded_actuator
+bool degraded_actuator_warm
 bool degraded_gear_mismatch
 bool degraded_stuck_in_neutral
 bool degraded_power
@@ -46,5 +47,6 @@ bool fault_vehicle
 bool fault_vehicle_speed
 bool fault_actuator
 bool fault_actuator_config
+bool fault_actuator_hot
 bool fault_param_mismatch
 bool fault_calibration
