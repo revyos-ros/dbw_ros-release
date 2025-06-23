@@ -68,5 +68,19 @@ HeadlightCtrlHigh headlight_high_control
 # Ambient Light Sensor enumeration
 AmbientLight ambient_light
 
-# Outside air temperature
-float32 outside_air_temp # Degrees Celsius
+# Temperatures (deg C)
+float32 outside_air_temp         # Outside air
+float32 engine_coolant_temp      # Engine coolant
+float32 engine_oil_temp          # Engine oil
+float32 trans_oil_temp           # Transmission oil
+float32 trans_clutch_temp        # Transmission clutch
+float32 traction_motor_coil_temp # BEV/HEV traction motor winding
+float32 traction_motor_elec_temp # BEV/HEV traction motor controller
+
+# Over-temperature warnings
+bool engine_coolant_hot_warn      # Engine coolant
+bool engine_oil_hot_warn          # Engine oil
+bool trans_oil_hot_warn           # Transmission oil
+bool trans_clutch_hot_warn        # Transmission clutch
+bool traction_motor_coil_hot_warn # BEV/HEV traction motor winding
+bool traction_motor_elec_hot_warn # BEV/HEV traction motor controller
