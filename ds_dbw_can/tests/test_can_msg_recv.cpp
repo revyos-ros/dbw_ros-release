@@ -169,6 +169,57 @@ TEST(CanMsgRecvCrc, recv) {
   }
 }
 
+TEST(CanMsgRecvRc, recv) {
+  // Test message
+  TestCanMsg msg = {0};
+  msg.reset();
+  msg.setDataRand();
+  msg.rc = 5;
+
+  // Test receiver
+  CanMsgRecvRc<TestCanMsg> recv;
+
+  // Invalid on initialization
+  auto stamp = clock_.now();
+  ASSERT_FALSE(recv.valid(stamp));
+  ASSERT_NE(msg, recv.msg());
+
+  // Valid on first receive
+  ASSERT_TRUE(recv.receive(msg, stamp));
+  ASSERT_TRUE(recv.validRc());
+  ASSERT_TRUE(recv.valid(stamp));
+  ASSERT_EQ(msg, recv.msg());
+
+  // Stay valid for timeout duration
+  stamp += TIMEOUT;
+  ASSERT_TRUE(recv.valid(stamp));
+  ASSERT_EQ(msg, recv.msg());
+
+  // Invalid on timeout
+  stamp += DUR_MIN;
+  ASSERT_FALSE(recv.valid(stamp));
+  ASSERT_EQ(msg, recv.msg());
+
+  // Valid for normal operation
+  for (size_t i = 0; i < 1000; i++) {
+    stamp += PERIOD;
+    msg.setDataRand();
+    msg.rc++;
+    ASSERT_TRUE(recv.receive(msg, stamp));
+    ASSERT_TRUE(recv.validRc());
+    ASSERT_TRUE(recv.valid(stamp));
+    ASSERT_EQ(msg, recv.msg());
+  }
+
+  // Keep previous message on receive with repeated RC
+  auto msg_bad_rc = msg;
+  msg_bad_rc.setDataRand();
+  ASSERT_FALSE(recv.receive(msg_bad_rc, stamp));
+  ASSERT_FALSE(recv.validRc());
+  ASSERT_TRUE(recv.valid(stamp));
+  ASSERT_EQ(msg, recv.msg());
+}
+
 TEST(CanMsgRecvCrcRc, recv) {
   // Test message
   TestCanMsg msg = {0};

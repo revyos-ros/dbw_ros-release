@@ -22,4 +22,5 @@ uint8 CMD_ANGLE=2       # deg      deg/s  deg/s^2  <depends>    Angle in deg
 uint8 CMD_CURVATURE=3   # 1/m      deg/s  deg/s^2  -0.2 to 0.2  Curvature in 1/m
 uint8 CMD_YAW_RATE=4    # rad/s    deg/s  deg/s^2  -8.5 to 8.5  Yaw rate in rad/s
 uint8 CMD_PERCENT=14    # %        deg/s  deg/s^2  -100 to 100  Percent of max steering wheel angle
+uint8 CMD_SET_OFFSET=13 # deg      N/A    N/A      <depends>    Set steering wheel angle calibration offset to value in cmd
 uint8 CMD_CALIBRATE=15  # deg      N/A    N/A      <depends>    Calibrate current steering wheel angle to value in cmd
