@@ -61,6 +61,7 @@
 #include <ds_dbw_msgs/msg/steering_offset.hpp>
 #include <ds_dbw_msgs/msg/ulc_cmd.hpp>
 #include <ds_dbw_msgs/msg/ulc_report.hpp>
+#include <ds_dbw_msgs/msg/remote_report.hpp>
 #include <ds_dbw_msgs/msg/wheel_speeds.hpp>
 #include <ds_dbw_msgs/msg/wheel_positions.hpp>
 #include <ds_dbw_msgs/msg/turn_signal_cmd.hpp>
@@ -69,6 +70,8 @@
 #include <ds_dbw_msgs/msg/drive_mode_report.hpp>
 #include <ds_dbw_msgs/msg/misc_cmd.hpp>
 #include <ds_dbw_msgs/msg/misc_report.hpp>
+#include <ds_dbw_msgs/msg/gpio_cmd.hpp>
+#include <ds_dbw_msgs/msg/gpio_report.hpp>
 #include <ds_dbw_msgs/msg/driver_assist.hpp>
 #include <ds_dbw_msgs/msg/battery.hpp>
 #include <ds_dbw_msgs/msg/battery_traction.hpp>
@@ -115,6 +118,7 @@ private:
   void recvTurnSignalCmd(const ds_dbw_msgs::msg::TurnSignalCmd::ConstSharedPtr msg);
   void recvDriveModeCmd(const ds_dbw_msgs::msg::DriveModeCmd::ConstSharedPtr msg);
   void recvMiscCmd(const ds_dbw_msgs::msg::MiscCmd::ConstSharedPtr msg);
+  void recvGpioCmd(const ds_dbw_msgs::msg::GpioCmd::ConstSharedPtr msg);
   void recvUlcCmd(const ds_dbw_msgs::msg::UlcCmd::ConstSharedPtr msg);
   void recvMonitorCmd(const ds_dbw_msgs::msg::MonitorCmd::ConstSharedPtr msg);
   void recvSteeringCalibrate(const std_msgs::msg::Empty::ConstSharedPtr msg);
@@ -133,6 +137,7 @@ private:
   MsgTurnSignalCmd   msg_turn_signal_cmd_ = {TurnSignal::None};
   MsgDriveModeCmd    msg_drive_mode_cmd_ = {DriveMode::Unknown};
   MsgMiscCmd         msg_misc_cmd_ = {MsgMiscCmd::PrkBrkCmd::None};
+  MsgGpioCmd         msg_gpio_cmd_ = {MsgGpioCmd::GpioCmd::Passive};
   #pragma GCC diagnostic pop
 
   // Received CAN messages (with validation)
@@ -158,6 +163,7 @@ private:
   CanMsgRecvCrcRc<MsgBrakeInfo>        msg_brake_info_;
   CanMsgRecvCrcRc<MsgPropulsionInfo>   msg_propulsion_info_;
   CanMsgRecvCrcRc<MsgSteerOffset>      msg_steer_offset_;
+  CanMsgRecvCrcRc<MsgRemoteReport>     msg_remote_rpt_;
   CanMsgRecvCrcRc<MsgUlcReport>        msg_ulc_rpt_;
   CanMsgRecvCrcRc<MsgAccel>            msg_accel_;
   CanMsgRecvCrcRc<MsgGyro>             msg_gyro_;
@@ -168,6 +174,8 @@ private:
   CanMsgRecvCrcRc<MsgDriveModeReport2> msg_drive_mode_rpt_2_;
   CanMsgRecvCrcRc<MsgMiscReport1>      msg_misc_rpt_1_;
   CanMsgRecvCrcRc<MsgMiscReport2>      msg_misc_rpt_2_;
+  CanMsgRecvCrcRc<MsgMiscReport3>      msg_misc_rpt_3_;
+  CanMsgRecvCrcRc<MsgGpioReport>       msg_gpio_rpt_;
   CanMsgRecvCrcRc<MsgDriverAssist>     msg_driver_assist_;
   CanMsgRecvCrcRc<MsgBattery>          msg_battery_;
   CanMsgRecvCrcRc<MsgBatteryTraction>  msg_battery_traction_;
@@ -181,6 +189,7 @@ private:
   CanMsgRecv     <MsgSteerParamHash>   msg_steer_param_hash_;
   CanMsgRecv     <MsgBrakeParamHash>   msg_brake_param_hash_;
   CanMsgRecv     <MsgThrtlParamHash>   msg_thrtl_param_hash_;
+  CanMsgRecv     <MsgSystemParamHash>  msg_system_param_hash_;
 
   // Clock for received message timestamps
   using Stamp = std_msgs::msg::Header::_stamp_type;
@@ -283,6 +292,7 @@ private:
   bool validate_cmd_crc_rc_warned_ = false;
   bool ulc_preempt_warned_ = false;
   bool system_sync_mode_printed_ = false;
+  bool remote_control_mode_printed_ = false;
   bool remote_control_printed_ = false;
   bool external_braking_printed_ = false;
   bool comms_loss_braking_printed_ = false;
@@ -292,6 +302,7 @@ private:
     uint32_t steer = 0;
     uint32_t brake = 0;
     uint32_t thrtl = 0;
+    uint32_t system = 0;
   } param_hash_;
 
   // ECU Info
@@ -315,9 +326,6 @@ private:
   // Frame ID
   std::string frame_id_ = "base_footprint";
 
-  // Use system enable/disable buttons
-  bool buttons_ = true;
-
   // Warning print options
   bool warn_crc_ = true;
   bool warn_cmds_ = true;
@@ -333,6 +341,7 @@ private:
   rclcpp::Subscription<ds_dbw_msgs::msg::GearCmd>::SharedPtr sub_gear_;
   rclcpp::Subscription<ds_dbw_msgs::msg::TurnSignalCmd>::SharedPtr sub_turn_signal_;
   rclcpp::Subscription<ds_dbw_msgs::msg::MiscCmd>::SharedPtr sub_misc_;
+  rclcpp::Subscription<ds_dbw_msgs::msg::GpioCmd>::SharedPtr sub_gpio_;
   rclcpp::Subscription<ds_dbw_msgs::msg::DriveModeCmd>::SharedPtr sub_drive_mode_;
   rclcpp::Subscription<ds_dbw_msgs::msg::UlcCmd>::SharedPtr sub_ulc_;
   rclcpp::Subscription<ds_dbw_msgs::msg::MonitorCmd>::SharedPtr sub_monitor_cmd_;
@@ -356,11 +365,13 @@ private:
   rclcpp::Publisher<ds_dbw_msgs::msg::BrakeInfo>::SharedPtr pub_brake_info_;
   rclcpp::Publisher<ds_dbw_msgs::msg::PropulsionInfo>::SharedPtr pub_propulsion_info_;
   rclcpp::Publisher<ds_dbw_msgs::msg::SteeringOffset>::SharedPtr pub_steer_offset_;
+  rclcpp::Publisher<ds_dbw_msgs::msg::RemoteReport>::SharedPtr pub_remote_rpt_;
   rclcpp::Publisher<ds_dbw_msgs::msg::UlcReport>::SharedPtr pub_ulc_;
   rclcpp::Publisher<ds_dbw_msgs::msg::WheelSpeeds>::SharedPtr pub_wheel_speeds_;
   rclcpp::Publisher<ds_dbw_msgs::msg::WheelPositions>::SharedPtr pub_wheel_positions_;
   rclcpp::Publisher<ds_dbw_msgs::msg::TurnSignalReport>::SharedPtr pub_turn_signal_;
   rclcpp::Publisher<ds_dbw_msgs::msg::MiscReport>::SharedPtr pub_misc_;
+  rclcpp::Publisher<ds_dbw_msgs::msg::GpioReport>::SharedPtr pub_gpio_;
   rclcpp::Publisher<ds_dbw_msgs::msg::DriveModeReport>::SharedPtr pub_drive_mode_;
   rclcpp::Publisher<ds_dbw_msgs::msg::DriverAssist>::SharedPtr pub_driver_assist_;
   rclcpp::Publisher<ds_dbw_msgs::msg::Battery>::SharedPtr pub_battery_;
